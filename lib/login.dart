@@ -23,7 +23,7 @@ class _loginState extends State<login> {
         Padding(
               padding: const EdgeInsets.only(top: 60.0),
               child: Center(
-                child: Image(image:AssetImage('logo2.png'),width: 450,),
+                child: Image(image:AssetImage('images/logo2.png'),width: 267,),
                  
                   
               ),
@@ -34,7 +34,7 @@ class _loginState extends State<login> {
        decoration: InputDecoration(
        border: OutlineInputBorder(),
        labelText: 'User Name',
-       hintText: 'Enter valid mail id as abc@gmail.com'
+       hintText: 'user not valid'
      ),
    ),
  ),
@@ -48,7 +48,26 @@ class _loginState extends State<login> {
        hintText: 'Enter your secure password'
      ),
    ),
- ) ],
+ ) 
+ ,Container( 
+              decoration:BoxDecoration(
+
+color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+child: FlatButton( onPressed: (){},  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
+              
+),
+
+
+              )
+
+
+
+ 
+ 
+ 
+ 
+ 
+ ],
     ),
   ),
   
