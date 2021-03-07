@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\vuenodepro\\my-project"
+		},
+		{
+			"path": "..\\..\\laravel"
+		},
+		{
+			"path": "..\\..\\CV-HTML"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "CV-HTML"
+	}
+}
