@@ -11,7 +11,7 @@ class Example extends StatefulWidget {
 
 class _ExampleState extends State<Example> {
   List<String> _locations = ['Mseken', 'monestir', 'Sousse', 'beja'];
-  String _selectedLocation; // Option 2
+  String _selectedLocation;
 
   @override
   Widget build(BuildContext context) {
