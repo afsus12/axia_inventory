@@ -23,7 +23,7 @@ class _loginState extends State<login> {
         Padding(
               padding: const EdgeInsets.only(top: 60.0),
               child: Center(
-                child: Image(image:AssetImage('images/logo2.png'),width: 267,),
+                child: Image(image:AssetImage('images/logo2.png'),width: 300,),
                  
                   
               ),
@@ -32,10 +32,16 @@ class _loginState extends State<login> {
    padding: EdgeInsets.all(10),
    child: TextField(
        decoration: InputDecoration(
-       border: OutlineInputBorder(),
+         
+       border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+                width: 10, 
+                style: BorderStyle.solid,
+            )),
        labelText: 'User Name',
        hintText: 'user not valid'
      ),
+     
    ),
  ),
       Padding(
@@ -43,22 +49,32 @@ class _loginState extends State<login> {
    child: TextField(
        obscureText: true,
        decoration: InputDecoration(
-       border: OutlineInputBorder(),
+       border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(
+                width: 10, 
+                style: BorderStyle.solid,
+            ),),
        labelText: 'Password',
        hintText: 'Enter your secure password'
      ),
    ),
  ) 
- ,Container( 
-              decoration:BoxDecoration(
-
-color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-child: FlatButton( onPressed: (){},  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
-              
-),
-
-
-              )
+ , Center( 
+   child: Container( 
+     
+     width: 150, height: 50,   decoration: BoxDecoration( color: Colors.blue[700],
+    border: Border.all( 
+           color: Colors.transparent,
+    ),
+    borderRadius: BorderRadius.all(Radius.circular(15))
+  ),
+     child: FlatButton(onPressed: (){},  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
+     
+                   
+     
+     ),
+   ),
+ )
 
 
 
