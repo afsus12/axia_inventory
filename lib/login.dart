@@ -16,19 +16,22 @@ class _loginState extends State<login> {
       fit: BoxFit.cover,
     ),
   ),
+  
   child: Scaffold(
+     
     backgroundColor: Colors.transparent,
-    body: ListView(
-      children: <Widget>[  
+    body: ListView(  
+      children: <Widget>[    
         Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Image(image:AssetImage('images/logo2.png'),width: 300,),
+              padding: const EdgeInsets.only(top:120),
+                           child: Center( 
+                child: Container(child: Image(image:AssetImage('images/logo2.png'),width: 220, )),
                  
-                  
+                
               ),
               ),
-   Padding(
+            
+   Padding( 
    padding: EdgeInsets.all(10),
    child: TextField(
        decoration: InputDecoration(
