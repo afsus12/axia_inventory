@@ -17,7 +17,8 @@ class _ExampleState extends State<Example> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar( backgroundColor: Colors.blueGrey,
+        appBar: AppBar(
+          backgroundColor: Colors.blueGrey,
           title: Text('Entrée en stock'),
           centerTitle: true,
         ),
@@ -56,6 +57,7 @@ class _ExampleState extends State<Example> {
                 color: Colors.amber,
                 textColor: Colors.white,
                 minWidth: 300,
+                height: 50,
                 onPressed: () {},
               ),
             ),
