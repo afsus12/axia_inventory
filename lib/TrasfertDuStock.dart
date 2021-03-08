@@ -5,6 +5,7 @@ void main() {
   runApp(Example());
 }
 
+
 class Example extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ExampleState();
@@ -21,7 +22,7 @@ class _ExampleState extends State<Example> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Color(0xff62959c),
           title: Text('Transfert du Stock'),
           centerTitle: true,
         ),
@@ -45,16 +46,16 @@ class _ExampleState extends State<Example> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(left: 6),
-              width: 350.0,  decoration: BoxDecoration(
-      color: Colors.red,
-      borderRadius: BorderRadius.circular(30)),
+              margin: EdgeInsets.only(left: 20),
+              width: 350.0,  decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),
+          side: BorderSide(width: 1.0, style: BorderStyle.solid),),),
               child: DropdownButtonHideUnderline(
                 child: ButtonTheme(
                   alignedDropdown: true, 
                   child: DropdownButton(icon: Icon(Icons.arrow_drop_down),
                    iconSize: 42,
-                     
+                  
                     value: _selectedLocation,
                     items: _locations.map((location) {
                       return DropdownMenuItem( 
@@ -87,10 +88,10 @@ class _ExampleState extends State<Example> {
               ],
             ),
             Container(
-              margin: EdgeInsets.only(left: 6),
-              width: 350.0,  decoration: BoxDecoration(
-      color: Colors.green, 
-      borderRadius: BorderRadius.circular(30)),
+              margin: EdgeInsets.only(left: 20),
+              width: 350.0,  decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30),
+          side: BorderSide(width: 1.0, style: BorderStyle.solid),),),
               child: DropdownButtonHideUnderline(
                 child: ButtonTheme(
                   alignedDropdown: true,
@@ -119,11 +120,14 @@ class _ExampleState extends State<Example> {
                 ),
               ),
             ),
-            Center(
-              child: Image.asset(
-                'images/scan.png',
-                cacheWidth: 300,
-                cacheHeight: 100,
+            Padding(
+              padding: const EdgeInsets.only(top:20.0),
+              child: Center(
+                child: Image.asset( 
+                  'images/scan.png',
+                  cacheWidth: 300,
+                  cacheHeight: 100,
+                ),
               ),
             ),
             Padding(
@@ -132,7 +136,7 @@ class _ExampleState extends State<Example> {
                 child: Container(
                   child: FlatButton(
                     child: Text('Scanner code a barre'),
-                    color: Colors.amber,
+                     color: Color(0xffec524b),
                     textColor: Colors.white,
                     minWidth: 350,
                     height: 50,
