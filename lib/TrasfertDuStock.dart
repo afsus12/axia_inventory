@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 void main() {
   runApp(Example());
@@ -10,8 +11,8 @@ class Example extends StatefulWidget {
 }
 
 class _ExampleState extends State<Example> {
-  List<String> _locations = ['Mseken', 'monestir', 'Sousse', 'beja'];
-  List<String> _locations1 = ['Mseken', 'monestir', 'Sousse', 'beja'];
+  List<String> _locations = ['Msaken', 'monastir', 'Sousse', 'beja'];
+  List<String> _locations1 = ['Msaken', 'monastir', 'Sousse', 'beja'];
   String _selectedLocation;
   String _selectedLocation1;
 
@@ -21,88 +22,130 @@ class _ExampleState extends State<Example> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueGrey,
-          title: Text('Entrée en stock'),
+          title: Text('Transfert du Stock'),
           centerTitle: true,
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+            
+              children: [ 
+                Padding(
+                  padding: const EdgeInsets.only(top:8.0,left:20),
+                  child: Text("Choix d'entrepôt (origine)"),
+                ), SizedBox(width: 90),
+                Padding(
+                  padding: const EdgeInsets.only(top:8.0),
+                  child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(math.pi),
+                      child: Icon(Icons.reply,color: Colors.red,)),
+                )
+              ],
+            ),
             Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Choisir l entrepôt origine '),
-                  ),
-                  DropdownButton(
-                    hint: Text('Selectionner depot'),
+              margin: EdgeInsets.only(left: 6),
+              width: 350.0,  decoration: BoxDecoration(
+      color: Colors.red,
+      borderRadius: BorderRadius.circular(30)),
+              child: DropdownButtonHideUnderline(
+                child: ButtonTheme(
+                  alignedDropdown: true, 
+                  child: DropdownButton(icon: Icon(Icons.arrow_drop_down),
+                   iconSize: 42,
+                     
                     value: _selectedLocation,
+                    items: _locations.map((location) {
+                      return DropdownMenuItem( 
+                        child: new Text(location,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        value: location,
+                      );
+                    }).toList(),
                     onChanged: (newValue) {
                       setState(() {
                         _selectedLocation = newValue;
                       });
                     },
-                    items: _locations.map((location) {
-                      return DropdownMenuItem(
-                        child: new Text(location),
-                        value: location,
-                      );
-                    }).toList(),
+                    style: Theme.of(context).textTheme.title,
                   ),
-                ],
+                ),
               ),
             ),
+            Row(
+             
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top:8.0,left:20),
+                  child: Text("Choix d'entrepôt (destination)"),
+                ),SizedBox(width: 58),Icon(Icons.reply,color: Colors.green,),
+                
+              ],
+            ),
             Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        child: Text('Choisir l entrepôt destination ')),
-                  ),
-                  DropdownButton(
-                    hint: Text('Selectionner depot'),
+              margin: EdgeInsets.only(left: 6),
+              width: 350.0,  decoration: BoxDecoration(
+      color: Colors.green, 
+      borderRadius: BorderRadius.circular(30)),
+              child: DropdownButtonHideUnderline(
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton(
+      icon: Icon(Icons.arrow_drop_down),
+      iconSize: 42,
+      underline: SizedBox(),
                     value: _selectedLocation1,
+                    items: _locations.map((location1) {
+                      return DropdownMenuItem(
+                        child: new Text(location1,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        value: location1,
+                      );
+                    }).toList(),
                     onChanged: (newValue) {
                       setState(() {
                         _selectedLocation1 = newValue;
                       });
                     },
-                    items: _locations.map((location1) {
-                      return DropdownMenuItem(
-                        child: new Text(location1),
-                        value: location1,
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Image.asset(
-              'images/scan.png',
-              cacheWidth: 270,
-              cacheHeight: 200,
-            ),
-            Container(
-              child: FlatButton(
-                child: Text('Scanner code a barre'),
-                color: Colors.amber,
-                textColor: Colors.white,
-                minWidth: 300,
-                height: 50,
-                onPressed: () {},
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  child: Text(
-                    'Produit ajoutées',
-                    style: TextStyle(fontSize: 20),
+                    style: Theme.of(context).textTheme.title,
                   ),
                 ),
-              ],
+              ),
+            ),
+            Center(
+              child: Image.asset(
+                'images/scan.png',
+                cacheWidth: 300,
+                cacheHeight: 100,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Center(
+                child: Container(
+                  child: FlatButton(
+                    child: Text('Scanner code a barre'),
+                    color: Colors.amber,
+                    textColor: Colors.white,
+                    minWidth: 350,
+                    height: 50,
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              child: Text(
+                'Produit ajoutées',
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ],
         ),
