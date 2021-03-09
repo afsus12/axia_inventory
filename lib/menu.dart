@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
+import 'inventaire1.dart';
 
 
 
@@ -270,24 +271,33 @@ class _MenuState extends State<Menu> {
                 children: [
                   Center(
                     child: ClipOval(
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color(0xffDE6262),
-                              Color(0xffFFB88C),
-                            ],
+                      child: GestureDetector( onTap: () {
+          setState(() { print('clicked');
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => inventaire()),
+  );
+          });
+        },
+                        child: Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xffDE6262),
+                                Color(0xffFFB88C),
+                              ],
+                            ),
                           ),
+                          child: Center(
+                              child: Image(
+                            image: AssetImage('images/inv.png'),
+                            width: 100,
+                          )),
                         ),
-                        child: Center(
-                            child: Image(
-                          image: AssetImage('images/inv.png'),
-                          width: 100,
-                        )),
                       ),
                     ),
                   ),

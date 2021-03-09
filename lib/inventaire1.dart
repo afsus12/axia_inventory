@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/rendering/box.dart';
 
 class inventaire extends StatefulWidget {
   @override
