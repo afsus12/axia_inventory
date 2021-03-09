@@ -15,27 +15,6 @@ class _inventaireState extends State<inventaire> {
         title: Text('Inventaire'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Text('N°inventaire'),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                        width: 10,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    labelText: 'Password',
-                    hintText: 'Enter your secure password'),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
