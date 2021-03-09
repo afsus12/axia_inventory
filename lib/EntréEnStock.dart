@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() {
   runApp(Example());
@@ -82,7 +83,15 @@ class _ExampleState extends State<Example> {
                     textColor: Colors.white,
                     minWidth: 350,
                     height: 50,
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        Alert(
+                                context: context,
+                                title: "RFLUTTER",
+                                desc: "Flutter is awesome.")
+                            .show();
+                      });
+                    },
                   ),
                 ),
               ),
@@ -92,6 +101,30 @@ class _ExampleState extends State<Example> {
                 'Produit ajoutées',
                 style: TextStyle(fontSize: 20),
               ),
+            ),
+            ListTile(
+              leading: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 24,
+                    minHeight: 24,
+                    maxWidth: 25,
+                    maxHeight: 28,
+                  ),
+                  child: Image.asset('images/net.png', fit: BoxFit.fill)),
+              title: new Text(
+                  'Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350'),
+            ),
+            ListTile(
+              leading: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 24,
+                    minHeight: 24,
+                    maxWidth: 25,
+                    maxHeight: 28,
+                  ),
+                  child: Image.asset('images/net.png', fit: BoxFit.fill)),
+              title: new Text(
+                  'Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350'),
             ),
           ],
         ),
