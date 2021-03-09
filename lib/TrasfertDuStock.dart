@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-void main() {
-  runApp(Example());
-}
-
-class Example extends StatefulWidget {
+class Tran extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ExampleState();
+  State<StatefulWidget> createState() => _Tran();
 }
 
-class _ExampleState extends State<Example> {
+class _Tran extends State<Tran> {
   List<String> _locations = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
   List<String> _locations1 = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
   String _selectedLocation;
@@ -18,9 +14,9 @@ class _ExampleState extends State<Example> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
+    return 
+       Scaffold(
+        appBar: AppBar(automaticallyImplyLeading: false,
           backgroundColor: Color(0xff62959c),
           title: Text('Transfert du Stock'),
           centerTitle: true,
@@ -168,7 +164,7 @@ class _ExampleState extends State<Example> {
             ),
           ],
         ),
-      ),
+     
     );
   }
 }

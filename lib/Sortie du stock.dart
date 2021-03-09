@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(Example());
-}
 
-class Example extends StatefulWidget {
+class Sortie extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ExampleState();
+  State<StatefulWidget> createState() => _Sortie();
 }
 
-class _ExampleState extends State<Example> {
+class _Sortie extends State<Sortie> {
   List<String> _locations = ['Mseken', 'monestir', 'Sousse', 'beja'];
   String _selectedLocation;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
+    return 
+   Scaffold(
+        appBar: AppBar(automaticallyImplyLeading: false,
           backgroundColor: Color(0xff62959c),
           title: Text('Sortie du stock'),
           centerTitle: true,
@@ -95,7 +92,7 @@ class _ExampleState extends State<Example> {
             ),
           ],
         ),
-      ),
+      
     );
   }
 }

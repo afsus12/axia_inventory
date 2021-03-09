@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-void main() {
-  runApp(Example());
-}
-
-class Example extends StatefulWidget {
+class Entre extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ExampleState();
+  State<StatefulWidget> createState() => _Entre();
 }
 
-class _ExampleState extends State<Example> {
+class _Entre extends State<Entre> {
   List<String> _locations = ['Mseken', 'monestir', 'Sousse', 'beja'];
   String _selectedLocation;
 

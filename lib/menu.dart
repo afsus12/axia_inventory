@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
+import 'EntréEnStock.dart';
+import 'Sortie du stock.dart';
 import 'inventaire1.dart';
+import 'TrasfertDuStock.dart';
 
 
 
@@ -173,7 +176,7 @@ class _MenuState extends State<Menu> {
           setState(() { print('clicked');
         Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Example()),
+    MaterialPageRoute(builder: (context) => Entre()),
   );
           });
         },
@@ -209,24 +212,33 @@ class _MenuState extends State<Menu> {
                 children: [
                   Center(
                     child: ClipOval(
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color(0xffDE6262),
-                              Color(0xffFFB88C),
-                            ],
+                      child: GestureDetector(onTap: () {
+          setState(() { print('clicked');
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Sortie()),
+  );
+          });
+        },
+                        child: Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xffDE6262),
+                                Color(0xffFFB88C),
+                              ],
+                            ),
                           ),
+                          child: Center(
+                              child: Image(
+                            image: AssetImage('images/out.png'),
+                            width: 100,
+                          )),
                         ),
-                        child: Center(
-                            child: Image(
-                          image: AssetImage('images/out.png'),
-                          width: 100,
-                        )),
                       ),
                     ),
                   ),
@@ -240,24 +252,33 @@ class _MenuState extends State<Menu> {
                 children: [
                   Center(
                     child: ClipOval(
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color(0xffDE6262),
-                              Color(0xffFFB88C),
-                            ],
+                      child: GestureDetector(onTap: () {
+          setState(() { print('clicked');
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Tran()),
+  );
+          });
+        },
+                        child: Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xffDE6262),
+                                Color(0xffFFB88C),
+                              ],
+                            ),
                           ),
+                          child: Center(
+                              child: Image(
+                            image: AssetImage('images/tran.png'),
+                            width: 100,
+                          )),
                         ),
-                        child: Center(
-                            child: Image(
-                          image: AssetImage('images/tran.png'),
-                          width: 100,
-                        )),
                       ),
                     ),
                   ),
