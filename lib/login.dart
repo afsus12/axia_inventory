@@ -1,3 +1,4 @@
+import 'package:axia_inventory/menu.dart';
 import 'package:flutter/material.dart';
 
 
@@ -71,7 +72,11 @@ class _loginState extends State<login> {
     ),
     borderRadius: BorderRadius.all(Radius.circular(15))
   ),
-     child: FlatButton(onPressed: (){},  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
+     child: FlatButton(onPressed: (){Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Menu()));
+
+     },  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
      
                    
      
