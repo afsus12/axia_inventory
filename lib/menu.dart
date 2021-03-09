@@ -61,7 +61,12 @@ class _MenuState extends State<Menu> {
                         child: Image.asset('images/homeicon.png',
                             fit: BoxFit.fill)),
                     title: new Text('Acceuil'),
-                    onTap: () {}),
+                    onTap: () {  setState(() { 
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Menu()),
+  );
+          });}),
                 new ListTile(
                     title: new Text('Entrée en stock'),
                     leading: ConstrainedBox(
@@ -72,7 +77,12 @@ class _MenuState extends State<Menu> {
                           maxHeight: 30,
                         ),
                         child: Image.asset('images/in1.png', fit: BoxFit.fill)),
-                    onTap: () {}),
+                    onTap: () {setState(() { 
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Entre()),
+  );
+          });}),
                 new ListTile(
                     title: new Text('Sortie du Stock'),
                     leading: ConstrainedBox(
@@ -84,7 +94,12 @@ class _MenuState extends State<Menu> {
                         ),
                         child:
                             Image.asset('images/out2.png', fit: BoxFit.fill)),
-                    onTap: () {}),
+                    onTap: () {setState(() { 
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Sortie()),
+  );
+          });}),
                 new ListTile(
                     title: new Text('Transfert du Stock'),
                     leading: ConstrainedBox(
@@ -96,7 +111,12 @@ class _MenuState extends State<Menu> {
                         ),
                         child: Image.asset('images/exchange2.png',
                             fit: BoxFit.fill)),
-                    onTap: () {}),
+                    onTap: () {setState(() { 
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Tran()),
+  );
+          });}),
                 new ListTile(
                     title: new Text('Inventaire'),
                     leading: ConstrainedBox(
@@ -109,7 +129,12 @@ class _MenuState extends State<Menu> {
                       child: Image.asset('images/inventory2.png',
                           fit: BoxFit.cover),
                     ),
-                    onTap: () {}),
+                    onTap: () {setState(() { 
+        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => inventaire()),
+  );
+          });}),
                 new ListTile(
                     title: new Text("Consultation d'historique"),
                     leading: ConstrainedBox(
