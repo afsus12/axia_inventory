@@ -18,7 +18,8 @@ class _ExampleState extends State<Example> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
+        appBar: AppBar( 
+          automaticallyImplyLeading: false,
           backgroundColor: Color(0xff62959c),
           title: Text('Entrée en stock'),
           centerTitle: true,
@@ -83,14 +84,17 @@ class _ExampleState extends State<Example> {
                     textColor: Colors.white,
                     minWidth: 350,
                     height: 50,
-                    onPressed: () {
-                      setState(() {
-                        Alert(
-                                context: context,
-                                title: "RFLUTTER",
-                                desc: "Flutter is awesome.")
-                            .show();
-                      });
+                    onPressed: (){  setState(() {
+                                          
+                    
+
+
+                                          
+                                        });
+                       
+
+
+
                     },
                   ),
                 ),
@@ -132,3 +136,4 @@ class _ExampleState extends State<Example> {
     );
   }
 }
+  
