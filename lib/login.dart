@@ -43,7 +43,7 @@
                   style: BorderStyle.solid,
               )),
         labelText: 'User Name',
-        hintText: 'user not valid'
+        hintText: 'Entre your username'
       ),
       
     ),
@@ -53,13 +53,18 @@
     child: TextField(
         obscureText: true,
         decoration: InputDecoration(
+        
+
+        
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+              
               borderSide: BorderSide(
                   width: 10, 
                   style: BorderStyle.solid,
               ),),
-        labelText: 'Password',
-        hintText: 'Enter your secure password'
+        labelText: 'Password' ,
+       
+        hintText: 'Enter your  password'
       ),
     ),
   ) 

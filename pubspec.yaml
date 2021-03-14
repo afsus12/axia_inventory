@@ -35,4 +35,10 @@ flutter:
   - images/
   
 
-  
+  fonts:
+    - family: Montserrat  
+      fonts:
+        - asset: fonts/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat-Bold.ttf
+        - asset: fonts/Montserrat-Black.ttf
+          
