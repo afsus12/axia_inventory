@@ -17,10 +17,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   avatar_view: ^1.0.0+3
   rflutter_alert: ^2.0.1
+  barcode_scan_fix: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
 
 
 

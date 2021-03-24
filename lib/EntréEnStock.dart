@@ -7,6 +7,10 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
+import 'package:barcode_scan_fix/barcode_scan.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+
 
 class Entre extends StatefulWidget {
   @override
@@ -16,6 +20,12 @@ class Entre extends StatefulWidget {
 class _Entre extends State<Entre> {
   List<String> _locations = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
   String _selectedLocation;
+   String barcode = "";
+
+  @override
+  initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +297,7 @@ class _Entre extends State<Entre> {
                     
                     minWidth: 350,
                     height: 50,
-                    onPressed: (){  setState(() {
+                    onPressed: (){  setState(() {scan();
                                           
                     
 
@@ -349,5 +359,27 @@ class _Entre extends State<Entre> {
       ),
     );
   }
+ Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() => this.barcode = barcode);
+      print(this.barcode);
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          this.barcode = 'The user did not grant the camera permission!';
+        });
+      } else {
+        setState(() => this.barcode = 'Unknown error: $e');
+      }
+    } on FormatException{
+      setState(() => this.barcode = 'null (User returned using the "back"-button before scanning anything. Result)');
+    } catch (e) {
+      setState(() => this.barcode = 'Unknown error: $e');
+    }
+  }
 }
+
+
+
   
