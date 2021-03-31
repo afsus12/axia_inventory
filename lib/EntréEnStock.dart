@@ -10,6 +10,8 @@ import 'TrasfertDuStock.dart';
 import 'package:barcode_scan_fix/barcode_scan.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Entre extends StatefulWidget {
   @override
