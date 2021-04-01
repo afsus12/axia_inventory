@@ -344,6 +344,51 @@ class _Entre extends State<Entre> {
               title: new Text(
                   'Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350'),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Container(
+                  child: FlatButton(
+                    child: Text('pop up'),
+                    color: Color(0xffec524b),
+                    textColor: Colors.white,
+                    minWidth: 350,
+                    height: 50,
+                    onPressed: () {
+                      return Alert(
+                          context: context,
+                          title: "Bakou kaki",
+                          desc:
+                              "Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350",
+                          content: Form(
+                            child: Column(
+                              children: <Widget>[
+                                TextFormField(
+                                  decoration:
+                                      InputDecoration(labelText: "Quantité"),
+                                ),
+                              ],
+                            ),
+                          ),
+                          buttons: [
+                            DialogButton(
+                              child: Text("Valider"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            DialogButton(
+                              child: Text("Cancel"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ]).show();
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

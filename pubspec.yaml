@@ -1,9 +1,7 @@
 name: axia_inventory
 description: A new Flutter project.
 
-
-publish_to: 'none' 
-
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -16,31 +14,22 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   avatar_view: ^1.0.0+3
-  rflutter_alert: ^2.0.1
   barcode_scan_fix: ^1.0.2
+  rflutter_alert: ^2.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
-
-
-
 
 flutter:
-
-
   uses-material-design: true
 
-
   assets:
-  - images/
-  
+    - images/
 
   fonts:
-    - family: Montserrat  
+    - family: Montserrat
       fonts:
         - asset: fonts/Montserrat-Regular.ttf
         - asset: fonts/Montserrat-Bold.ttf
         - asset: fonts/Montserrat-Black.ttf
-          
