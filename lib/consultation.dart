@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
@@ -6,22 +7,75 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
+import 'package:barcode_scan_fix/barcode_scan.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class Sortie extends StatefulWidget {
+void main() => runApp(new MyApp());
+
+class MyApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => _Sortie();
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'Flutter Demo',
+      theme: new ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: new MyHomePage(title: 'Gestion des utilisateurs'),
+    );
+  }
 }
 
-class _Sortie extends State<Sortie> {
-  List<String> _locations = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
-  String _selectedLocation;
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageState createState() => new _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController editingController = TextEditingController();
+
+  final duplicateItems = List<String>.generate(10000, (i) => "Item $i");
+  var items = List<String>();
+
+  @override
+  void initState() {
+    items.addAll(duplicateItems);
+    super.initState();
+  }
+
+  void filterSearchResults(String query) {
+    List<String> dummySearchList = List<String>();
+    dummySearchList.addAll(duplicateItems);
+    if (query.isNotEmpty) {
+      List<String> dummyListData = List<String>();
+      dummySearchList.forEach((item) {
+        if (item.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(duplicateItems);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff62959c),
-        title: Text('Consultation du stock'),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text(widget.title),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -228,77 +282,37 @@ class _Sortie extends State<Sortie> {
           ],
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 8.0, right: 35, left: 35, bottom: 8),
-            child: Container(
-              margin: EdgeInsets.only(top: 30, bottom: 10),
-              width: MediaQuery.of(context).size.width,
-              height: 45,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: BorderSide(width: 0.6, style: BorderStyle.solid),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButton(
-                    hint: Text('Sélectionner un entrepôt'),
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 33,
-                    value: _selectedLocation,
-                    items: _locations.map((location) {
-                      return DropdownMenuItem(
-                        child: new Text(location,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal)),
-                        value: location,
-                      );
-                    }).toList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedLocation = newValue;
-                      });
-                    },
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 15),
-            child: Center(
-              child: Image.asset(
-                'images/scan.png',
-                cacheWidth: 300,
-                cacheHeight: 100,
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('${items[index]}'),
+                  );
+                },
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(
-                child: FlatButton(
-                  child: Text('Scanner code a barre'),
-                  color: Color(0xffec524b),
-                  textColor: Colors.white,
-                  minWidth: 350,
-                  height: 50,
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
