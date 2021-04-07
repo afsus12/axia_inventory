@@ -1,5 +1,10 @@
-  import 'package:axia_inventory/menu.dart';
+  import 'dart:convert';
+
+import 'package:axia_inventory/api.dart';
+import 'package:axia_inventory/customWidget.dart';
+import 'package:axia_inventory/menu.dart';
   import 'package:flutter/material.dart';
+
 
 
   class login extends StatefulWidget {
@@ -8,6 +13,14 @@
   }
 
   class _loginState extends State<login> {
+  final _formKey=GlobalKey<FormState>();
+  String message='';
+  final protUserController=TextEditingController();
+  final protPwdController=TextEditingController();
+    @override
+    void dispose(){protUserController.dispose();
+    protPwdController.dispose();
+    super.dispose();}
     @override
     Widget build(BuildContext context) {
       return Container(
@@ -32,62 +45,87 @@
                 ),
                 ),
               
-    Padding( 
-    padding: EdgeInsets.all(10),
-    child: TextField(
-        decoration: InputDecoration(
-          
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide(
-                  width: 10, 
-                  style: BorderStyle.solid,
-              )),
-        labelText: 'User Name',
-        hintText: 'Entre your username'
-      ),
-      
-    ),
+    Form(key: _formKey,
+      child: Column(
+        children:<Widget> [
+          Padding( 
+          padding: EdgeInsets.all(10),
+          child: TextFormField( controller: protUserController,
+            validator: (value){if(value.isEmpty){ return 'user cannot be empty';}return null;},
+              decoration: InputDecoration(
+                
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                        width: 10, 
+                        style: BorderStyle.solid,
+                    )),
+              labelText: 'User Name',
+              hintText: 'Entre your username'
+            
+            ),
+            
+          ),
   ),
-        Padding(
-    padding: EdgeInsets.all(10),
-    child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-        
+       Padding(
+      padding: EdgeInsets.all(10),
+      child: TextFormField( controller: protPwdController,validator: (value){if(value.isEmpty){return 'password cannot be empty';}return null;},
+          obscureText: true,
+          decoration: InputDecoration(
+          
 
-        
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
-              
-              borderSide: BorderSide(
-                  width: 10, 
-                  style: BorderStyle.solid,
-              ),),
-        labelText: 'Password' ,
-       
-        hintText: 'Enter your  password'
+          
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+                
+                borderSide: BorderSide(
+                    width: 10, 
+                    style: BorderStyle.solid,
+                ),),
+          labelText: 'Password' ,
+         
+          hintText: 'Enter your  password'
+        ),
       ),
-    ),
   ) 
   , Center( 
     child: Container( 
       
-      width: 150, height: 50,   decoration: BoxDecoration( color: Colors.blue[700],
-      border: Border.all( 
-            color: Colors.transparent,
-      ),
-      borderRadius: BorderRadius.all(Radius.circular(15))
-    ),
-      child: FlatButton(onPressed: (){Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Menu()));
+    
+      child: CustomButton(onBtnPressed: ()async{   if (_formKey.currentState.validate()){
+        var protUser =protUserController.text;
+        var protPwd = protPwdController.text;
+        setState(() {
+                 message='please wait ...';
+                });
+                
+              var rsp= await loginUser(protUser,protPwd);
+              print(rsp);
+              
+              
+          if(rsp.statusCode==200){
+                    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Menu()));
+                    }
+              else{
+                setState(() {
+                  message='invalid credentials';                
+                                });
+              }
+                }}
+        
 
-      },  child: Text('Login',style: TextStyle(color: Colors.white, fontSize: 25)),
       
+      ,),
+    
                     
       
       ),
+    ),Text('$message')
+  
+],
+      ),
     ),
-  )
+         
 
 
 
