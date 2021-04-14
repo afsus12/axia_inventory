@@ -15,10 +15,10 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   avatar_view: ^1.0.0+3
-  barcode_scan_fix: ^1.0.2
   rflutter_alert: ^2.0.2
   http: any
   shared_preferences: any
+  flutter_barcode_scanner: ^1.0.2
 
 dev_dependencies:
   flutter_test:

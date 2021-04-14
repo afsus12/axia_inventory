@@ -7,7 +7,6 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-import 'package:barcode_scan_fix/barcode_scan.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
