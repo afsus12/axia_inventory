@@ -7,11 +7,12 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-import 'package:barcode_scan_fix/barcode_scan.dart';
+
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class Entre extends StatefulWidget {
   @override
@@ -21,13 +22,33 @@ class Entre extends StatefulWidget {
 class _Entre extends State<Entre> {
   List<String> _locations = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
   String _selectedLocation;
-  String barcode = "";
+  String _scanBarcode = 'Unknown';
 
   @override
   initState() {
     super.initState();
   }
 
+Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _scanBarcode = barcodeScanRes;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -308,7 +329,7 @@ class _Entre extends State<Entre> {
                     height: 50,
                     onPressed: () {
                       setState(() {
-                        scan();
+                        scanBarcodeNormal();
                       });
                     },
                   ),
@@ -389,30 +410,10 @@ class _Entre extends State<Entre> {
                 ),
               ),
             ),
-          ],
+   Text(_scanBarcode)       ],
         ),
       ),
     );
   }
-
-  Future scan() async {
-    try {
-      String barcode = await BarcodeScanner.scan();
-      setState(() => this.barcode = barcode);
-      print(this.barcode);
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          this.barcode = 'The user did not grant the camera permission!';
-        });
-      } else {
-        setState(() => this.barcode = 'Unknown error: $e');
-      }
-    } on FormatException {
-      setState(() => this.barcode =
-          'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      setState(() => this.barcode = 'Unknown error: $e');
-    }
-  }
 }
+ 

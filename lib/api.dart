@@ -5,11 +5,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> loginUser (String user,String  pass) async {
-  var url ='https://192.168.1.14:8000/login';
+  var url ='https://192.168.1.8:8000/login';
 
   Map data = {
-    'protUser':  user,
-    'protPwd' : pass,
+    'protmUser':  user,
+    'protmPwd' : pass,
   };
   var body = json.encode(data);
 

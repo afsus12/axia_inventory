@@ -86,41 +86,43 @@ import 'package:axia_inventory/menu.dart';
         ),
       ),
   ) 
-  , Center( 
-    child: Container( 
-      
-    
-      child: CustomButton(onBtnPressed: ()async{   if (_formKey.currentState.validate()){
-        var protUser =protUserController.text;
-        var protPwd = protPwdController.text;
-        setState(() {
-                 message='please wait ...';
-                });
-                
-              var rsp= await loginUser(protUser,protPwd);
-              print(rsp);
-              
-              
-          if(rsp.statusCode==200){
-                    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Menu()));
-                    }
-              else{
-                setState(() {
-                  message='invalid credentials';                
-                                });
-              }
-                }}
+  , Padding(
+    padding: const EdgeInsets.fromLTRB(100, 8,100,8),
+    child: Center( 
+      child: Container( 
         
+        child: CustomButton(btnText:'Login', onBtnPressed: ()async{   if (_formKey.currentState.validate()){
+          var protUser =protUserController.text;
+          var protPwd = protPwdController.text;
+          setState(() {
+                   message='please wait ...';
+                  });
+                  
+                var rsp= await loginUser(protUser,protPwd);
+                print(rsp);
+                
+                
+            if(rsp.statusCode==200){
+                      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Menu()));
+                      }
+                else{
+                  setState(() {
+                    message='invalid credentials';                
+                                  });
+                }
+                  }} 
+          
 
+        
+        ,),
       
-      ,),
-    
-                    
-      
+                      
+        
+        ),
       ),
-    ),Text('$message')
+  ),Text('$message')
   
 ],
       ),

@@ -2,6 +2,7 @@
     package="com.example.axia_inventory">
    <uses-permission android:name="android.permission.CAMERA" />
    <uses-permission android:name="android.permission.INTERNET" />
+   
    <application
         android:label="axia_inventory"
         android:icon="@mipmap/ic_launcher">
