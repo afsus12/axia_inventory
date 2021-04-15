@@ -20,13 +20,27 @@ class Entre extends StatefulWidget {
 }
 
 class _Entre extends State<Entre> {
-  List<String> _locations = ['Msaken', 'Monastir', 'Sousse', 'Beja'];
-  String _selectedLocation;
+  
   String _scanBarcode = 'Unknown';
+  String selectedName;
+  List data= List();
+
+  Future getAllName()async{
+  var response= await http.get(Uri.parse('https://192.168.1.8:8000/api/Depot/selection/elitex47'),headers:{"Accept":"application/json"});
+  var jsonBody = response.body;
+  var jsonData = json.decode(jsonBody);
+  setState(() {
+    data=jsonData;
+
+  });
+  print(jsonData);
+  return "success";
+  }
 
   @override
   initState() {
     super.initState();
+    getAllName();
   }
 
 Future<void> scanBarcodeNormal() async {
@@ -285,23 +299,18 @@ Future<void> scanBarcodeNormal() async {
                       hint: Text('Sélectionner un entrepôt'),
                       icon: Icon(Icons.arrow_drop_down),
                       iconSize: 33,
-                      value: _selectedLocation,
-                      items: _locations.map((location) {
+                      value: selectedName,
+                      items: data.map((list) {
                         return DropdownMenuItem(
-                          child: new Text(location,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal)),
-                          value: location,
-                        );
+                          child:Text(list['deIntitule']),value: list['deIntitule'],) ;
                       }).toList(),
-                      onChanged: (newValue) {
+                      onChanged:(value){
                         setState(() {
-                          _selectedLocation = newValue;
+                          selectedName=value;
                         });
-                      },
-                      style: Theme.of(context).textTheme.title,
+                      }, 
+                      
+                   
                     ),
                   ),
                 ),
