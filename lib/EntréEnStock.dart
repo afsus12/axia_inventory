@@ -20,21 +20,21 @@ class Entre extends StatefulWidget {
 }
 
 class _Entre extends State<Entre> {
-  
   String _scanBarcode = 'Unknown';
   String selectedName;
-  List data= List();
+  List data = List();
 
-  Future getAllName()async{
-  var response= await http.get(Uri.parse('https://192.168.1.8:8000/api/Depot/selection/elitex47'),headers:{"Accept":"application/json"});
-  var jsonBody = response.body;
-  var jsonData = json.decode(jsonBody);
-  setState(() {
-    data=jsonData;
-
-  });
-  print(jsonData);
-  return "success";
+  Future getAllName() async {
+    var response = await http.get(
+        Uri.parse('https://192.168.1.33:8000/api/Depot/selection/elitex47'),
+        headers: {"Accept": "application/json"});
+    var jsonBody = response.body;
+    var jsonData = json.decode(jsonBody);
+    setState(() {
+      data = jsonData;
+    });
+    print(jsonData);
+    return "success";
   }
 
   @override
@@ -43,7 +43,7 @@ class _Entre extends State<Entre> {
     getAllName();
   }
 
-Future<void> scanBarcodeNormal() async {
+  Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -63,6 +63,7 @@ Future<void> scanBarcodeNormal() async {
       _scanBarcode = barcodeScanRes;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -302,15 +303,15 @@ Future<void> scanBarcodeNormal() async {
                       value: selectedName,
                       items: data.map((list) {
                         return DropdownMenuItem(
-                          child:Text(list['deIntitule']),value: list['deIntitule'],) ;
+                          child: Text(list['deIntitule']),
+                          value: list['deIntitule'],
+                        );
                       }).toList(),
-                      onChanged:(value){
+                      onChanged: (value) {
                         setState(() {
-                          selectedName=value;
+                          selectedName = value;
                         });
-                      }, 
-                      
-                   
+                      },
                     ),
                   ),
                 ),
@@ -419,10 +420,10 @@ Future<void> scanBarcodeNormal() async {
                 ),
               ),
             ),
-   Text(_scanBarcode)       ],
+            Text(_scanBarcode)
+          ],
         ),
       ),
     );
   }
 }
- 
