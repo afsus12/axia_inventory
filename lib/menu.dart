@@ -11,10 +11,18 @@ import 'TrasfertDuStock.dart';
 class Menu extends StatefulWidget {
   @override
   _MenuState createState() => _MenuState();
+  final  String aname;
+  final String email;
+  Menu({Key key,this.aname,this.email}) :super (key: key);
+  
 }
 
 class _MenuState extends State<Menu> {
   int _selectedIndex = 0;
+  
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +47,8 @@ class _MenuState extends State<Menu> {
               child: ListView(
                 children: <Widget>[
                   new UserAccountsDrawerHeader(
-                    accountName: new Text('yassine'),
-                    accountEmail: new Text('afsayassine@gmail.com'),
+                    accountName: new Text("${widget.aname}"),
+                    accountEmail: new Text("${widget.email}"),
                     decoration: BoxDecoration(
                         color: const Color(0xFF00897b),
                         image: DecorationImage(
@@ -221,7 +229,7 @@ class _MenuState extends State<Menu> {
             setState(() { print('clicked');
           Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Entre()),
+      MaterialPageRoute(builder: (context) => Entre(aname: "${widget.aname}")),  
   );
             });
           },

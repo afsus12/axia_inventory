@@ -103,9 +103,12 @@ import 'package:axia_inventory/menu.dart';
                 
                 
             if(rsp.statusCode==200){
+
+
+              var jsondata=jsonDecode(rsp.body);
                       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Menu()));
+          MaterialPageRoute(builder: (context) => Menu(aname: jsondata['name'],email: jsondata['email'],)));
                       }
                 else{
                   setState(() {
