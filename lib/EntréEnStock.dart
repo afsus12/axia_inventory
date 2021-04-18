@@ -33,6 +33,8 @@ class _Entre extends State<Entre> {
   String msg="0";
   String _scanBarcode = 'Unknown';
   String selectedName;
+  RegExp regex = RegExp(r"([.]*0)(?!.*\d)");
+
   List data= List();
   List artdata=List();
   Future getAllName()async{   
@@ -54,10 +56,116 @@ class _Entre extends State<Entre> {
   var jsonBody = response.body;
   var jsonData = json.decode(jsonBody);
 setState(() {
-    artdata=jsonData;
-    if (jsonData!=null){ok=true;}
+    artdata=jsonData; });
+    if (jsonData!=null){ok=true; 
+                  return   showDialog( 
+        context: context,
+        builder: (BuildContext context) {
+          return   Dialog(
+            shape: RoundedRectangleBorder( 
+                borderRadius:
+                    BorderRadius.circular(30.0)), 
+            child: Container( decoration: BoxDecoration( borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFE5BDF6),
+                Color(0xFFD8DEDE),
+              ],
+            )
+          ),
+              height: 320,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                new   Text(artdata[0]['arRef']),
+                new   Text(artdata[0]['arDesign']),
+                new   Text(removeTrailingZero(artdata[0]['asQtesto'])),
+                  new   Text(artdata[0]['deCode']),
+                  new    Text(artdata[0]['deIntitule']),
+                  
+                                  Padding(
+                    padding: const EdgeInsets.only(left: 50,top: 30),
+                    child: Row(
+                        children: [SizedBox(width: 30,
+                    child: FloatingActionButton(
+  backgroundColor: const Color(0xffEC524B),
+  foregroundColor: Colors.white,
+  onPressed: () {
+    // Respond to button press
+  },
+  child: Icon(Icons.remove),
+),
+                ),
+                          Container( 
+                                        width: 150,
+                                     height: 40,
+                                child: TextField(     keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ], 
+                                    obscureText: false,
+                                    decoration: InputDecoration( isDense: true, contentPadding: EdgeInsets.all(10),
+                                    
+
+                                    
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+                                          
+                                          borderSide: BorderSide(
+                                              width: 10, 
+                                              style: BorderStyle.solid,
+                                          ),),
+                                     labelText: 'Qte',
+                                     labelStyle:TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
+                                    
+                                    hintText: 'Qte a ajouté',
+                                    hintStyle: TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
+                                  ),
+                                ),
+                          ),SizedBox(width: 30,height:30,
+                    child: FloatingActionButton(
+  backgroundColor: const Color(0xffEC524B),
+  foregroundColor: Colors.white,
+  onPressed: () {
+    // Respond to button press
+  },
+  child: Icon(Icons.add),
+),
+                )
+                        ],
+                      ),
+                  ) 
+  ,
+                    Padding(
+                      padding: const EdgeInsets.only(left:40.0,top:10),
+                      child: SizedBox(
+                        width: 200.0,
+                        child: RaisedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "add",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: const Color(0xFF5853A1),
+                        ),
+                      ),
+                    )
+               
+              
+            
+            
+                  ],
+                ),
+              ),
+            ),
+          );
+        });}
     
-  });
+  
   print(jsonData);
   return ok;
   }
@@ -378,128 +486,112 @@ Future<void> scanBarcodeNormal(value) async {
                   
                    
               
-                    
-                     showDialog( 
-        context: context,
-        builder: (BuildContext context) {
-          return   Dialog(
-            shape: RoundedRectangleBorder( 
-                borderRadius:
-                    BorderRadius.circular(20.0)), 
-            child: Container(
-              height: 300,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                new   Text(artdata[0]['arRef']),
-                new   Text(artdata[0]['arDesign']),
-                new   Text(artdata[0]['asQtesto']),
-                  new   Text(artdata[0]['deCode']),
-                  new    Text(artdata[0]['deIntitule']),
-                  
-                   TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'set qte'),
-                    ),
-                    SizedBox(
-                      width: 320.0,
-                      child: RaisedButton(
-                        onPressed: () {},
-                        child: Text(
-                          "add",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: const Color(0xFF1BC0C5),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        });}
+                    }
                       );
                     },
                   ),
                 ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 30, left: 15),
-              width: 500,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Color(0xffAF5F422),
-                      Color(0xffFFFFFF),
-                    ]),
-              ),
-              child: Text(
-                'Produit ajoutées',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            ListTile(
-              leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 24,
-                    minHeight: 24,
-                    maxWidth: 25,
-                    maxHeight: 28,
-                  ),
-                  child: Image.asset('images/net.png', fit: BoxFit.fill)),
-              title: new Text(
-                  'Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350'),
-            ),
+          
+           
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child: Container(
-                  child: FlatButton(
-                    child: Text('pop up'),
-                    color: Color(0xffec524b),
-                    textColor: Colors.white,
-                    minWidth: 350,
-                    height: 50,
-                    onPressed: () {
-                      return Alert(
-                          context: context,
-                          title: "Bakou kaki",
-                          desc:
-                              "Referance du produit : *******\nDesination : *******\nQuantitiéEnStock:350",
-                          content: Form(
-                            child: Column(
-                              children: <Widget>[
-                                TextFormField(
-                                  decoration:
-                                      InputDecoration(labelText: "Quantité"),
-                                ),
-                              ],
-                            ),
-                          ),
-                          buttons: [
-                            DialogButton(
-                              child: Text("Valider"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            DialogButton(
-                              child: Text("Cancel"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ]).show();
-                    },
-                  ),
+                child: Container( width: 320, 
+                  decoration: BoxDecoration( borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFE5BDF6),
+                Color(0xFFD8DEDE),
+              ],
+            )
+          ),
+              height: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                  
+                  children: [
+                new   Text("testtt"),
+                new   Text("testtt"),
+                new   Text("testtt"),
+                  new   Text("testtt"),
+                  new    Text("testtt" ),
+                  
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50,top: 50),
+                    child: Row(
+                        children: [SizedBox(width: 30,
+                    child: FloatingActionButton(
+  backgroundColor: const Color(0xffEC524B),
+  foregroundColor: Colors.white,
+  onPressed: () {
+    // Respond to button press
+  },
+  child: Icon(Icons.remove),
+),
                 ),
+                          Container( 
+                                        width: 150,
+                                     height: 40,
+                                child: TextField(     keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ], 
+                                    obscureText: false,
+                                    decoration: InputDecoration( isDense: true, contentPadding: EdgeInsets.all(10),
+                                    
+
+                                    
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+                                          
+                                          borderSide: BorderSide(
+                                              width: 10, 
+                                              style: BorderStyle.solid,
+                                          ),),
+                                     labelText: 'Qte',
+                                     labelStyle:TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
+                                    
+                                    hintText: 'Qte a ajouté',
+                                    hintStyle: TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
+                                  ),
+                                ),
+                          ),SizedBox(width: 30,height:30,
+                    child: FloatingActionButton(
+  backgroundColor: const Color(0xffEC524B),
+  foregroundColor: Colors.white,
+  onPressed: () {
+    // Respond to button press
+  },
+  child: Icon(Icons.add),
+),
+                )
+                        ],
+                      ),
+                  ) 
+  ,
+                    Padding(
+                      padding: const EdgeInsets.only(left:50.0,top:20),
+                      child: SizedBox(
+                        width: 200.0,
+                        child: RaisedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "add",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: const Color(0xFF5853A1),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
               ),
             ),
    Text(_scanBarcode) ,Text("${widget.aname}"),Text(msg)     ],
@@ -507,4 +599,14 @@ Future<void> scanBarcodeNormal(value) async {
       ),
     );
   }
+}
+String removeTrailingZero(String string) {
+  if (!string.contains('.')) {
+    return string;
+  }
+  string = string.replaceAll(RegExp(r'0*$'), '');
+  if (string.endsWith('.')) {
+    string = string.substring(0, string.length - 1);
+  }
+  return string;
 }
