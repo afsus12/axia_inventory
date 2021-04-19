@@ -1,53 +1,65 @@
+import 'package:axia_inventory/consultation.dart';
 import 'package:flutter/material.dart';
-import 'package:list_tile_switch/list_tile_switch.dart';
+import 'dart:ffi';
+
+import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
+import 'gestion.dart';
 import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-import 'gestion3.dart';
+
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() {
   runApp(MyApp());
+  HttpOverrides.global = new MyHttpOverrides();
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Accées',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const ListTileSwitchExample(title: 'Accées'),
+      home: DataFromAPI(),
     );
   }
 }
 
-class ListTileSwitchExample extends StatefulWidget {
-  const ListTileSwitchExample({
-    Key key,
-    this.title,
-  }) : super(key: key);
-
-  final dynamic title;
-
+class DataFromAPI extends StatefulWidget {
   @override
-  _gestion createState() => _gestion();
+  _DataFromAPIState createState() => _DataFromAPIState();
 }
 
-class _gestion extends State<ListTileSwitchExample> {
-  List<bool> _switchValues = List.generate(7, (_) => false);
+class _DataFromAPIState extends State<DataFromAPI> {
+  Future getUserData() async {
+    var response = await http.get(
+      Uri.parse('https://192.168.1.33:8000/api/users/getusers'),
+    );
+    var jsonData = jsonDecode(response.body);
+    List<User> users = [];
+    for (var u in jsonData) {
+      User user = User(u["protmUser"], u["deCode"], u["cbcreateur"]);
+      users.add(user);
+    }
+    print(users.length);
+    return users;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Color(0xff62959c),
+        title: Text('Gestion des utilisateurs'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -254,107 +266,55 @@ class _gestion extends State<ListTileSwitchExample> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Ce Employé peut faire : ',
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 22,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ListTileSwitch(
-              value: _switchValues[0],
-              leading: Image.asset(
-                'images/in1.png',
-                height: 50,
-                width: 50,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _switchValues[0] = value;
-                });
-              },
-              switchActiveColor: Colors.indigo,
-              title: const Text(
-                'Entré en stock ',
-              ),
-            ),
-            ListTileSwitch(
-              value: _switchValues[1],
-              leading: Image.asset(
-                'images/out2.png',
-                height: 50,
-                width: 50,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _switchValues[1] = value;
-                });
-              },
-              switchActiveColor: Colors.indigo,
-              title: const Text(
-                'Sortie du stock',
-              ),
-            ),
-            ListTileSwitch(
-              value: _switchValues[2],
-              leading: Image.asset(
-                'images/exchange2.png',
-                height: 50,
-                width: 50,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _switchValues[2] = value;
-                });
-              },
-              switchActiveColor: Colors.indigo,
-              title: const Text(
-                'Transfert du stock',
-              ),
-            ),
-            ListTileSwitch(
-              value: _switchValues[3],
-              leading: Image.asset(
-                'images/inventory2.png',
-                height: 50,
-                width: 50,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _switchValues[3] = value;
-                });
-              },
-              switchActiveColor: Colors.indigo,
-              title: const Text(
-                'Inventaire',
-              ),
-            ),
-            ListTileSwitch(
-              value: _switchValues[4],
-              leading: Image.asset(
-                'images/his2.png',
-                height: 50,
-                width: 50,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _switchValues[4] = value;
-                });
-              },
-              switchActiveColor: Colors.indigo,
-              title: const Text(
-                'Consultation historiques',
-              ),
-            ),
-          ],
+      body: Container(
+        child: Card(
+          child: FutureBuilder(
+              future: getUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Container(
+                    child: Center(
+                      child: Text('wait..'),
+                    ),
+                  );
+                } else
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ListTile(
+                          title: Text(snapshot.data[i].protmUser),
+                          subtitle: Text(snapshot.data[i].deCode),
+                          trailing: Text(snapshot.data[i].cbcreateur),
+                          onTap: () {
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ListTileSwitchExample()),
+                              );
+                            });
+                          },
+                        );
+                      });
+              }),
         ),
       ),
     );
+  }
+}
+
+class User {
+  final String protmUser, deCode, cbcreateur;
+
+  User(this.protmUser, this.deCode, this.cbcreateur);
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
