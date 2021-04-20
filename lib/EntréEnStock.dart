@@ -5,7 +5,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
-import 'gestion3.dart';
+
 import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
@@ -19,20 +19,22 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class Entre extends StatefulWidget {
+
+   
   @override
   State<StatefulWidget> createState() => _Entre();
-  final String aname;
+  final  String aname;
   final String email;
-  Entre({Key key, this.aname, this.email}) : super(key: key);
+  Entre({Key key,this.aname,this.email}) :super (key: key);
+
 }
 
 class _Entre extends State<Entre> {
-  String msg = "0";
+  String msg="0";
   String _scanBarcode = 'Unknown';
   String selectedName;
   RegExp regex = RegExp(r"([.]*0)(?!.*\d)");
 
-<<<<<<< HEAD
   List data= List();
   List artdata=List();
   Future getAllName()async{   
@@ -109,165 +111,86 @@ setState(() {
                                     obscureText: false,
                                     decoration: InputDecoration( isDense: true, contentPadding: EdgeInsets.all(10),
                                     
-=======
-  List data = List();
-  List artdata = List();
-  Future getAllName() async {
-    var response = await http.get(
-        Uri.parse(
-            "https://192.168.1.34:8000/api/Depot/selection/${widget.aname}"),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-      data = jsonData;
-    });
-    print(jsonData);
-    return "success";
-  }
->>>>>>> 7a78732304449dda0548a78786aa8b2fc8a78392
 
-  Future getArticlebarre(value1, value2) async {
-    bool ok = false;
-    String dep = value1;
-    String bar = value2;
-    var response = await http.get(
-        Uri.parse("https://192.168.1.34:8000/api/articlebar/$dep/$bar"),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-      artdata = jsonData;
-    });
-    if (jsonData != null) {
-      ok = true;
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFFE5BDF6),
-                        Color(0xFFD8DEDE),
-                      ],
-                    )),
-                height: 320,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new Text(artdata[0]['arRef']),
-                      new Text(artdata[0]['arDesign']),
-                      new Text(removeTrailingZero(artdata[0]['asQtesto'])),
-                      new Text(artdata[0]['deCode']),
-                      new Text(artdata[0]['deIntitule']),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 50, top: 30),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              child: FloatingActionButton(
-                                backgroundColor: const Color(0xffEC524B),
-                                foregroundColor: Colors.white,
-                                onPressed: () {
-                                  // Respond to button press
-                                },
-                                child: Icon(Icons.remove),
-                              ),
-                            ),
-                            Container(
-                              width: 150,
-                              height: 40,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(
-                                      width: 10,
-                                      style: BorderStyle.solid,
-                                    ),
+                                    
+                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+                                          
+                                          borderSide: BorderSide(
+                                              width: 10, 
+                                              style: BorderStyle.solid,
+                                          ),),
+                                     labelText: 'Qte',
+                                     labelStyle:TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
+                                    
+                                    hintText: 'Qte a ajouté',
+                                    hintStyle: TextStyle(color: Color(0xFF8B8B8B),fontSize: 12),
                                   ),
-                                  labelText: 'Qte',
-                                  labelStyle: TextStyle(
-                                      color: Color(0xFF8B8B8B), fontSize: 12),
-                                  hintText: 'Qte a ajouté',
-                                  hintStyle: TextStyle(
-                                      color: Color(0xFF8B8B8B), fontSize: 12),
                                 ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: FloatingActionButton(
-                                backgroundColor: const Color(0xffEC524B),
-                                foregroundColor: Colors.white,
-                                onPressed: () {
-                                  // Respond to button press
-                                },
-                                child: Icon(Icons.add),
-                              ),
-                            )
-                          ],
+                          ),SizedBox(width: 30,height:30,
+                    child: FloatingActionButton(
+  backgroundColor: const Color(0xffEC524B),
+  foregroundColor: Colors.white,
+  onPressed: () {
+    // Respond to button press
+  },
+  child: Icon(Icons.add),
+),
+                )
+                        ],
+                      ),
+                  ) 
+  ,
+                    Padding(
+                      padding: const EdgeInsets.only(left:40.0,top:10),
+                      child: SizedBox(
+                        width: 200.0,
+                        child: RaisedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "add",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: const Color(0xFF5853A1),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0, top: 10),
-                        child: SizedBox(
-                          width: 200.0,
-                          child: RaisedButton(
-                            onPressed: () {},
-                            child: Text(
-                              "add",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            color: const Color(0xFF5853A1),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    )
+               
+              
+            
+            
+                  ],
                 ),
               ),
-            );
-          });
-    }
-
-    print(jsonData);
-    return ok;
+            ),
+          );
+        });}
+    
+  
+  print(jsonData);
+  return ok;
   }
+
+
+ 
 
   @override
   initState() {
     super.initState();
     getAllName();
+  
+    
   }
 
-  Future<void> scanBarcodeNormal(value) async {
+Future<void> scanBarcodeNormal(value) async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancel", true, ScanMode.BARCODE);
       print(barcodeScanRes);
-      if (barcodeScanRes != null) {
-        getArticlebarre(value, barcodeScanRes);
+      if(barcodeScanRes!=null){
+     getArticlebarre(value, barcodeScanRes);
+  
       }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -282,7 +205,6 @@ setState(() {
       _scanBarcode = barcodeScanRes;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -461,14 +383,7 @@ setState(() {
                       child: Image.asset('images/usr.png', fit: BoxFit.cover),
                     ),
                   ),
-                  onTap: () {
-                    setState(() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DataFromAPI()),
-                      );
-                    });
-                  }),
+                  onTap: () {}),
               new ListTile(
                   title: new Text('Parametre'),
                   leading: ConstrainedBox(
@@ -529,16 +444,16 @@ setState(() {
                       value: selectedName,
                       items: data.map((list) {
                         return DropdownMenuItem(
-                          child: Text(list['deIntitule']),
-                          value: list['deIntitule'],
-                        );
+                          child:Text(list['deIntitule']),value: list['deIntitule'],) ;
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged:(value){
                         setState(() {
-                          selectedName = value;
-                          msg = selectedName;
+                          selectedName=value;
+                           msg=selectedName;
                         });
-                      },
+                      }, 
+                      
+                   
                     ),
                   ),
                 ),
@@ -566,134 +481,27 @@ setState(() {
                     height: 50,
                     onPressed: () {
                       setState(() {
+                       
                         scanBarcodeNormal(selectedName);
-                      });
+                  
+                   
+              
+                    }
+                      );
                     },
                   ),
                 ),
               ),
             ),
-<<<<<<< HEAD
           
            
-           
+       
    Text(_scanBarcode) ,Text("${widget.aname}"),Text(msg)     ],
-=======
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 320,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFE5BDF6),
-                          Color(0xFFD8DEDE),
-                        ],
-                      )),
-                  height: 300,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        new Text("testtt"),
-                        new Text("testtt"),
-                        new Text("testtt"),
-                        new Text("testtt"),
-                        new Text("testtt"),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 50, top: 50),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 30,
-                                child: FloatingActionButton(
-                                  backgroundColor: const Color(0xffEC524B),
-                                  foregroundColor: Colors.white,
-                                  onPressed: () {
-                                    // Respond to button press
-                                  },
-                                  child: Icon(Icons.remove),
-                                ),
-                              ),
-                              Container(
-                                width: 150,
-                                height: 40,
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                        width: 10,
-                                        style: BorderStyle.solid,
-                                      ),
-                                    ),
-                                    labelText: 'Qte',
-                                    labelStyle: TextStyle(
-                                        color: Color(0xFF8B8B8B), fontSize: 12),
-                                    hintText: 'Qte a ajouté',
-                                    hintStyle: TextStyle(
-                                        color: Color(0xFF8B8B8B), fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: FloatingActionButton(
-                                  backgroundColor: const Color(0xffEC524B),
-                                  foregroundColor: Colors.white,
-                                  onPressed: () {
-                                    // Respond to button press
-                                  },
-                                  child: Icon(Icons.add),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 50.0, top: 20),
-                          child: SizedBox(
-                            width: 200.0,
-                            child: RaisedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "add",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              color: const Color(0xFF5853A1),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Text(_scanBarcode),
-            Text("${widget.aname}"),
-            Text(msg)
-          ],
->>>>>>> 7a78732304449dda0548a78786aa8b2fc8a78392
         ),
       ),
     );
   }
 }
-
 String removeTrailingZero(String string) {
   if (!string.contains('.')) {
     return string;
