@@ -1,67 +1,43 @@
+import 'package:axia_inventory/consultation.dart';
+import 'package:flutter/material.dart';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
+import 'gestion.dart';
 import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
+
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'gestion3.dart';
 
-class Sortie extends StatefulWidget {
+class DataFromAPI extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Sortie();
+  _DataFromAPIState createState() => _DataFromAPIState();
 }
 
-class _Sortie extends State<Sortie> {
-  String _scanBarcode = 'Unknown';
-  String selectedName;
-  List data = List();
-
-  Future getAllName() async {
+class _DataFromAPIState extends State<DataFromAPI> {
+  Future getUserData() async {
     var response = await http.get(
-        Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-      data = jsonData;
-    });
-    print(jsonData);
-    return "success";
-  }
-
-  @override
-  initState() {
-    super.initState();
-    getAllName();
-  }
-
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+      Uri.parse('https://192.168.1.34:8000/api/users/getusers'),
+    );
+    var jsonData = jsonDecode(response.body);
+    List<User> users = [];
+    for (var u in jsonData) {
+      User user = User(u["protmUser"], u["deCode"], u["cbcreateur"]);
+      users.add(user);
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
+    print(users.length);
+    return users;
   }
 
   @override
@@ -69,7 +45,7 @@ class _Sortie extends State<Sortie> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff62959c),
-        title: Text('Sortie du stock'),
+        title: Text('Gestion des utilisateurs'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -283,73 +259,55 @@ class _Sortie extends State<Sortie> {
           ],
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 8.0, right: 35, left: 35, bottom: 8),
-            child: Container(
-              margin: EdgeInsets.only(top: 30, bottom: 10),
-              width: MediaQuery.of(context).size.width,
-              height: 45,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: BorderSide(width: 0.6, style: BorderStyle.solid),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButton(
-                    hint: Text('Sélectionner un entrepôt'),
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 33,
-                    value: selectedName,
-                    items: data.map((list) {
-                      return DropdownMenuItem(
-                        child: Text(list['deIntitule']),
-                        value: list['deIntitule'],
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedName = value;
+      body: Container(
+        child: Card(
+          child: FutureBuilder(
+              future: getUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Container(
+                    child: Center(
+                      child: Text('wait..'),
+                    ),
+                  );
+                } else
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ListTile(
+                          title: Text(snapshot.data[i].protmUser),
+                          subtitle: Text(snapshot.data[i].deCode),
+                          trailing: Text(snapshot.data[i].cbcreateur),
+                          onTap: () {
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ListTileSwitchExample()),
+                              );
+                            });
+                          },
+                        );
                       });
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0, bottom: 15),
-            child: Center(
-              child: Image.asset(
-                'images/scan.png',
-                cacheWidth: 300,
-                cacheHeight: 100,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Container(
-                child: FlatButton(
-                  child: Text('Scanner code a barre'),
-                  color: Color(0xffec524b),
-                  textColor: Colors.white,
-                  minWidth: 350,
-                  height: 50,
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-        ],
+              }),
+        ),
       ),
     );
+  }
+}
+
+class User {
+  final String protmUser, deCode, cbcreateur;
+
+  User(this.protmUser, this.deCode, this.cbcreateur);
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

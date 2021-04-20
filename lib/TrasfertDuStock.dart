@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'gestion3.dart';
 
 class Tran extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _Tran extends State<Tran> {
 
   Future getAllName() async {
     var response = await http.get(
-        Uri.parse('https://192.168.1.33:8000/api/Depot/selection/elitex47'),
+        Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
@@ -243,7 +244,14 @@ class _Tran extends State<Tran> {
                     child: Image.asset('images/usr.png', fit: BoxFit.cover),
                   ),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DataFromAPI()),
+                    );
+                  });
+                }),
             new ListTile(
                 title: new Text('Parametre'),
                 leading: ConstrainedBox(

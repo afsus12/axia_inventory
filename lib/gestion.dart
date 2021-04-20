@@ -7,25 +7,7 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Accées',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const ListTileSwitchExample(title: 'Accées'),
-    );
-  }
-}
+import 'gestion3.dart';
 
 class ListTileSwitchExample extends StatefulWidget {
   const ListTileSwitchExample({
@@ -36,10 +18,10 @@ class ListTileSwitchExample extends StatefulWidget {
   final dynamic title;
 
   @override
-  _ListTileSwitchExampleState createState() => _ListTileSwitchExampleState();
+  _gestion createState() => _gestion();
 }
 
-class _ListTileSwitchExampleState extends State<ListTileSwitchExample> {
+class _gestion extends State<ListTileSwitchExample> {
   List<bool> _switchValues = List.generate(7, (_) => false);
 
   @override
@@ -218,7 +200,14 @@ class _ListTileSwitchExampleState extends State<ListTileSwitchExample> {
                     child: Image.asset('images/usr.png', fit: BoxFit.cover),
                   ),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DataFromAPI()),
+                    );
+                  });
+                }),
             new ListTile(
                 title: new Text('Parametre'),
                 leading: ConstrainedBox(
