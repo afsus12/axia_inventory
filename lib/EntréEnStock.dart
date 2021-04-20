@@ -5,7 +5,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
-
+import 'gestion3.dart';
 import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
@@ -37,7 +37,7 @@ class _Entre extends State<Entre> {
   Future getAllName() async {
     var response = await http.get(
         Uri.parse(
-            "https://192.168.1.33:8000/api/Depot/selection/${widget.aname}"),
+            "https://192.168.1.34:8000/api/Depot/selection/${widget.aname}"),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
@@ -53,7 +53,7 @@ class _Entre extends State<Entre> {
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://192.168.1.33:8000/api/articlebar/$dep/$bar"),
+        Uri.parse("https://192.168.1.34:8000/api/articlebar/$dep/$bar"),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
@@ -382,7 +382,14 @@ class _Entre extends State<Entre> {
                       child: Image.asset('images/usr.png', fit: BoxFit.cover),
                     ),
                   ),
-                  onTap: () {}),
+                  onTap: () {
+                    setState(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DataFromAPI()),
+                      );
+                    });
+                  }),
               new ListTile(
                   title: new Text('Parametre'),
                   leading: ConstrainedBox(

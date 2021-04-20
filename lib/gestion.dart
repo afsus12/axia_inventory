@@ -9,25 +9,6 @@ import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Accées',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const ListTileSwitchExample(title: 'Accées'),
-    );
-  }
-}
-
 class ListTileSwitchExample extends StatefulWidget {
   const ListTileSwitchExample({
     Key key,
@@ -219,7 +200,14 @@ class _gestion extends State<ListTileSwitchExample> {
                     child: Image.asset('images/usr.png', fit: BoxFit.cover),
                   ),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DataFromAPI()),
+                    );
+                  });
+                }),
             new ListTile(
                 title: new Text('Parametre'),
                 leading: ConstrainedBox(
