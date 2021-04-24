@@ -8,15 +8,9 @@ import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
+import 'consultation1.dart';
 
 class ListTileSwitchExample extends StatefulWidget {
-  const ListTileSwitchExample({
-    Key key,
-    this.title,
-  }) : super(key: key);
-
-  final dynamic title;
-
   @override
   _gestion createState() => _gestion();
 }
@@ -28,7 +22,8 @@ class _gestion extends State<ListTileSwitchExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Color(0xff62959c),
+        title: Text('Ajouter un utilisateur'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -182,7 +177,14 @@ class _gestion extends State<ListTileSwitchExample> {
                   ),
                   child: Image.asset('images/his2.png', fit: BoxFit.cover),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Consultation()),
+                    );
+                  });
+                }),
             Divider(
               color: Colors.grey,
             ),

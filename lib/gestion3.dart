@@ -1,7 +1,7 @@
-import 'package:axia_inventory/consultation.dart';
+import 'package:axia_inventory/recherche2.dart';
 import 'package:flutter/material.dart';
 import 'dart:ffi';
-
+import 'ajouterUtilisateur.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
@@ -12,7 +12,7 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-
+import 'consultation1.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -39,6 +39,8 @@ class _DataFromAPIState extends State<DataFromAPI> {
     print(users.length);
     return users;
   }
+
+  TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +201,14 @@ class _DataFromAPIState extends State<DataFromAPI> {
                   ),
                   child: Image.asset('images/his2.png', fit: BoxFit.cover),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Consultation()),
+                    );
+                  });
+                }),
             Divider(
               color: Colors.grey,
             ),
@@ -259,39 +268,78 @@ class _DataFromAPIState extends State<DataFromAPI> {
           ],
         ),
       ),
-      body: Container(
-        child: Card(
-          child: FutureBuilder(
-              future: getUserData(),
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container(
-                    child: Center(
-                      child: Text('wait..'),
-                    ),
-                  );
-                } else
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, i) {
-                        return ListTile(
-                          title: Text(snapshot.data[i].protmUser),
-                          subtitle: Text(snapshot.data[i].deCode),
-                          trailing: Text(snapshot.data[i].cbcreateur),
-                          onTap: () {
-                            setState(() {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ListTileSwitchExample()),
-                              );
-                            });
-                          },
-                        );
-                      });
-              }),
-        ),
+      body: Column(
+        children: <Widget>[
+          Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    hintText: 'Search Here...',
+                  ),
+                ),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ajouterUtilisateur()),
+                    );
+                  });
+                },
+                child: Text(
+                  'Ajouter',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                child: SizedBox(
+                  width: 600,
+                  height: 600,
+                  child: Card(
+                    child: FutureBuilder(
+                        future: getUserData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.data == null) {
+                            return Container(
+                              child: Center(
+                                child: Text('wait..'),
+                              ),
+                            );
+                          } else
+                            return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, i) {
+                                  return ListTile(
+                                    title: Text(snapshot.data[i].protmUser),
+                                    subtitle: Text(snapshot.data[i].deCode),
+                                    trailing: Text(snapshot.data[i].cbcreateur),
+                                    onTap: () {
+                                      setState(() {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ListTileSwitchExample()),
+                                        );
+                                      });
+                                    },
+                                  );
+                                });
+                        }),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

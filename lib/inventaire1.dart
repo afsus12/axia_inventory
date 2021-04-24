@@ -8,6 +8,7 @@ import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
+import 'consultation1.dart';
 
 class inventaire extends StatefulWidget {
   @override
@@ -181,7 +182,7 @@ class _inventaireState extends State<inventaire> {
                   setState(() {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DataFromAPI()),
+                      MaterialPageRoute(builder: (context) => Consultation()),
                     );
                   });
                 }),

@@ -13,6 +13,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'gestion3.dart';
+import 'consultation1.dart';
 
 class Sortie extends StatefulWidget {
   @override
@@ -223,7 +224,14 @@ class _Sortie extends State<Sortie> {
                   ),
                   child: Image.asset('images/his2.png', fit: BoxFit.cover),
                 ),
-                onTap: () {}),
+                onTap: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Consultation()),
+                    );
+                  });
+                }),
             Divider(
               color: Colors.grey,
             ),

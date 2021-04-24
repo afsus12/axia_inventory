@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
@@ -11,69 +11,54 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'gestion3.dart';
-import 'consultation1.dart';
 
-class Tran extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _Tran();
+  _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _Tran extends State<Tran> {
-  String _scanBarcode = 'Unknown';
-  String selectedName;
-  String selectedName1;
-  List data = List();
-  List data1 = List();
+class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController editingController = TextEditingController();
 
-  Future getAllName() async {
-    var response = await http.get(
-        Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-      data = jsonData;
-      data1 = jsonData;
-    });
-    print(jsonData);
-    return "success";
-  }
+  final duplicateItems = List<String>.generate(10000, (i) => "Item $i");
+  var items = List<String>();
 
   @override
-  initState() {
+  void initState() {
+    items.addAll(duplicateItems);
     super.initState();
-    getAllName();
   }
 
-  Future<void> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+  void filterSearchResults(String query) {
+    List<String> dummySearchList = List<String>();
+    dummySearchList.addAll(duplicateItems);
+    if (query.isNotEmpty) {
+      List<String> dummyListData = List<String>();
+      dummySearchList.forEach((item) {
+        if (item.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(duplicateItems);
+      });
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _scanBarcode = barcodeScanRes;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff62959c),
-        title: Text('Transfert du Stock'),
+        title: Text('Ajouter un utilisateur'),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -91,7 +76,6 @@ class _Tran extends State<Tran> {
             },
           )
         ],
-        centerTitle: true,
       ),
       drawer: new Drawer(
         child: ListView(
@@ -227,14 +211,7 @@ class _Tran extends State<Tran> {
                   ),
                   child: Image.asset('images/his2.png', fit: BoxFit.cover),
                 ),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Consultation()),
-                    );
-                  });
-                }),
+                onTap: () {}),
             Divider(
               color: Colors.grey,
             ),
@@ -252,14 +229,7 @@ class _Tran extends State<Tran> {
                     child: Image.asset('images/usr.png', fit: BoxFit.cover),
                   ),
                 ),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DataFromAPI()),
-                    );
-                  });
-                }),
+                onTap: () {}),
             new ListTile(
                 title: new Text('Parametre'),
                 leading: ConstrainedBox(
@@ -294,145 +264,37 @@ class _Tran extends State<Tran> {
           ],
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 15),
-                child: Text("Choix d'entrepôt (origine)"),
-              ),
-              SizedBox(width: 90),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(math.pi),
-                    child: Icon(
-                      Icons.reply,
-                      color: Colors.red,
-                    )),
-              )
-            ],
-          ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              width: 350.0,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: BorderSide(width: 0.6, style: BorderStyle.solid),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButtonHideUnderline(
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                        hint: Text('Sélectionner un entrepôt'),
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 33,
-                        value: selectedName,
-                        items: data.map((list) {
-                          return DropdownMenuItem(
-                            child: Text(list['deIntitule']),
-                            value: list['deIntitule'],
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedName = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
               ),
             ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 15),
-                child: Text("Choix d'entrepôt (destination)"),
-              ),
-              SizedBox(width: 58),
-              Icon(
-                Icons.reply,
-                color: Colors.green,
-              ),
-            ],
-          ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              width: 350.0,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: BorderSide(width: 0.6, style: BorderStyle.solid),
-                ),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButtonHideUnderline(
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                        hint: Text('Sélectionner un entrepôt'),
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 33,
-                        value: selectedName1,
-                        items: data1.map((list) {
-                          return DropdownMenuItem(
-                            child: Text(list['deIntitule']),
-                            value: list['deIntitule'],
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedName1 = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('${items[index]}'),
+                  );
+                },
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: Center(
-              child: Image.asset(
-                'images/scan.png',
-                cacheWidth: 300,
-                cacheHeight: 100,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Center(
-              child: Container(
-                child: FlatButton(
-                  child: Text('Scanner code a barre'),
-                  color: Color(0xffec524b),
-                  textColor: Colors.white,
-                  minWidth: 350,
-                  height: 50,
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

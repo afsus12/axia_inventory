@@ -6,6 +6,8 @@ import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
+import 'recherche2.dart';
+import 'consultation1.dart';
 
 class Menu extends StatefulWidget {
   @override
@@ -173,7 +175,15 @@ class _MenuState extends State<Menu> {
                       ),
                       child: Image.asset('images/his2.png', fit: BoxFit.cover),
                     ),
-                    onTap: () {}),
+                    onTap: () {
+                      setState(() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Consultation()),
+                        );
+                      });
+                    }),
                 Divider(
                   color: Colors.grey,
                 ),
@@ -440,41 +450,52 @@ class _MenuState extends State<Menu> {
                 children: [
                   Center(
                     child: ClipOval(
-                      child: Container(
-                        width: 135,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              Color(0xffDE6262),
-                              Color(0xffFFB88C),
-                            ],
-                          ),
-                        ),
-                        child: Center(
-                          child: Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: Image(
-                              image: AssetImage('images/his.png'),
-                              width: 60,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            print('clicked');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Consultation()),
+                            );
+                          });
+                        },
+                        child: Container(
+                          width: 135,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xffDE6262),
+                                Color(0xffFFB88C),
+                              ],
                             ),
                           ),
+                          child: Center(
+                              child: Container(
+                            margin: EdgeInsets.only(left: 5),
+                            child: Image(
+                              image: AssetImage('images/his.png'),
+                              width: 70,
+                            ),
+                          )),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                      padding: const EdgeInsets.only(top: 180.0),
-                      child: Center(
+                    padding: const EdgeInsets.only(top: 180.0),
+                    child: Center(
                         child: Text('Consultation',
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Montserrat',
                               fontWeight: FontWeight.normal,
-                            )),
-                      ))
+                            ))),
+                  )
                 ],
               ),
               Stack(

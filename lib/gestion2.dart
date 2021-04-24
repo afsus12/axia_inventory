@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,6 +25,20 @@ class ListSearch extends StatefulWidget {
 
 class ListSearchState extends State<ListSearch> {
   TextEditingController _textController = TextEditingController();
+
+  Future getUserData() async {
+    var response = await http.get(
+      Uri.parse('https://192.168.1.34:8000/api/users/getusers'),
+    );
+    var jsonData = jsonDecode(response.body);
+    List<User> users = [];
+    for (var u in jsonData) {
+      User user = User(u["protmUser"], u["deCode"], u["cbcreateur"]);
+      users.add(user);
+    }
+    print(users.length);
+    return users;
+  }
 
   static List<String> mainDataList = [
     "Apple",
@@ -81,4 +102,10 @@ class ListSearchState extends State<ListSearch> {
       ),
     );
   }
+}
+
+class User {
+  final String protmUser, deCode, cbcreateur;
+
+  User(this.protmUser, this.deCode, this.cbcreateur);
 }
