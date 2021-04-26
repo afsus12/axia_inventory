@@ -11,6 +11,7 @@ import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 
+import 'dart:typed_data';
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -34,15 +35,29 @@ class _Entre extends State<Entre> {
 
   List data = List();
   List artdata = List();
+  List photData =List();
   Future getAllName() async {
     var response = await http.get(
         Uri.parse(
-            "https://192.168.1.34:8000/api/Depot/selection/${widget.aname}"),
+            "https://192.168.1.9:8000/api/Depot/selection/${widget.aname}"),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
     setState(() {
       data = jsonData;
+    });
+    print(jsonData);
+    return "success";
+  }
+  Future getPhoto() async {
+    var response = await http.get(
+        Uri.parse(
+            "https://192.168.1.9:8000/api/ddt/6192404300580"),
+        headers: {"Accept": "image/jpg"});
+    var jsonBody = response.body;
+    var jsonData = json.decode(jsonBody);
+    setState(() {
+      photData = jsonData;
     });
     print(jsonData);
     return "success";
@@ -53,7 +68,7 @@ class _Entre extends State<Entre> {
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://192.168.1.34:8000/api/articlebar/$dep/$bar"),
+        Uri.parse("https://192.168.1.9:8000/api/articlebar/$dep/$bar"),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
@@ -69,6 +84,7 @@ class _Entre extends State<Entre> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
               child: Container(
+
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     gradient: LinearGradient(
@@ -80,90 +96,113 @@ class _Entre extends State<Entre> {
                       ],
                     )),
                 height: 320,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      new Text(artdata[0]['arRef']),
-                      new Text(artdata[0]['arDesign']),
-                      new Text(removeTrailingZero(artdata[0]['asQtesto'])),
-                      new Text(artdata[0]['deCode']),
-                      new Text(artdata[0]['deIntitule']),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 50, top: 30),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              child: FloatingActionButton(
-                                backgroundColor: const Color(0xffEC524B),
-                                foregroundColor: Colors.white,
-                                onPressed: () {
-                                  // Respond to button press
-                                },
-                                child: Icon(Icons.remove),
-                              ),
-                            ),
-                            Container(
-                              width: 150,
-                              height: 40,
-                              child: TextField(
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  contentPadding: EdgeInsets.all(10),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(
-                                      width: 10,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                                  labelText: 'Qte',
-                                  labelStyle: TextStyle(
-                                      color: Color(0xFF8B8B8B), fontSize: 12),
-                                  hintText: 'Qte a ajouté',
-                                  hintStyle: TextStyle(
-                                      color: Color(0xFF8B8B8B), fontSize: 12),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: FloatingActionButton(
-                                backgroundColor: const Color(0xffEC524B),
-                                foregroundColor: Colors.white,
-                                onPressed: () {
-                                  // Respond to button press
-                                },
-                                child: Icon(Icons.add),
-                              ),
-                            )
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                 
+                  children: [new Text(artdata[0]['arDesign'], style: new TextStyle(
+      fontSize: 24.0,fontWeight: FontWeight.bold,
+      )),
+Image(image: NetworkImage(
+    "https://192.168.1.9:8000/api/ddt/6192404300580",
+     headers: {
+       "Content-Type": "application/octet-stream ",
+       // Other headers if wanted
+     },
+  ),
+) ,
+                    Row( 
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                       Column( mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                          children: [Text('Reference : '),Text('Design : '),Text('Qte : '),Text('Depot code : '),Text('Depot : ')
+                           
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0, top: 10),
-                        child: SizedBox(
-                          width: 200.0,
-                          child: RaisedButton(
-                            onPressed: () {},
-                            child: Text(
-                              "add",
-                              style: TextStyle(color: Colors.white),
+                   
+                    Column( mainAxisAlignment: MainAxisAlignment.start,
+                               mainAxisSize: MainAxisSize.max,
+                      children: [
+                        new Text(artdata[0]['arRef']), new Text(artdata[0]['arDesign']), new Text(removeTrailingZero(artdata[0]['asQtesto']), style: new TextStyle(
+      fontSize: 20.0,fontWeight: FontWeight.bold,
+      color: Colors.yellow,
+    ),),  new Text(artdata[0]['deCode']), new Text(artdata[0]['deIntitule']),
+                      ],
+                    ),
+                   ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left:55.0, top:30),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            child: FloatingActionButton(
+                              backgroundColor: const Color(0xffEC524B),
+                              foregroundColor: Colors.white,
+                              onPressed: () {
+                                // Respond to button press
+                              },
+                              child: Icon(Icons.remove),
                             ),
-                            color: const Color(0xFF5853A1),
                           ),
+                          Container(
+                            width: 150,
+                            height: 40,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide: BorderSide(
+                                    width: 10,
+                                    style: BorderStyle.solid,
+                                  ),
+                                ),
+                                labelText: 'Qte',
+                                labelStyle: TextStyle(
+                                    color: Color(0xFF8B8B8B), fontSize: 12),
+                                hintText: 'Qte a ajouté',
+                                hintStyle: TextStyle(
+                                    color: Color(0xFF8B8B8B), fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: FloatingActionButton(
+                              backgroundColor: const Color(0xffEC524B),
+                              foregroundColor: Colors.white,
+                              onPressed: () {
+                                // Respond to button press
+                              },
+                              child: Icon(Icons.add),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: SizedBox(
+                        width: 200.0,
+                        child: RaisedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "add",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: const Color(0xFF5853A1),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             );
@@ -496,7 +535,8 @@ class _Entre extends State<Entre> {
             ),
             Text(_scanBarcode),
             Text("${widget.aname}"),
-            Text(msg)
+            Text(msg),
+
           ],
         ),
       ),

@@ -17,25 +17,15 @@ import 'package:http/http.dart' as http;
 import 'consultation1.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'utilisateurspost.dart';
+import 'api.dart';
+
 
 class ajouterUtilisateur extends StatefulWidget {
   @override
   _ajouterUtilisateurState createState() => _ajouterUtilisateurState();
 }
 
-Future<DataModel> submitData(String name, String decode) async {
-  var response = await http.post(
-      Uri.https('192.168.1.34:8000/', 'api/users/getusers'),
-      body: {"name": name, "decode": decode});
-  var data = response.body;
-  print(data);
 
-  if (response.statusCode == 4) {
-    String responseString = response.body;
-    dataModelFromJson(responseString);
-  } else
-    return null;
-}
 
 class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
   DataModel _dataModel;
@@ -45,23 +35,16 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
   Widget build(BuildContext context) {
     String selectedName;
     List data = List();
-    Future<DataModel> submitData(String protmUser, String decode) async {
-      var response = await http.post(
-          Uri.https('192.168.1.34:8000/', 'api/users/getusers'),
-          body: {"protmUser": protmUser, "decode": decode});
-      var data = response.body;
-      print(data);
 
-      if (response.statusCode == 4) {
-        String responseString = response.body;
-        dataModelFromJson(responseString);
-      } else
-        return null;
-    }
+
+    
+
+
+
 
     Future getAllName() async {
       var response = await http.get(
-          Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
+          Uri.parse('https://192.168.1.9:8000/api/Depot/selection/elitex47'),
           headers: {"Accept": "application/json"});
       var jsonBody = response.body;
       var jsonData = json.decode(jsonBody);
@@ -474,14 +457,13 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                           minWidth: 100,
                           height: 50,
                           onPressed: () async {
-                            String protmUser = protmUserController.text;
-                            String decode = decodeController.text;
-                            DataModel data =
-                                await submitData(protmUser, decode);
-                            setState(() {
-                              _dataModel = data;
-                            });
-                          },
+                               var rsp = await loginUsdder();
+                              print(rsp);
+
+                              if (rsp.statusCode == 200) {
+                                var jsondata = jsonDecode(rsp.body);
+                        
+                          }},
                         ),
                       ),
                     ),
