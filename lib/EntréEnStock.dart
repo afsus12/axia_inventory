@@ -536,6 +536,11 @@ Image(image: NetworkImage(
             Text(_scanBarcode),
             Text("${widget.aname}"),
             Text(msg),
+            FadeInImage(
+      image: NetworkImage(
+          'https://192.168.1.9:8000/api/ddt/6192404300580&size=500,300@2x'),
+      placeholder: AssetImage('assets/product.jpg'),
+    ),
 
           ],
         ),
