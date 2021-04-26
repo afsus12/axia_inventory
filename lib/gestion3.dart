@@ -26,7 +26,6 @@ class DataFromAPI extends StatefulWidget {
 }
 
 class _DataFromAPIState extends State<DataFromAPI> {
-    static List mainDataList ;
   Future getUserData() async {
     var response = await http.get(
       Uri.parse('https://192.168.1.9:8000/api/users/getusers'),
@@ -35,10 +34,6 @@ class _DataFromAPIState extends State<DataFromAPI> {
     List<User> users = [];
     for (var u in jsonData) {
       User user = User(u["protmUser"], u["deCode"], u["cbcreateur"]);
-      
-    
-     
-    
       users.add(user);
     }
     print(users.length);
@@ -46,17 +41,6 @@ class _DataFromAPIState extends State<DataFromAPI> {
   }
 
   TextEditingController _textController = TextEditingController();
-
-
-  List<String> newDataList = List.from(mainDataList);
-
-  onItemChanged(String value) {
-    setState(() {
-      newDataList = mainDataList
-          .where((string) => string.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +278,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
                   decoration: InputDecoration(
                     hintText: 'Search Here...',
                     
-                  ), onChanged: onItemChanged,
+                  ),
                 ),
               ),
               RaisedButton(

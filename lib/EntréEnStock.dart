@@ -1,5 +1,6 @@
 import 'dart:ffi';
-
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'menu.dart';
@@ -50,14 +51,14 @@ class _Entre extends State<Entre> {
     return "success";
   }
   Future getPhoto() async {
-    var response = await http.get(
+   var response = await http.get(
         Uri.parse(
             "https://192.168.1.9:8000/api/ddt/6192404300580"),
-        headers: {"Accept": "image/jpg"});
+        headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
     setState(() {
-      photData = jsonData;
+     photData = jsonData;
     });
     print(jsonData);
     return "success";
@@ -77,9 +78,14 @@ class _Entre extends State<Entre> {
     });
     if (jsonData != null) {
       ok = true;
+    
+     
+      
       return showDialog(
           context: context,
-          builder: (BuildContext context) {
+          builder: (BuildContext context) {  getPhoto();
+           var blob = photData[0]['arPhoto'];
+      Uint8List image = Base64Codec().decode(blob);
             return Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
@@ -102,14 +108,8 @@ class _Entre extends State<Entre> {
                   children: [new Text(artdata[0]['arDesign'], style: new TextStyle(
       fontSize: 24.0,fontWeight: FontWeight.bold,
       )),
-Image(image: NetworkImage(
-    "https://192.168.1.9:8000/api/ddt/6192404300580",
-     headers: {
-       "Content-Type": "application/octet-stream ",
-       // Other headers if wanted
-     },
-  ),
-) ,
+             new Container( child: new Image.memory(image)),
+
                     Row( 
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -217,6 +217,7 @@ Image(image: NetworkImage(
   initState() {
     super.initState();
     getAllName();
+    
   }
 
   Future<void> scanBarcodeNormal(value) async {
@@ -536,11 +537,7 @@ Image(image: NetworkImage(
             Text(_scanBarcode),
             Text("${widget.aname}"),
             Text(msg),
-            FadeInImage(
-      image: NetworkImage(
-          'https://192.168.1.9:8000/api/ddt/6192404300580&size=500,300@2x'),
-      placeholder: AssetImage('assets/product.jpg'),
-    ),
+           
 
           ],
         ),
@@ -559,3 +556,4 @@ String removeTrailingZero(String string) {
   }
   return string;
 }
+
