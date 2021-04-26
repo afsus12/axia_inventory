@@ -16,7 +16,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'consultation1.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'utilisateurspost.dart';
+
 import 'api.dart';
 
 
@@ -28,7 +28,7 @@ class ajouterUtilisateur extends StatefulWidget {
 
 
 class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
-  DataModel _dataModel;
+
   TextEditingController protmUserController = TextEditingController();
   TextEditingController decodeController = TextEditingController();
   @override
