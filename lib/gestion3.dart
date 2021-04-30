@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:ffi';
 import 'ajouterUtilisateur.dart';
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';

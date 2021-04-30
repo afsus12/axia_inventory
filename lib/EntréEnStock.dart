@@ -2,7 +2,7 @@ import 'dart:ffi';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
@@ -11,6 +11,9 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspaths;
 
 import 'dart:typed_data';
 import 'dart:async';
@@ -19,6 +22,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'classart.dart';
 
 class Entre extends StatefulWidget {
   @override
@@ -26,6 +30,7 @@ class Entre extends StatefulWidget {
   final String aname;
   final String email;
   Entre({Key key, this.aname, this.email}) : super(key: key);
+
 }
 
 class _Entre extends State<Entre> {
@@ -33,10 +38,14 @@ class _Entre extends State<Entre> {
   String _scanBarcode = 'Unknown';
   String selectedName;
   RegExp regex = RegExp(r"([.]*0)(?!.*\d)");
-
+  TextEditingController qteController = TextEditingController();
+  String vl='e';
   List data = List();
-  List artdata = List();
-  List photData =List();
+ 
+  bool go=false;
+  bool isloading=false;
+  
+  final List<Channel> channelList=<Channel>[];
   Future getAllName() async {
     var response = await http.get(
         Uri.parse(
@@ -50,42 +59,81 @@ class _Entre extends State<Entre> {
     print(jsonData);
     return "success";
   }
-  Future getPhoto() async {
-   var response = await http.get(
-        Uri.parse(
-            "https://192.168.1.9:8000/api/ddt/6192404300580"),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-     photData = jsonData;
-    });
-    print(jsonData);
-    return "success";
-  }
+ bb(response) async{
+   if (response.statusCode==404){
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Article not found"),
+          content: new Text("cette article n'existe pas "),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  isloading=false;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }else if (response.body != null) {
 
-  Future getArticlebarre(value1, value2) async {
-    bool ok = false;
-    String dep = value1;
-    String bar = value2;
-    var response = await http.get(
-        Uri.parse("https://192.168.1.9:8000/api/articlebar/$dep/$bar"),
-        headers: {"Accept": "application/json"});
-    var jsonBody = response.body;
-    var jsonData = json.decode(jsonBody);
-    setState(() {
-      artdata = jsonData;
-    });
-    if (jsonData != null) {
-      ok = true;
+  
+
+   
+       var jsonBody = response.body;
+    var artdata = json.decode(jsonBody);
     
+    var blob = artdata[1]['arPhoto'];
+    var slag=artdata[0]['arRef'];
+
+  var imags= await writeImageTemp(blob,slag );
+    var contain = channelList.where((element) => element.arRef == slag);
+if (contain.isNotEmpty)
+
+  {
+     return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Vous avez deja ajouté ce article"),
+          content: new Text("Modifier le parameter de ce article!"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  isloading=false;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+  } else {
+
      
-      
+ 
+      setState(() {
+        isloading=false;
+      });
+    
       return showDialog(
           context: context,
-          builder: (BuildContext context) {  getPhoto();
-           var blob = photData[0]['arPhoto'];
-      Uint8List image = Base64Codec().decode(blob);
+          builder: (BuildContext context) {
+          
             return Dialog(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
@@ -101,14 +149,26 @@ class _Entre extends State<Entre> {
                         Color(0xFFD8DEDE),
                       ],
                     )),
-                height: 320,
+                height: 353,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                  
-                  children: [new Text(artdata[0]['arDesign'], style: new TextStyle(
-      fontSize: 24.0,fontWeight: FontWeight.bold,
-      )),
-             new Container( child: new Image.memory(image)),
+                  children: [Container(
+   child: imags != null // Here is important!
+        ? ClipOval(
+ child: new Image.file(imags,
+    width: 60,
+    height: 60,
+    fit: BoxFit.cover,
+  ),
+
+                  ): ClipOval(
+ child: new Image.asset('images/net.png',
+    width: 60,
+    height: 60,
+    fit: BoxFit.cover,
+  ),)),
+            
 
                     Row( 
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -149,7 +209,8 @@ class _Entre extends State<Entre> {
                           Container(
                             width: 150,
                             height: 40,
-                            child: TextField(
+                            child: TextFormField(
+                              controller: qteController,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
@@ -193,7 +254,9 @@ class _Entre extends State<Entre> {
                       child: SizedBox(
                         width: 200.0,
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () { setState(() { var qte=double.parse(qteController.text) ;var qtes=double.parse(artdata[0]['asQtesto']) ;
+                         channelList..add(Channel(artdata[0]['arRef'],artdata[0]['arDesign'],artdata[0]['deCode'],imags, artdata[0]['deIntitule'],qtes ,qte));
+                         go=true;  }); Navigator.pop(context);},
                           child: Text(
                             "add",
                             style: TextStyle(color: Colors.white),
@@ -207,10 +270,36 @@ class _Entre extends State<Entre> {
               ),
             );
           });
-    }
+    }}
+  
+}
+  Future<File> writeImageTemp(String base64Image, String imageName) async {
+   Uint8List bytes = base64.decode(base64Image);
+
+final appDir = await syspaths.getTemporaryDirectory();
+  imageName=imageName+'.jpg';
+File file = File('${appDir.path}/'+imageName);
+
+await file.writeAsBytes(bytes);
+
+
+  return file;
+}
+  
+
+  Future getArticlebarre(value1, value2) async {
+
+    String dep = value1;
+    String bar = value2;
+    var response = await http.get(
+        Uri.parse("https://192.168.1.9:8000/api/articlebar/$dep/$bar"),
+        headers: {"Accept": "application/json"});
+
+  var jsonBody = response.body;
+    var jsonData = json.decode(jsonBody);
 
     print(jsonData);
-    return ok;
+    return response;
   }
 
   @override
@@ -220,16 +309,15 @@ class _Entre extends State<Entre> {
     
   }
 
-  Future<void> scanBarcodeNormal(value) async {
+  Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancel", true, ScanMode.BARCODE);
       print(barcodeScanRes);
-      if (barcodeScanRes != null) {
-        getArticlebarre(value, barcodeScanRes);
-      }
+      var mm= await getArticlebarre(selectedName,barcodeScanRes);
+    return bb(mm);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
@@ -238,10 +326,12 @@ class _Entre extends State<Entre> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
+ 
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
+    
+    
   }
 
   @override
@@ -519,24 +609,95 @@ class _Entre extends State<Entre> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Container(
-                  child: FlatButton(
+                  child:  !isloading
+                    ?FlatButton(
                     child: Text('Scanner code a barre'),
                     color: Color(0xffec524b),
                     textColor: Colors.white,
                     minWidth: 350,
                     height: 50,
-                    onPressed: () {
-                      setState(() {
-                        scanBarcodeNormal(selectedName);
-                      });
+                    onPressed: ()  {
+                      setState(() {isloading=true;
+                      
+                        
+              
+                      }); scanBarcodeNormal();
+                           
                     },
-                  ),
+                  ):CircularProgressIndicator(),
                 ),
               ),
             ),
-            Text(_scanBarcode),
-            Text("${widget.aname}"),
-            Text(msg),
+        
+           new SizedBox(height: 10,),
+         Visibility( maintainSize: true, 
+  maintainAnimation: true,
+  maintainState: true, visible:go==true,
+           child: new  Container(height: 50,
+                 decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30)),
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                Color(0xff2193b0),
+                Color(0xff6dd5ed),
+              ])),
+               child:Center(child: Text("Produit Ajoutées",style: TextStyle(fontSize: 18,color: Colors.white)))),
+         ),
+           Expanded(
+             child: SizedBox(height: 200.0,
+               child: ListView.builder(itemCount: channelList.length, scrollDirection: Axis.vertical,
+                 itemBuilder: (context,index){ var a=channelList[index].qte.toString(); var b=channelList[index].qtesto.toString();
+                  final item =channelList[index].toString() ;
+                 return  Dismissible(key: Key(item),
+                  onDismissed: (direction) {
+                // Remove the item from the data source.
+                setState(() {
+                  channelList.removeAt(index);
+                  if(channelList.length==0){setState(() {
+                    go=false;
+                  });}
+                });ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("$item dismissed")));
+              }, background: Container(color: Colors.red,child: Icon(Icons.delete,color: Colors.white,size: 18,)),
+
+                   child: Container(
+                     child: Card(
+                       child: ListTile(onTap: (){},title: Text(channelList[index].arDesign),leading:  
+                       ClipOval(
+                  child: new Image.file(channelList[index].arImage,
+                       width: 60,
+                       height: 60,
+                       fit: BoxFit.cover,
+                     ),
+                     ) ,        trailing: 
+                  
+                     RichText(
+  text: TextSpan(
+    text: 'Quantité en Stock\n',
+    style: DefaultTextStyle.of(context).style,
+    children: <TextSpan>[
+      TextSpan(text: removeTrailingZero(b)+'\n ', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+      TextSpan(text:'(+'+removeTrailingZero(a)+')',style:TextStyle(color: Colors.green)),
+    ],
+  ),
+ textAlign: TextAlign.center,),
+                     
+                      subtitle: Text(channelList[index].arRef+'\n'+channelList[index].deCode+'\n'+channelList[index].deDepot),
+                     ),
+                       
+                                   
+                     ),
+                   ),
+                 
+                 
+                 
+                 
+                                 
+                 ); }),
+             ),
+           )
+
            
 
           ],

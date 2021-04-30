@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
