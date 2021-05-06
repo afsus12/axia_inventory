@@ -116,7 +116,7 @@ class _MenuState extends State<Menu> {
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Sortie()),
+                          MaterialPageRoute(builder: (context) => Sortie(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
                         );
                       });
                     }),
@@ -138,7 +138,7 @@ class _MenuState extends State<Menu> {
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Tran()),
+                          MaterialPageRoute(builder: (context) => Tran(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
                         );
                       });
                     }),
@@ -309,7 +309,7 @@ class _MenuState extends State<Menu> {
                             print('clicked');
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Sortie()),
+                              MaterialPageRoute(builder: (context) => Sortie(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}")),
                             );
                           });
                         },
@@ -357,7 +357,7 @@ class _MenuState extends State<Menu> {
                             print('clicked');
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Tran()),
+                              MaterialPageRoute(builder: (context) => Tran(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}")),
                             );
                           });
                         },
