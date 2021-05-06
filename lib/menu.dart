@@ -510,7 +510,8 @@ class _MenuState extends State<Menu> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DataFromAPI()),
+                                  builder: (context) =>
+                                      DataFromAPI(aname: "${widget.aname}")),
                             );
                           });
                         },

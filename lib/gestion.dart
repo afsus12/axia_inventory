@@ -9,17 +9,55 @@ import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
 import 'consultation1.dart';
+import 'api.dart';
+import 'package:flutter/material.dart';
+
+import 'menu.dart';
+import 'EntréEnStock.dart';
+import 'login.dart';
+import 'gestion3.dart';
+import 'EntréEnStock.dart';
+import 'Sortie du stock.dart';
+import 'inventaire1.dart';
+import 'TrasfertDuStock.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'consultation1.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
+import 'api.dart';
 
 class ListTileSwitchExample extends StatefulWidget {
   @override
   _gestion createState() => _gestion();
+  final String aname;
+
+  ListTileSwitchExample({Key key, this.aname}) : super(key: key);
 }
 
 class _gestion extends State<ListTileSwitchExample> {
   List<bool> _switchValues = List.generate(7, (_) => false);
+  int admin;
 
   @override
   Widget build(BuildContext context) {
+    List data = List();
+    Future getAllName() async {
+      var response = await http.get(
+          Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
+          headers: {"Accept": "application/json"});
+      var jsonBody = response.body;
+      var jsonData = json.decode(jsonBody);
+      setState(() {
+        data = jsonData;
+      });
+      print(jsonData);
+      return "success";
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff62959c),
@@ -267,6 +305,11 @@ class _gestion extends State<ListTileSwitchExample> {
               onChanged: (value) {
                 setState(() {
                   _switchValues[0] = value;
+                  if (_switchValues[0] == true) {
+                    admin = 1;
+                  } else {
+                    admin = 0;
+                  }
                 });
               },
               switchActiveColor: Colors.indigo,
@@ -284,6 +327,11 @@ class _gestion extends State<ListTileSwitchExample> {
               onChanged: (value) {
                 setState(() {
                   _switchValues[1] = value;
+                  if (_switchValues[1] == true) {
+                    admin = 1;
+                  } else {
+                    admin = 0;
+                  }
                 });
               },
               switchActiveColor: Colors.indigo,
@@ -301,6 +349,11 @@ class _gestion extends State<ListTileSwitchExample> {
               onChanged: (value) {
                 setState(() {
                   _switchValues[2] = value;
+                  if (_switchValues[2] == true) {
+                    admin = 1;
+                  } else {
+                    admin = 0;
+                  }
                 });
               },
               switchActiveColor: Colors.indigo,
@@ -318,6 +371,11 @@ class _gestion extends State<ListTileSwitchExample> {
               onChanged: (value) {
                 setState(() {
                   _switchValues[3] = value;
+                  if (_switchValues[3] == true) {
+                    admin = 1;
+                  } else {
+                    admin = 0;
+                  }
                 });
               },
               switchActiveColor: Colors.indigo,
@@ -335,12 +393,34 @@ class _gestion extends State<ListTileSwitchExample> {
               onChanged: (value) {
                 setState(() {
                   _switchValues[4] = value;
+                  if (_switchValues[4] == true) {
+                    admin = 1;
+                  } else {
+                    admin = 0;
+                  }
                 });
               },
               switchActiveColor: Colors.indigo,
               title: const Text(
                 'Consultation historiques',
               ),
+            ),
+            FlatButton(
+              child: Text('Ajouter'),
+              color: Color(0xffec524b),
+              textColor: Colors.white,
+              minWidth: 100,
+              height: 50,
+              onPressed: () async {
+                var cb = "${widget.aname}";
+
+                var rsp = await role(admin, cb);
+                print(rsp);
+
+                if (rsp.statusCode == 200) {
+                  var jsondata = jsonDecode(rsp.body);
+                }
+              },
             ),
           ],
         ),
