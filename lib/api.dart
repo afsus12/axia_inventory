@@ -3,8 +3,20 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+Future<http.Response> role(
+  int admin,
+  String cb,
+) async {
+  var url = 'https://192.168.1.34:8000/api/users/addroles';
+
+  Map data = {
+    'protmAdministrator': admin,
+    'cbCreateur': cb,
+  };
+}
+
 Future<http.Response> loginUser(String user, String pass) async {
-  var url = 'https://192.168.1.9:8000/login';
+  var url = 'https://192.168.1.34:8000/login';
 
   Map data = {
     'protmUser': user,
@@ -19,20 +31,31 @@ Future<http.Response> loginUser(String user, String pass) async {
   print("${response.body}");
   return response;
 }
-Future<http.Response> loginUsdder() async {
-  var url = 'https://192.168.1.9:8000/api/users/add';
+
+Future<http.Response> loginUsdder(
+  String protmUserController,
+  String protmPwdController,
+  String protmDescriptionController,
+  String protmEmailController,
+  String protmUserprofilController,
+  int admin,
+  String decodeController,
+  String cb,
+) async {
+  var url = 'https://192.168.1.34:8000/api/users/add';
 
   Map data = {
-    "protmUser": "testss",
-  "protmPwd": "test123",
-  "protmDescription" :"testss",
-  "protmRight":true,
-  "protmEmail":"afsayassines@gmail.com",
-  "protmUserprofil":"testss",
-  "protmAdministrator":1,
-  "deCode":"DEP0101",
-  "cbcreateur":"testss",
+    'protmUser': protmUserController,
+    'protmPwd': protmPwdController,
+    'protmDescription': protmDescriptionController,
+    'protmRight': true,
+    'protmEmail': protmEmailController,
+    'protmUserprofil': protmUserprofilController,
+    'protmAdministrator': admin,
+    'deCode': decodeController,
+    'cbCreateur': cb,
   };
+
   var body = json.encode(data);
 
   var response = await http.post(Uri.parse(url),
@@ -42,5 +65,3 @@ Future<http.Response> loginUsdder() async {
   print("${response.body}");
   return response;
 }
-
-

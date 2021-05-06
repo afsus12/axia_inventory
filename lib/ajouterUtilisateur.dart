@@ -19,32 +19,35 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'api.dart';
 
-
 class ajouterUtilisateur extends StatefulWidget {
   @override
   _ajouterUtilisateurState createState() => _ajouterUtilisateurState();
+  final String aname;
+
+  ajouterUtilisateur({Key key, this.aname}) : super(key: key);
 }
 
-
-
 class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
-
   TextEditingController protmUserController = TextEditingController();
+  TextEditingController protmPwdController = TextEditingController();
   TextEditingController decodeController = TextEditingController();
+  TextEditingController protmDescriptionController = TextEditingController();
+  TextEditingController protmRightController = TextEditingController();
+  TextEditingController protmEmailController = TextEditingController();
+  TextEditingController protmUserprofilController = TextEditingController();
+  TextEditingController protmAdministratorController = TextEditingController();
+  TextEditingController cbcreateurController = TextEditingController();
+  bool _isDisabled = false;
+  int admin;
+
   @override
   Widget build(BuildContext context) {
     String selectedName;
     List data = List();
 
-
-    
-
-
-
-
     Future getAllName() async {
       var response = await http.get(
-          Uri.parse('https://192.168.1.9:8000/api/Depot/selection/elitex47'),
+          Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
           headers: {"Accept": "application/json"});
       var jsonBody = response.body;
       var jsonData = json.decode(jsonBody);
@@ -300,7 +303,7 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                         child: Text('Nom utilisateur :'),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
+                        padding: const EdgeInsets.only(left: 17, top: 20),
                         child: Container(
                           width: 200,
                           height: 35,
@@ -332,10 +335,80 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 20, top: 20),
+                        child: Text('Password :'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 50, top: 20),
+                        child: Container(
+                          width: 200,
+                          height: 35,
+                          child: TextField(
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                  width: 10,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                              labelStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
+                            ),
+                            controller: protmPwdController,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 20),
+                        child: Text('Description :'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40, top: 20),
+                        child: Container(
+                          width: 200,
+                          height: 35,
+                          child: TextField(
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                  width: 10,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                              labelStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
+                              hintText: 'Description',
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
+                            ),
+                            controller: protmDescriptionController,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 20),
                         child: Text('Email :'),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 80, top: 20),
+                        padding: const EdgeInsets.only(left: 75, top: 20),
                         child: Container(
                           width: 200,
                           height: 35,
@@ -357,7 +430,7 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                               hintStyle: TextStyle(
                                   color: Color(0xFF8B8B8B), fontSize: 12),
                             ),
-                            controller: decodeController,
+                            controller: protmEmailController,
                           ),
                         ),
                       ),
@@ -367,10 +440,10 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Text('Password :'),
+                        child: Text('Userprofil :'),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 53, top: 20),
+                        padding: const EdgeInsets.only(left: 50, top: 20),
                         child: Container(
                           width: 200,
                           height: 35,
@@ -388,10 +461,11 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                               ),
                               labelStyle: TextStyle(
                                   color: Color(0xFF8B8B8B), fontSize: 12),
-                              hintText: 'Enter your  password',
+                              hintText: 'Userprofil',
                               hintStyle: TextStyle(
                                   color: Color(0xFF8B8B8B), fontSize: 12),
                             ),
+                            controller: protmUserprofilController,
                           ),
                         ),
                       ),
@@ -401,46 +475,59 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Text('Entrepôt :            '),
+                        child: Text('Admin ou non :'),
                       ),
                       Padding(
+                        padding: const EdgeInsets.only(left: 23, top: 20),
+                        child: Container(
+                          width: 70,
+                          height: 35,
+                          child: Switch(
+                              value: _isDisabled,
+                              onChanged: (check) {
+                                setState(() {
+                                  _isDisabled = check;
+                                  if (_isDisabled == true) {
+                                    admin = 1;
+                                  } else {
+                                    admin = 0;
+                                  }
+                                });
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
                         padding: const EdgeInsets.only(left: 20, top: 20),
+                        child: Text('Depot :'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 73, top: 20),
                         child: Container(
                           width: 200,
                           height: 35,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              side: BorderSide(
-                                  width: 0.6, style: BorderStyle.solid),
-                            ),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton(
-                                hint: Text(
-                                  'selectioner un entrepôt',
-                                  style: TextStyle(
-                                      color: Color(0xFF8B8B8B), fontSize: 12),
+                          child: TextField(
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(8),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide(
+                                  width: 10,
+                                  style: BorderStyle.solid,
                                 ),
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 33,
-                                value: selectedName,
-                                items: data.map((list) {
-                                  return DropdownMenuItem(
-                                    child: Text(list['deIntitule']),
-                                    value: list['deIntitule'],
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedName = value;
-                                  });
-                                },
-                                style: Theme.of(context).textTheme.title,
                               ),
+                              labelStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
+                              hintText: 'Depot',
+                              hintStyle: TextStyle(
+                                  color: Color(0xFF8B8B8B), fontSize: 12),
                             ),
+                            controller: decodeController,
                           ),
                         ),
                       ),
@@ -457,13 +544,21 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                           minWidth: 100,
                           height: 50,
                           onPressed: () async {
-                               var rsp = await loginUsdder();
-                              print(rsp);
+                            var cb = "${widget.aname}";
+                            var user = protmUserController.text;
+                            var pwde = protmPwdController.text;
+                            var desc = protmDescriptionController.text;
+                            var mail = protmEmailController.text;
+                            var profil = protmUserprofilController.text;
+                            var depo = decodeController.text;
+                            var rsp = await loginUsdder(user, pwde, desc, mail,
+                                profil, admin, depo, cb);
+                            print(rsp);
 
-                              if (rsp.statusCode == 200) {
-                                var jsondata = jsonDecode(rsp.body);
-                        
-                          }},
+                            if (rsp.statusCode == 200) {
+                              var jsondata = jsonDecode(rsp.body);
+                            }
+                          },
                         ),
                       ),
                     ),

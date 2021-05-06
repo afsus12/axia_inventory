@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:ffi';
 import 'ajouterUtilisateur.dart';
 import 'package:flutter/material.dart';
+
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
@@ -17,17 +18,15 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'listedesdepotes.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'gestion3.dart';
 
-class DataFromAPI extends StatefulWidget {
+class DepotFromAPI extends StatefulWidget {
   @override
-  _DataFromAPIState createState() => _DataFromAPIState();
-  final String aname;
-  DataFromAPI({Key key, this.aname}) : super(key: key);
+  _DepotFromAPIState createState() => _DepotFromAPIState();
 }
 
-class _DataFromAPIState extends State<DataFromAPI> {
+class _DepotFromAPIState extends State<DepotFromAPI> {
   Future getUserData() async {
     var response = await http.get(
       Uri.parse('https://192.168.1.34:8000/api/users/getusers'),
@@ -282,22 +281,6 @@ class _DataFromAPIState extends State<DataFromAPI> {
                   ),
                 ),
               ),
-              RaisedButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ajouterUtilisateur(aname: "${widget.aname}")),
-                    );
-                  });
-                },
-                child: Text(
-                  'Ajouter',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
             ],
           ),
           Column(
@@ -321,14 +304,14 @@ class _DataFromAPIState extends State<DataFromAPI> {
                                 itemCount: snapshot.data.length,
                                 itemBuilder: (context, i) {
                                   return ListTile(
-                                    title: Text(snapshot.data[i].protmUser),
+                                    title: Text(snapshot.data[i].deCode),
                                     onTap: () {
                                       setState(() {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DepotFromAPI()),
+                                                  ListTileSwitchExample()),
                                         );
                                       });
                                     },

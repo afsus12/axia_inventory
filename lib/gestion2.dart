@@ -28,7 +28,7 @@ class ListSearchState extends State<ListSearch> {
 
   Future getUserData() async {
     var response = await http.get(
-      Uri.parse('https://192.168.1.9:8000/api/users/getusers'),
+      Uri.parse('https://192.168.1.34:8000/api/users/getusers'),
     );
     var jsonData = jsonDecode(response.body);
     List<User> users = [];
