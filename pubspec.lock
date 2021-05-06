@@ -377,10 +377,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.2.19"
-=======
-    version: "0.3.0"
   time:
     dependency: transitive
     description:
@@ -388,7 +385,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.1"
->>>>>>> 1fc443887f87b13d2a12c6d938c0f544d5bb101d
   typed_data:
     dependency: transitive
     description:

@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
- 
+
   http: any
 
   flutter_barcode_scanner: ^1.0.2
@@ -38,6 +38,6 @@ flutter:
         - asset: fonts/Montserrat-Regular.ttf
         - asset: fonts/Montserrat-Bold.ttf
         - asset: fonts/Montserrat-Black.ttf
-    - family:   FiraSans
+    - family: FiraSans
       fonts:
-        - asset: fonts/FiraSans-Regular.ttf 
+        - asset: fonts/FiraSans-Regular.ttf
