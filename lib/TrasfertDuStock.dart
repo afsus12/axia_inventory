@@ -18,6 +18,10 @@ import 'consultation1.dart';
 class Tran extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _Tran();
+    final String aname;
+  final String email;
+  final String url;
+Tran({Key key, this.aname, this.email,this.url}) : super(key: key);
 }
 
 class _Tran extends State<Tran> {
@@ -29,7 +33,7 @@ class _Tran extends State<Tran> {
 
   Future getAllName() async {
     var response = await http.get(
-        Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
+        Uri.parse('https://192.168.1.9:8000/api/Depot/selection/elitex47'),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);

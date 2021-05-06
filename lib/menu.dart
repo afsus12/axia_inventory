@@ -14,7 +14,8 @@ class Menu extends StatefulWidget {
   _MenuState createState() => _MenuState();
   final String aname;
   final String email;
-  Menu({Key key, this.aname, this.email}) : super(key: key);
+  final String url;
+  Menu({Key key, this.aname, this.email,this.url}) : super(key: key);
 }
 
 class _MenuState extends State<Menu> {
@@ -94,7 +95,7 @@ class _MenuState extends State<Menu> {
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Entre()),
+                          MaterialPageRoute(builder: (context) => Entre(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
                         );
                       });
                     }),
@@ -260,7 +261,7 @@ class _MenuState extends State<Menu> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Entre(aname: "${widget.aname}")),
+                                      Entre(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
                             );
                           });
                         },

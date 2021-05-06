@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-Future<http.Response> loginUser(String user, String pass) async {
-  var url = 'https://192.168.1.9:8000/login';
+Future<http.Response> loginUser(String user, String pass ,String uri) async {
+  var url = 'https://$uri/login';
 
   Map data = {
     'protmUser': user,
@@ -20,7 +20,7 @@ Future<http.Response> loginUser(String user, String pass) async {
   return response;
 }
 Future<http.Response> loginUsdder() async {
-  var url = 'https://192.168.1.9:8000/api/users/add';
+  var url = 'https://192.168.1.8:8000/api/users/add';
 
   Map data = {
     "protmUser": "testss",

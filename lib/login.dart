@@ -106,8 +106,8 @@ class _loginState extends State<login> {
                               setState(() {
                                 message = 'please wait ...';
                               });
-
-                              var rsp = await loginUser(protUser, protPwd);
+                              var uri='192.168.1.8:8000';
+                              var rsp = await loginUser(protUser, protPwd,uri);
                               print(rsp);
 
                               if (rsp.statusCode == 200) {
@@ -118,6 +118,7 @@ class _loginState extends State<login> {
                                         builder: (context) => Menu(
                                               aname: jsondata['name'],
                                               email: jsondata['email'],
+                                              url: uri,
                                             )));
                               } else {
                                 setState(() {
