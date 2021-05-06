@@ -13,6 +13,10 @@ import 'consultation1.dart';
 class inventaire extends StatefulWidget {
   @override
   _inventaireState createState() => _inventaireState();
+     final String aname;
+  final String email;
+  final String url;
+inventaire({Key key, this.aname, this.email,this.url}) : super(key: key);
 }
 
 class _inventaireState extends State<inventaire> {

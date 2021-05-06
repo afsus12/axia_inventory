@@ -27,7 +27,7 @@ class _Consultation extends State<Consultation> {
 
   Future getAllName() async {
     var response = await http.get(
-        Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
+        Uri.parse('https://192.168.1.9:8000/api/Depot/selection/elitex47'),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);

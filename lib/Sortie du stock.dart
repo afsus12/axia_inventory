@@ -18,9 +18,14 @@ import 'consultation1.dart';
 class Sortie extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _Sortie();
+    final String aname;
+  final String email;
+  final String url;
+Sortie({Key key, this.aname, this.email,this.url}) : super(key: key);
 }
 
 class _Sortie extends State<Sortie> {
+  
   String _scanBarcode = 'Unknown';
   String selectedName;
   List data = List();
