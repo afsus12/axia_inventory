@@ -1,3 +1,4 @@
+import 'package:axia_inventory/sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:list_tile_switch/list_tile_switch.dart';
 import 'menu.dart';
@@ -35,7 +36,10 @@ class ListTileSwitchExample extends StatefulWidget {
   _gestion createState() => _gestion();
   final String aname;
 
-  ListTileSwitchExample({Key key, this.aname}) : super(key: key);
+  final String email;
+  final String url;
+
+  ListTileSwitchExample({Key key, this.aname,this.email,this.url}) : super(key: key);
 }
 
 class _gestion extends State<ListTileSwitchExample> {
@@ -47,7 +51,7 @@ class _gestion extends State<ListTileSwitchExample> {
     List data = List();
     Future getAllName() async {
       var response = await http.get(
-          Uri.parse('https://192.168.1.34:8000/api/Depot/selection/elitex47'),
+          Uri.parse('https://${widget.url}/api/Depot/selection/${widget.aname}'),
           headers: {"Accept": "application/json"});
       var jsonBody = response.body;
       var jsonData = json.decode(jsonBody);
@@ -74,214 +78,14 @@ class _gestion extends State<ListTileSwitchExample> {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu()),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
                 );
               });
             },
           )
         ],
       ),
-      drawer: new Drawer(
-        child: ListView(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(
-              accountName: new Text('yassine'),
-              accountEmail: new Text('afsayassine@gmail.com'),
-              decoration: BoxDecoration(
-                  color: const Color(0xFF00897b),
-                  image: DecorationImage(
-                      image: AssetImage("images/asd.jpg"), fit: BoxFit.fill)),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                backgroundImage: new AssetImage('images/avataaars.png'),
-              ),
-            ),
-            new ListTile(
-                leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: 24,
-                      minHeight: 20,
-                      maxWidth: 28,
-                      maxHeight: 28,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child:
-                          Image.asset('images/homeicon.png', fit: BoxFit.fill),
-                    )),
-                title: new Text('Acceuil'),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Menu()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text('Entrée en stock'),
-                leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: 24,
-                      minHeight: 24,
-                      maxWidth: 29,
-                      maxHeight: 29,
-                    ),
-                    child: Container(
-                        child:
-                            Image.asset('images/in1.png', fit: BoxFit.fill))),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Entre()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text('Sortie du Stock'),
-                leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: 24,
-                      minHeight: 21,
-                      maxWidth: 28,
-                      maxHeight: 28,
-                    ),
-                    child: Container(
-                        margin: EdgeInsets.only(left: 1),
-                        child:
-                            Image.asset('images/out2.png', fit: BoxFit.fill))),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Sortie()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text('Transfert du Stock'),
-                leading: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: 21,
-                      minHeight: 21,
-                      maxWidth: 26,
-                      maxHeight: 26,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2),
-                      child:
-                          Image.asset('images/exchange2.png', fit: BoxFit.fill),
-                    )),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Tran()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text('Inventaire'),
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 20,
-                    minHeight: 20,
-                    maxWidth: 28,
-                    maxHeight: 26,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 1),
-                    child:
-                        Image.asset('images/inventory2.png', fit: BoxFit.cover),
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => inventaire()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text("Consultation d'historique"),
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 24,
-                    minHeight: 24,
-                    maxWidth: 28,
-                    maxHeight: 28,
-                  ),
-                  child: Image.asset('images/his2.png', fit: BoxFit.cover),
-                ),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Consultation()),
-                    );
-                  });
-                }),
-            Divider(
-              color: Colors.grey,
-            ),
-            new ListTile(
-                title: new Text('Gestion des utilisateurs'),
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 27,
-                    minHeight: 24,
-                    maxWidth: 32,
-                    maxHeight: 30,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 1),
-                    child: Image.asset('images/usr.png', fit: BoxFit.cover),
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DataFromAPI()),
-                    );
-                  });
-                }),
-            new ListTile(
-                title: new Text('Parametre'),
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 14,
-                    minHeight: 14,
-                    maxWidth: 30,
-                    maxHeight: 25,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 2),
-                    child:
-                        Image.asset('images/parametre.png', fit: BoxFit.cover),
-                  ),
-                ),
-                onTap: () {}),
-            new ListTile(
-                title: new Text('log out'),
-                leading: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 25,
-                    minHeight: 25,
-                    maxWidth: 30,
-                    maxHeight: 28,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Image.asset('images/IMg4.png', fit: BoxFit.cover),
-                  ),
-                ),
-                onTap: () {}),
-          ],
-        ),
-      ),
+      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

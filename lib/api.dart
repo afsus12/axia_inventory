@@ -28,7 +28,7 @@ Future<http.Response> loginUser(String user, String pass, String uri) async {
       headers: {"Content-Type": "application/json"}, body: body);
 
   print("${response.statusCode}");
-  print("${response.body}");
+  print("${response.body}");  
   return response;
 }
 
@@ -42,7 +42,7 @@ Future<http.Response> loginUsdder(
   String decodeController,
   String cb,
 ) async {
-  var url = 'https://192.168.1.34:8000/api/users/add';
+  var url = 'https://192.168.1.8:8000/api/users/add';
 
   Map data = {
     'protmUser': protmUserController,
