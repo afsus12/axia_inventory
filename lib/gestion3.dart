@@ -35,8 +35,8 @@ class DataFromAPI extends StatefulWidget {
 class _DataFromAPIState extends State<DataFromAPI> {
   Future getUserData() async {
     var response = await http.get(
-      Uri.parse('https://${widget.url}/api/users/getusers'),
-    );
+      Uri.parse('https://${widget.url}/api/users/getusers'),headers: {"Accept": "application/json"});
+  
     var jsonData = jsonDecode(response.body);
     List<User> users = [];
     for (var u in jsonData) {
