@@ -35,8 +35,9 @@ class DataFromAPI extends StatefulWidget {
 class _DataFromAPIState extends State<DataFromAPI> {
   Future getUserData() async {
     var response = await http.get(
-      Uri.parse('https://${widget.url}/api/users/getusers'),headers: {"Accept": "application/json"});
-  
+      Uri.parse('https://${widget.url}/api/users/getusers'),
+          headers: {"Accept": "application/json"}
+    );
     var jsonData = jsonDecode(response.body);
     List<User> users = [];
     for (var u in jsonData) {
@@ -94,7 +95,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ajouterUtilisateur(aname: "${widget.aname}")),
+                              ajouterUtilisateur(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
                     );
                   });
                 },
@@ -133,7 +134,7 @@ class _DataFromAPIState extends State<DataFromAPI> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DepotFromAPI()),
+                                                  DepotFromAPI(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}" )),
                                         );
                                       });
                                     },

@@ -61,6 +61,22 @@ DateTime dateTime = DateTime.parse(jsonData[index]['is_date']);
     print(jsonData);
     return "success";
   }
+
+void choiceAction(String choice) {
+  if (choice == Constants.FirstItem) {
+  setState(() {
+    invHislist.sort((a,b) => a.isDate.compareTo(b.isDate));
+  }); 
+  } else if (choice == Constants.SecondItem) {
+    setState(() {
+      invHislist.sort((a,b) => a.isValide.compareTo(b.isValide));
+    });
+    
+  } else if (choice == Constants.ThirdItem) {
+    print('I Third Item');
+  }
+}
+
   @override
   initState() {
     final List<Hisinv> invHislist = <Hisinv>[];
@@ -126,72 +142,135 @@ DateTime dateTime = DateTime.parse(jsonData[index]['is_date']);
                         colors: [
                           Color(0xff2193b0),
                           Color(0xff6dd5ed),
-                        ])),child:Center(child: Text('Historique des inventaires'))),
+                        ])),child:Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [SizedBox(width: 30,),
+                            Text('Historiques des inventaires',style: TextStyle(fontSize: 20,color:Colors.white)),
+                      SizedBox(width: 20,),  Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(padding: EdgeInsets.only(top: 400)),
+        PopupMenuButton<String>(
+          icon: Icon(Icons.filter_list_rounded,color: Colors.black,),
+          onSelected: choiceAction,
+          itemBuilder: (BuildContext context) {
+            return Constants.choices.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+        ),
+      ],
+    )  ],
+                        )),
         
         
          Expanded(
            child: SizedBox(height: 200.0,
              child: ListView.builder( itemCount: invHislist.length,shrinkWrap: true,
                       scrollDirection: Axis.vertical,
-               itemBuilder: (context, index) {
-                 double c_width = MediaQuery.of(context).size.width * 0.37;String formattedDate = DateFormat('yyyy/MM/dd \n kk:mm').format(invHislist[index].isDate);
-           
+               itemBuilder: (context, index) {String formattedDate = DateFormat('yyyy/MM/dd \n kk:mm').format(invHislist[index].isDate);
+           double c_width = MediaQuery.of(context).size.width * 0.37; 
+
                      return Container(
                        child: Card( child: Stack(children: [
-                    Align(alignment: Alignment.topLeft,child: Row(children: [Icon(
-                                          Icons.fiber_manual_record,
-                                          color: Colors.orange,
-                                          size: 13,
-                                        ),
-                                        SizedBox(
-                                          width: 3,
-                                        ), Text(invHislist[index].piIntitule)],) ,),
-                    Column(
-                               
-                      children: [
-                      
-                            
-                             Padding(
-                                            padding: const EdgeInsets.only(left:10.0,top: 20),
-                                            child: Container(
-
-
-
-
-                                              child:Text(invHislist[index].isRemarques+'\n'+invHislist[index].faCodefamille),
-                                            )
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0,top:5),
+                      child: Align(alignment: Alignment.topLeft,child: Row(children: [Icon(
+                                            Icons.fiber_manual_record,
+                                            color: Colors.blue,
+                                            size: 13,
                                           ),
-
-                          ]),
+                                          SizedBox(
+                                            width: 3,
+                                          ), Text(invHislist[index].piIntitule,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)],) ,),
+                    ),
+                    
                       Padding(
-                        padding: const EdgeInsets.only(top:8.0 ,right: 8),
-                        child: Align(alignment:Alignment.topRight,child: Text(formattedDate ,textAlign:TextAlign.center,)),
+                        padding: const EdgeInsets.only(top:20.0 ,right: 5),
+                        child: Align(alignment:Alignment.centerRight,child: IntrinsicHeight(
+                          child: Row(mainAxisAlignment: MainAxisAlignment.end,
+                            children: [ VerticalDivider(),
+                              Column( 
+                                children: [
+                                  Text(formattedDate ,textAlign:TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w700,fontSize: 15),),
+                                  SizedBox(height: 8,),
+                                 invHislist[index].isValide==1?  Text('Valider',style: TextStyle(fontSize: 18,fontWeight:FontWeight.w600,color:Colors.green,),):Text('en attente',textAlign:TextAlign.center,style: TextStyle(fontSize: 18,fontWeight:FontWeight.w600,color:Colors.yellow[700],)),
+                                  invHislist[index].isValide==1?   Icon(Icons.done_outline_rounded,color: Colors.green,size: 25,):Icon(Icons.pending,color:Colors.yellow[700])
+                              
+                                     ,
+                                
+                                 
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
                       ),
-                      Row(
-                                            children: [
-                                              Container(width: c_width,
-                                                child: new Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                 
-                                                       
-                                                        new Text(invHislist[index].deCode,
-                                                            style: TextStyle(fontSize: 13)),
-                                                    SizedBox(height: 3,),
-                                                  new  Text(channelList[index].barcode,
-                                                            style: TextStyle(fontSize: 13)),
-                                                  SizedBox(height: 3,),
+                    Padding(
+                      padding: const EdgeInsets.only(top:30.0,left: 25),
+                      child: 
+                       
+                          Table( 
+                                                      defaultColumnWidth: FixedColumnWidth(130) ,
+                                                    children: [ 
+                                                 TableRow(children: [TableCell(
+                                                   child: SizedBox(child:  Text('Code Depot:',style: TextStyle(color: Colors.grey,)))
                                                   
-                                                
-                                                    new    Text(channelList[index].deDepot,
-                                                            style: TextStyle(fontSize: 13)),
-                                                  
-                                                  ],
+                                                   
+                                                      ),
+                                                      TableCell(
+                                                   child: SizedBox(child:  Text(invHislist[index].deCode),),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                                  
+                                                 ]),
+                                                  TableRow(children: [TableCell(
+                                                   child: SizedBox(child:  Text('Commentaire:',style: TextStyle(color: Colors.grey,)))
+                                                  
+                                                   
+                                                      ),
+                                                      TableCell(
+                                                   child: SizedBox(child:  AutoSizeText(
+                             invHislist[index].isRemarques,
+                             
+                             minFontSize: 15,
+                             maxLines: 3,
+                             
+                                                  ),),),
+                                               
+                                                  
+                                                 ]),
+                                                   TableRow(children: [TableCell(
+                                                   child: SizedBox(child:  Text('Collaborateur:',style: TextStyle(color: Colors.grey,)))
+                                                  
+                                                   
+                                                      ),
+                                                      TableCell(
+                                                   child: SizedBox(child:  Text(invHislist[index].cbcreateur,),),
+                                                ),
+                                                  
+                                                 ]),
+                                                invHislist[index].faCodefamille !=''?  TableRow(children: [TableCell(
+                                                   child: SizedBox(child:  Text('Famille Code:',style: TextStyle(color: Colors.grey,)))
+                                                  
+                                                   
+                                                      ),
+                                                      TableCell(
+                                                   child: SizedBox(child:  Text(invHislist[index].faCodefamille,style:TextStyle(color: Colors.black)),),
+                                                ),
+                                                  
+                                                 ]):TableRow(children:[TableCell(child: SizedBox.shrink(),),TableCell(child: SizedBox.shrink())] ),
+                                                  
+                                                    
+                                    
+                                              
+                                                    ],
+                                                  ),
+                    
+                    ),
+                      
                               
 
 
@@ -215,3 +294,16 @@ DateTime dateTime = DateTime.parse(jsonData[index]['is_date']);
         ));
   }
 }
+class Constants {
+  static const String FirstItem = 'Sort by : date';
+  static const String SecondItem = 'Second Item';
+  static const String ThirdItem = 'Third Item';
+
+  static const List<String> choices = <String>[
+    FirstItem,
+    SecondItem,
+    ThirdItem,
+  ];
+}
+
+
