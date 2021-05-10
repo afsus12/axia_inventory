@@ -41,8 +41,9 @@ Future<http.Response> loginUsdder(
   int admin,
   String decodeController,
   String cb,
+  String url,
 ) async {
-  var url = 'https://192.168.1.8:8000/api/users/add';
+  var uri = 'https://$url/api/users/add';
 
   Map data = {
     'protmUser': protmUserController,
@@ -58,7 +59,7 @@ Future<http.Response> loginUsdder(
 
   var body = json.encode(data);
 
-  var response = await http.post(Uri.parse(url),
+  var response = await http.post(Uri.parse(uri),
       headers: {"Content-Type": "application/json"}, body: body);
 
   print("${response.statusCode}");
