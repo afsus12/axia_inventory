@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'gestion.dart';
+import 'menu.dart';
+import 'listedesdepotes.dart';
+import 'package:axia_inventory/sidemenu.dart';
+import 'ajouterUtilisateur.dart';
 
-class DepotScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
   final String aname;
@@ -10,10 +13,10 @@ class DepotScreen extends StatefulWidget {
   final String email;
   final String url;
 
-  DepotScreen({Key key, this.aname, this.email, this.url}) : super(key: key);
+  HomeScreen({Key key, this.aname, this.email, this.url}) : super(key: key);
 }
 
-class _HomeScreenState extends State<DepotScreen> {
+class _HomeScreenState extends State<HomeScreen> {
 //Step 3
   _HomeScreenState() {
     _filter.addListener(() {
@@ -78,7 +81,7 @@ class _HomeScreenState extends State<DepotScreen> {
     if (!(_searchText.isEmpty)) {
       List tempList = new List();
       for (int i = 0; i < filteredNames.length; i++) {
-        if (filteredNames[i]['deCode']
+        if (filteredNames[i]['protmUser']
             .toLowerCase()
             .contains(_searchText.toLowerCase())) {
           tempList.add(filteredNames[i]);
@@ -90,13 +93,16 @@ class _HomeScreenState extends State<DepotScreen> {
       itemCount: names == null ? 0 : filteredNames.length,
       itemBuilder: (BuildContext context, int index) {
         return new ListTile(
-          title: Text(filteredNames[index]['deCode']),
+          title: Text(filteredNames[index]['protmUser']),
           onTap: () {
             setState(() {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ListTileSwitchExample()),
+                    builder: (context) => DepotScreen(
+                        aname: "${widget.aname}",
+                        email: "${widget.email}",
+                        url: "${widget.url}")),
               );
             });
           },
@@ -114,6 +120,27 @@ class _HomeScreenState extends State<DepotScreen> {
         icon: _searchIcon,
         onPressed: _searchPressed,
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 25,
+          ),
+          onPressed: () {
+            setState(() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ajouterUtilisateur(
+                        aname: "${widget.aname}",
+                        email: "${widget.email}",
+                        url: "${widget.url}")),
+              );
+            });
+          },
+        )
+      ],
     );
   }
 

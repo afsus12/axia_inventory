@@ -7,17 +7,19 @@ import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
 import 'gestion3.dart';
-import 'recherche2.dart';
+
 import 'consultation1.dart';
 import 'package:http/http.dart' as http;
 import 'sidemenu.dart';
+import 'homescreen.dart';
+
 class Menu extends StatefulWidget {
   @override
   _MenuState createState() => _MenuState();
   final String aname;
   final String email;
   final String url;
-  Menu({Key key, this.aname, this.email,this.url}) : super(key: key);
+  Menu({Key key, this.aname, this.email, this.url}) : super(key: key);
 }
 
 class _MenuState extends State<Menu> {
@@ -43,7 +45,11 @@ class _MenuState extends State<Menu> {
             title: Text('Acceuil'),
             centerTitle: true,
           ),
-          drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",),
+          drawer: ssd(
+            aname: "${widget.aname}",
+            email: "${widget.email}",
+            url: "${widget.url}",
+          ),
           body: GridView.count(
             crossAxisCount: 2,
             children: [
@@ -58,8 +64,11 @@ class _MenuState extends State<Menu> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      Entre(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
+                                  builder: (context) => Entre(
+                                        aname: "${widget.aname}",
+                                        email: "${widget.email}",
+                                        url: "${widget.url}",
+                                      )),
                             );
                           });
                         },
@@ -107,7 +116,11 @@ class _MenuState extends State<Menu> {
                             print('clicked');
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Sortie(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}")),
+                              MaterialPageRoute(
+                                  builder: (context) => Sortie(
+                                      aname: "${widget.aname}",
+                                      email: "${widget.email}",
+                                      url: "${widget.url}")),
                             );
                           });
                         },
@@ -155,7 +168,11 @@ class _MenuState extends State<Menu> {
                             print('clicked');
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Tran(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}")),
+                              MaterialPageRoute(
+                                  builder: (context) => Tran(
+                                      aname: "${widget.aname}",
+                                      email: "${widget.email}",
+                                      url: "${widget.url}")),
                             );
                           });
                         },
@@ -204,7 +221,11 @@ class _MenuState extends State<Menu> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
+                                  builder: (context) => invacc(
+                                        aname: "${widget.aname}",
+                                        email: "${widget.email}",
+                                        url: "${widget.url}",
+                                      )),
                             );
                           });
                         },
@@ -256,7 +277,11 @@ class _MenuState extends State<Menu> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Consultation(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
+                                  builder: (context) => Consultation(
+                                        aname: "${widget.aname}",
+                                        email: "${widget.email}",
+                                        url: "${widget.url}",
+                                      )),
                             );
                           });
                         },
@@ -306,11 +331,9 @@ class _MenuState extends State<Menu> {
                           setState(() {
                             print('clicked');
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DataFromAPI(aname: "${widget.aname}",email:"${widget.email}" ,url: "${widget.url}",)),
-                            );
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
                           });
                         },
                         child: Container(
