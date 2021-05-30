@@ -106,7 +106,11 @@ class _loginState extends State<login> {
                               setState(() {
                                 message = 'please wait ...';
                               });
+<<<<<<< HEAD
                               var uri = '192.168.1.36:8000';
+=======
+                              var uri = '192.168.1.9:8000';
+>>>>>>> 1f64ff8cdb917458703477cc2c05c54374dd9da9
                               var rsp = await loginUser(protUser, protPwd, uri);
                               print(rsp);
 
