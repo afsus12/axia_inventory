@@ -20,9 +20,16 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
+
+
 import 'package:auto_size_text/auto_size_text.dart';
 
+
+
+
+
 import 'sidemenu.dart';
+
 
 class invacc extends StatefulWidget {
   @override
@@ -31,7 +38,7 @@ class invacc extends StatefulWidget {
   final String aname;
   final String email;
   final String url;
-  invacc({Key key, this.aname, this.email, this.url}) : super(key: key);
+  invacc({Key key, this.aname, this.email,this.url}) : super(key: key);
 }
 
 class _invaccState extends State<invacc> {
@@ -43,8 +50,7 @@ bool fa=false;
 String nominv;
    Future getAllName() async {
     var response = await http.get(
-        Uri.parse(
-            'https://${widget.url}/api/inventaire/getstoklist/${widget.aname}'),
+        Uri.parse('https://${widget.url}/api/inventaire/getstoklist/${widget.aname}'),
         headers: {"Accept": "application/json"});
     var jsonBody = response.body;
     var jsonData = json.decode(jsonBody);
@@ -87,6 +93,7 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
       filtred=invHislist.where((element) => element.isDate.isAfter(now_1w)).toList();
     });
   }
+}
 
   @override
   initState() {
@@ -99,54 +106,19 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
     }); 
     
   }
-
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff62959c),
-        title: Text('Inventaire'),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.home,
-              color: Colors.white,
-              size: 25,
-            ),
-            onPressed: () {
-              setState(() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Menu(
-                          aname: "${widget.aname}",
-                          email: "${widget.email}",
-                          url: "${widget.url}")),
-                );
-              });
-            },
-          )
-        ],
-      ),
-      drawer: ssd(
-          aname: "${widget.aname}",
-          email: "${widget.email}",
-          url: "${widget.url}"),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 200.0),
-            child: Center(
-              child: SizedBox(
-                width: 60,
-                height: 60,
-                child: FloatingActionButton(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                ),
+    return MaterialApp( 
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xff62959c),
+          title: Text('Inventaire'),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 25,
               ),
               onPressed: () {
                 setState(() {

@@ -37,15 +37,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio(); // for http requests
   String _searchText = "";
-  List names = new List(); // names we get from API
+  List names = new List();
+   // names we get from API
   List filteredNames = new List(); // names filtered by search text
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Gestion des utilisateurs');
+  Widget _appBarTitle = new Text('Gestion des utilisateurs',style: TextStyle(fontSize: 16,fontWeight:FontWeight.bold));
 
   //step 2.1
   void _getNames() async {
     final response =
-        await dio.get('https://192.168.1.36:8000/api/users/getusers');
+        await dio.get('https://192.168.60.107:8000/api/users/getusers');
     print(response.data);
     List tempList = new List();
     for (int i = 0; i < response.data.length; i++) {
@@ -62,14 +63,16 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       if (this._searchIcon.icon == Icons.search) {
         this._searchIcon = new Icon(Icons.close);
-        this._appBarTitle = new TextField(
-          controller: _filter,
-          decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+        this._appBarTitle = Container(width: 180,
+          child: new TextField(
+            controller: _filter,
+            decoration: new InputDecoration(
+                prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+          ),
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text('Gestion des utilisateurs');
+        this._appBarTitle = new Text('Gestion des utilisateurs',style: TextStyle(fontSize: 16,fontWeight:FontWeight.bold));
         filteredNames = names;
         _filter.clear();
       }
@@ -93,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: names == null ? 0 : filteredNames.length,
       itemBuilder: (BuildContext context, int index) {
         return new ListTile(
+          leading: Icon(Icons.person),
           title: Text(filteredNames[index]['protmUser']),
           onTap: () {
             setState(() {
@@ -114,12 +118,22 @@ class _HomeScreenState extends State<HomeScreen> {
   //STep6
   Widget _buildBar(BuildContext context) {
     return new AppBar(
+      backgroundColor: Color(0xff62959c),
       centerTitle: true,
-      title: _appBarTitle,
-      leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: _searchPressed,
+      title: Padding(
+        padding: const EdgeInsets.only(left:25.0),
+        child: Container(child: Row(
+          children: [
+            _appBarTitle,
+             new IconButton(
+          icon: _searchIcon,
+          onPressed: _searchPressed,
+        ),
+          ],
+        )),
       ),
+
+     
       actions: <Widget>[
         IconButton(
           icon: Icon(
@@ -157,6 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         child: _buildList(),
       ),
+       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
 
 //      floatingActionButton: FloatingActionButton(
 //        onPressed: _postName,

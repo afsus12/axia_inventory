@@ -1,3 +1,4 @@
+import 'package:axia_inventory/sidemenu.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'gestion.dart';
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<DepotScreen> {
   //step 2.1
   void _getNames() async {
     final response =
-        await dio.get('https://192.168.1.36:8000/api/users/getusers');
+        await dio.get('https://192.168.60.107:8000/api/users/getusers');
     print(response.data);
     List tempList = new List();
     for (int i = 0; i < response.data.length; i++) {
@@ -90,6 +91,7 @@ class _HomeScreenState extends State<DepotScreen> {
       itemCount: names == null ? 0 : filteredNames.length,
       itemBuilder: (BuildContext context, int index) {
         return new ListTile(
+          leading: Icon(Icons.home_work_sharp),
           title: Text(filteredNames[index]['deCode']),
           onTap: () {
             setState(() {
@@ -108,12 +110,21 @@ class _HomeScreenState extends State<DepotScreen> {
   //STep6
   Widget _buildBar(BuildContext context) {
     return new AppBar(
+      backgroundColor: Color(0xff62959c),
       centerTitle: true,
-      title: _appBarTitle,
-      leading: new IconButton(
-        icon: _searchIcon,
-        onPressed: _searchPressed,
+      title: Padding(
+        padding: const EdgeInsets.only(left:25.0),
+        child: Container(child: Row(
+          children: [
+            _appBarTitle,
+             new IconButton(
+          icon: _searchIcon,
+          onPressed: _searchPressed,
+        ),
+          ],
+        )),
       ),
+    
     );
   }
 
@@ -127,6 +138,7 @@ class _HomeScreenState extends State<DepotScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildBar(context),
+       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
       body: Container(
         child: _buildList(),
       ),
