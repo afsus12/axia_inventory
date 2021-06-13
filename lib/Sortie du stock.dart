@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'gestion3.dart';
+
 
 import 'dart:ffi';
 import 'dart:convert';
@@ -47,11 +47,19 @@ class Sortie extends StatefulWidget {
     final String aname;
   final String email;
   final String url;
-Sortie({Key key, this.aname, this.email,this.url}) : super(key: key);
+   final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  
+Sortie({Key key, this.aname, this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _Sortie extends State<Sortie> {
-  
+  final _formKey = GlobalKey<FormState>();
   String _scanBarcode = 'Unknown';
   String selectedName;
   List data = List();
@@ -102,240 +110,275 @@ class _Sortie extends State<Sortie> {
 
 Widget setupAlertDialoadContainer(File imags, BuildContext context) {
   return
- Stack(
-      children: <Widget>[ 
-        Container(
-    padding: EdgeInsets.only(left: Constants.padding,top: Constants.avatarRadius
-        + Constants.padding, right: Constants.padding,bottom: Constants.padding
-    ),
-    margin: EdgeInsets.only(top: Constants.avatarRadius),
-    decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(Constants.padding),
-      boxShadow: [
-        BoxShadow(color: Colors.black,offset: Offset(0,10),
-        blurRadius: 10
-        ),
-      ]
-    ),
-    child: Column( crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      
-      children: <Widget>[SizedBox(width: 250,
-        child: AutoSizeText(
-  artdata[0]['arDesign'],
-  style: TextStyle(fontSize: 20 ,fontWeight: FontWeight.w600),
-  minFontSize: 14,
-  maxLines: 3,
-  overflow: TextOverflow.ellipsis,textAlign:TextAlign.center,
-),
+Form(key: _formKey,
+   child: Stack(
+        children: <Widget>[ 
+          Container(
+      padding: EdgeInsets.only(left: Constants.padding,top: Constants.avatarRadius
+          + Constants.padding, right: Constants.padding,bottom: Constants.padding
       ),
-      
-        SizedBox(height: 12,),
-    
-       Padding(
-         padding: const EdgeInsets.only(left :Constants.padding+30),
-         child: SingleChildScrollView(
-           scrollDirection: Axis.vertical,
-           child: FittedBox(
-             child: Table(
-                   defaultColumnWidth: FixedColumnWidth(150), defaultVerticalAlignment:TableCellVerticalAlignment.top ,
-                 children: [
-              TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Reference:',style: TextStyle(color: Colors.grey,)))
-               
-                
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['arRef']),),
-             ),
-               
-              ]),
-               TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Designation:',style: TextStyle(color: Colors.grey,)))
-               
-                
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['arDesign']),),
-             ),
-               
-              ]),
-                TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Barre Code:',style: TextStyle(color: Colors.grey,)))
-               
-                
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['arCodebarre'],),),
-             ),
-               
-              ]),
-               TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Code Depot:',style: TextStyle(color: Colors.grey,)))
-               
-                
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['deCode'],style:TextStyle(color: Colors.black)),),
-             ),
-               
-              ]),
-                TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Nom Depot:',style: TextStyle(color: Colors.grey,)))
-               
-                
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['deIntitule'],style:TextStyle(color: Colors.black)),),
-             ),
-               
-              ]),
-                 
-                
-           
-                 ],
-               ),
-           ),
-         ),
-       ),  SizedBox(width: 140,
-         child: Divider(color:Color(0xff2193b0))),
-            SizedBox(height: 15,child:  Text('Quantité en stock:',style: TextStyle(color: Colors.black ,fontFamily: 'FiraSans')))
-           
-     
-    
-   ,SizedBox(height: 30,child:  Text(removeTrailingZero(artdata[0]['asQtesto']),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
-
-           
-   
+      margin: EdgeInsets.only(top: Constants.avatarRadius),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Constants.padding),
+        boxShadow: [
+          BoxShadow(color: Colors.black,offset: Offset(0,10),
+          blurRadius: 10
+          ),
+        ]
+      ),
+      child: Column( crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         
-    
-    
-        Padding(
-          padding: const EdgeInsets.only(left:50.0, ),
-          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 30,
-                                child: FloatingActionButton(
-                                  backgroundColor: const Color(0xffEC524B),
-                                  foregroundColor: Colors.white,
-                                  onPressed: () {
-                                    double currentValue = double.parse(qteController.text);
-                                                     
-                                    setState(() {
-                                       currentValue--;
-                      qteController.text =
-                          (currentValue).toString();
-                                    });
-                                  },
-                                  child: Icon(Icons.remove),
-                                ),
-                              ),
-                              Container(
-                                width: 150,
-                                height: 40,
-                                child: TextFormField(
-                                  controller: qteController,
-                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.singleLineFormatter
-                                  ],
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                        width: 10,
-                                        style: BorderStyle.solid,
-                                      ),
-                                    ),
-                                    labelText: 'Qte',
-                                    labelStyle: TextStyle(
-                                        color: Color(0xFF8B8B8B), fontSize: 12),
-                                    hintText: 'Qte a ajouté',
-                                    hintStyle: TextStyle(
-                                        color: Color(0xFF8B8B8B), fontSize: 12),
+        children: <Widget>[SizedBox(width: 250,
+          child: AutoSizeText(
+    artdata[0]['arDesign'],
+    style: TextStyle(fontSize: 20 ,fontWeight: FontWeight.w600),
+    minFontSize: 14,
+    maxLines: 3,
+    overflow: TextOverflow.ellipsis,textAlign:TextAlign.center,
+ ),
+        ),
+        
+          SizedBox(height: 12,),
+      
+         Padding(
+           padding: const EdgeInsets.only(left :Constants.padding+30),
+           child: SingleChildScrollView(
+             scrollDirection: Axis.vertical,
+             child: FittedBox(
+               child: Table(
+                     defaultColumnWidth: FixedColumnWidth(150), defaultVerticalAlignment:TableCellVerticalAlignment.top ,
+                   children: [
+                TableRow(children: [TableCell(
+                  child: SizedBox(height: 30,child:  Text('Reference:',style: TextStyle(color: Colors.grey,)))
+                 
+                  
+                     ),
+                     TableCell(
+                  child: SizedBox(child:  Text(artdata[0]['arRef']),),
+               ),
+                 
+                ]),
+                 TableRow(children: [TableCell(
+                  child: SizedBox(height: 30,child:  Text('Designation:',style: TextStyle(color: Colors.grey,)))
+                 
+                  
+                     ),
+                     TableCell(
+                  child: SizedBox(child:  Text(artdata[0]['arDesign']),),
+               ),
+                 
+                ]),
+                  TableRow(children: [TableCell(
+                  child: SizedBox(height: 30,child:  Text('Barre Code:',style: TextStyle(color: Colors.grey,)))
+                 
+                  
+                     ),
+                     TableCell(
+                  child: SizedBox(child:  Text(artdata[0]['arCodebarre'],),),
+               ),
+                 
+                ]),
+                  TableRow(children: [TableCell(
+                child: SizedBox(height: 30,child:  Text('Montant en Stock:',style: TextStyle(color: Colors.grey,)))
+               
+                
+                   ),
+                   TableCell(
+                child: SizedBox(child:  Text(removeTrailingZero(double.parse(artdata[0]['asMontsto'].toString()).toString()) ,style:TextStyle(color: Colors.black)),),
+             ),
+               
+              ]),
+                 TableRow(children: [TableCell(
+                  child: SizedBox(height: 30,child:  Text('Code Depot:',style: TextStyle(color: Colors.grey,)))
+                 
+                  
+                     ),
+                     TableCell(
+                  child: SizedBox(child:  Text(artdata[0]['deCode'],style:TextStyle(color: Colors.black)),),
+               ),
+                 
+                ]),
+                  TableRow(children: [TableCell(
+                  child: SizedBox(height: 30,child:  Text('Nom Depot:',style: TextStyle(color: Colors.grey,)))
+                 
+                  
+                     ),
+                     TableCell(
+                  child: SizedBox(child:  Text(artdata[0]['deIntitule'],style:TextStyle(color: Colors.black)),),
+               ),
+                 
+                ]),
+                   
+                  
+             
+                   ],
+                 ),
+             ),
+           ),
+         ),  SizedBox(width: 140,
+           child: Divider(color:Color(0xff2193b0))),
+              SizedBox(height: 15,child:  Text('Quantité en stock:',style: TextStyle(color: Colors.black ,fontFamily: 'FiraSans')))
+             
+       
+      
+     ,SizedBox(height: 30,child:  Text(removeTrailingZero(double.parse(artdata[0]['asQtesto'].toString()).toString()),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
+ 
+             
+     
+          
+      
+      
+          Padding(
+            padding: const EdgeInsets.only(left:50.0, ),
+            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 30,
+                                  child: FloatingActionButton(
+                                    backgroundColor: const Color(0xffEC524B),
+                                    foregroundColor: Colors.white,
+                                    onPressed: () {
+                                      double currentValue = double.parse(qteController.text);
+                                                       
+                                      setState(() {
+                                         currentValue--;
+                        qteController.text =
+                            (currentValue).toString();
+                                      });
+                                    },
+                                    child: Icon(Icons.remove),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: FloatingActionButton(
-                                  backgroundColor: const Color(0xffEC524B),
-                                  foregroundColor: Colors.white,
-                                  onPressed: () {double currentValue = double.parse(qteController.text);
-                                                     
-                                    setState(() {
-                                       currentValue++;
-                      qteController.text =
-                          (currentValue).toString();
-                                    });
-                                  },
-                                  child: Icon(Icons.add),
+                                Padding(
+                                  padding: const EdgeInsets.only(top:15.0),
+                                  child: SizedBox(
+                                    width: 150,
+                                  
+                                    child: TextFormField(
+                                      controller: qteController,
+                                     validator: (value) {
+    if (double.parse(value) >double.parse(artdata[0]['asQtesto'].toString())) {
+      return 'Quantité insufissante';
+    }
+    return null;
+  },
+                                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.singleLineFormatter
+                                      ],
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                         helperText: ' ',
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.symmetric(vertical: 13.0, horizontal: 10.0),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          borderSide: BorderSide(
+                                            width: 10,
+                                            style: BorderStyle.solid,
+                                          ),
+                                        ),
+                                        labelText: 'Quantité à sortir ',
+                                        labelStyle: TextStyle(
+                                            color: Color(0xFF8B8B8B), fontSize: 12),
+                                        hintText: 'Qte a ajouté',
+                                        hintStyle: TextStyle(
+                                            color: Color(0xFF8B8B8B), fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              )
-                            ],
-                          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Colors.blue[500]),
-            child: FlatButton(
-                onPressed: (){
-                  setState(() { var qte=double.parse(qteController.text) ;var qtes=double.parse(artdata[0]['asQtesto']) ;
-                         channelList..add(Channel(artdata[0]['arRef'],artdata[0]['arDesign'],artdata[0]['deCode'],imags, artdata[0]['deIntitule'],qtes ,qte,artdata[0]['arCodebarre']));
-                         go=true; isloading=false; }); Navigator.pop(context);},
-                
-                child: Text("Ajouter",style: TextStyle(fontSize: 18,color: Colors.white),)),
+                                SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: FloatingActionButton(
+                                    backgroundColor: const Color(0xffEC524B),
+                                    foregroundColor: Colors.white,
+                                    onPressed: () {double currentValue = double.parse(qteController.text);
+                                                       
+                                      setState(() {
+                                         currentValue++;
+                        qteController.text =
+                            (currentValue).toString();
+                                      });
+                                    },
+                                    child: Icon(Icons.add),
+                                  ),
+                                )
+                              ],
+                            ),
           ),
-        ),
-      ],
-    ),
-    
-    ),Padding(
-    padding: const EdgeInsets.only(top:double.minPositive+70),
-    child:   Container(height: double.minPositive+48,    decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(Constants.padding),topRight: Radius.circular(Constants.padding)
-     ,bottomLeft: Radius.elliptical(300,80)),
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                  Color(0xff2193b0),
-                  Color(0xff6dd5ed),
-                ])),),
-    ),
-    
-    Positioned(
-    left: Constants.padding,
-      right: Constants.padding,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Colors.blue[500]),
+              child: FlatButton(
+                  onPressed: (){
+                   var qte=double.parse(qteController.text) ;var qtes=double.parse(artdata[0]['asQtesto']) ;
+                          
+                          if(qte<=qtes){
+                          setState(() {   channelList..add(Channel(artdata[0]['arRef'],artdata[0]['arDesign'],artdata[0]['deCode'],imags, artdata[0]['deIntitule'],qtes ,qte,artdata[0]['arCodebarre']));
+                           go=true; isloading=false; }); Navigator.pop(context);}
+                           else{if (!_formKey.currentState.validate()) {
+                             ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Processing Data')));
+    }
+  }
+                              
+                           
+                           
+                           
+                           
+                           },
+                  
+                  child: Text("Ajouter",style: TextStyle(fontSize: 18,color: Colors.white),)),
+            ),
+          ),
+        ],
+      ),
       
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: Constants.avatarRadius,
-        child: ClipRRect( borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-      child:imags!=null ? new Image.file(imags,
-      width: 100,
-      height: 100,
-      fit: BoxFit.cover,
-    ):Image.asset('images/net.png',
-      width: 100,
-      height: 100,
-      fit: BoxFit.cover,)),
-    ),)
-       
-      ],
-    );}
+      ),Padding(
+      padding: const EdgeInsets.only(top:double.minPositive+70),
+      child:   Container(height: double.minPositive+48,    decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(Constants.padding),topRight: Radius.circular(Constants.padding)
+       ,bottomLeft: Radius.elliptical(300,80)),
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                    Color(0xff2193b0),
+                    Color(0xff6dd5ed),
+                  ])),),
+      ),
+      
+      Positioned(
+      left: Constants.padding,
+        right: Constants.padding,
+        
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: Constants.avatarRadius,
+          child: ClipRRect( borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
+        child:imags!=null ? new Image.file(imags,
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+      ):Image.asset('images/net.png',
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,)),
+      ),)
+         
+        ],
+      ),
+ );}
      Future getArticlebarre(value1, value2) async {
 
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar"),
+        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar/${widget.aname}"),
         headers: {"Accept": "application/json"});
 
   var jsonBody = response.body;
@@ -351,6 +394,8 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
        var jsonData = json.decode(jsonBody);
     setState(() {
       artdata=jsonData;
+
+      qteController.text=removeTrailingZero( double.parse(jsonData[0]['asQtesto']).toString());     
     });
                       
     print(jsonData); 
@@ -376,7 +421,16 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
   
       break;
     case false:  
-    
+    setState(() {
+ qteController.text =removeTrailingZero(artdata[0]['asQtesto'].toString());
+});
+if(double.parse(artdata[0]['asQtesto'])==0){
+return warningDialog(context, "l'article "+artdata[0]['arRef'] +" avec cette code a barre("+artdata[0]['arCodebarre']+") n'est pas disponible a cause de rupture de stock "  ,title: "Rupture de stock",neutralText: "ok",neutralAction: (){
+  setState(() {
+    isloading=false;
+  });
+});
+}else{
     return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -394,9 +448,14 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
           ),
         ),
       );
+    }).then((value){
+      setState(() {
+        isloading=false;
+      });
     });
+    }
     
-       
+      
       break;
   
   }
@@ -453,14 +512,26 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                 });
               },
             )
           ],
         ),
-        drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+        drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -598,7 +669,13 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
     neutralAction: (){Navigator.pop(context);
        Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Sortie(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,)),
+    MaterialPageRoute(builder: (context) => Sortie(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
   );},
 
 )         ;
@@ -866,11 +943,11 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                   
                      RichText(
   text: TextSpan(
-    text: 'Quantité en Stock\n',
-    style: DefaultTextStyle.of(context).style,
+    text: '-'+removeTrailingZero(a)+'\n',
+    style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 20),
     children: <TextSpan>[
-      TextSpan(text: removeTrailingZero(b)+'\n ', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-      TextSpan(text:'(-'+removeTrailingZero(a)+')',style:TextStyle(color: Colors.red)),
+      TextSpan(text: 'Quantité en Stock:\n ',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight:FontWeight.normal),),
+      TextSpan(text:removeTrailingZero(b),style:TextStyle(color: Colors.black,fontWeight:FontWeight.bold,fontSize: 15)),
     ],
   ),
  textAlign: TextAlign.center,),

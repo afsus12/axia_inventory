@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:axia_inventory/onvalidationinventaire.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
@@ -35,7 +36,14 @@ class Entre extends StatefulWidget {
   final String aname;
   final String email;
   final String url;
-  Entre({Key key, this.aname, this.email,this.url}) : super(key: key);
+   final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  Entre({Key key, this.aname, this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 
 }
 
@@ -169,6 +177,16 @@ class _Entre extends State<Entre> {
              ),
                
               ]),
+                TableRow(children: [TableCell(
+                child: SizedBox(height: 30,child:  Text('Montant en Stock:',style: TextStyle(color: Colors.grey,)))
+               
+                
+                   ),                            
+                   TableCell(
+                child: SizedBox(child:  Text(removeTrailingZero(double.parse(artdata[0]['asMontsto']).toString()),style:TextStyle(color: Colors.black)),),
+             ),
+               
+              ]),
                TableRow(children: [TableCell(
                 child: SizedBox(height: 30,child:  Text('Code Depot:',style: TextStyle(color: Colors.grey,)))
                
@@ -202,7 +220,7 @@ class _Entre extends State<Entre> {
            
      
     
-   ,SizedBox(height: 30,child:  Text(removeTrailingZero(artdata[0]['asQtesto']),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
+   ,SizedBox(height: 30,child:  Text(removeTrailingZero(double.parse(artdata[0]['asQtesto']).toString()),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
 
            
    
@@ -335,7 +353,7 @@ class _Entre extends State<Entre> {
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar"),
+        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar/${widget.aname}"),
         headers: {"Accept": "application/json"});
 
   var jsonBody = response.body;
@@ -351,6 +369,7 @@ class _Entre extends State<Entre> {
        var jsonData = json.decode(jsonBody);
     setState(() {
       artdata=jsonData;
+      qteController.text=removeTrailingZero(double.parse(jsonData[0]['asQtesto']).toString());
     });
                       
     print(jsonData); 
@@ -394,7 +413,12 @@ class _Entre extends State<Entre> {
           ),
         ),
       );
-    });
+    }).then((val){
+      setState(() {
+        isloading=false;
+      });
+
+});
     
        
       break;
@@ -454,14 +478,26 @@ class _Entre extends State<Entre> {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"   ,entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                 });
               },
             )
           ],
         ),
-        drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+        drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -600,7 +636,13 @@ class _Entre extends State<Entre> {
     neutralAction: (){Navigator.pop(context);
        Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Entre(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,)),
+    MaterialPageRoute(builder: (context) => Entre(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
   );},
 
 )         ;
@@ -716,7 +758,8 @@ class _Entre extends State<Entre> {
                                              
                                                 ),
                                                 TableCell(
-                                             child: SizedBox(child:  Text(channelList[index].qtesto.toString(),style:TextStyle(color: Colors.black)),),
+                                             child: SizedBox(child:  Text(
+                                               channelList[index].qtesto.toString(),style:TextStyle(color: Colors.black)),),
                                           ),
                                             
                                            ]),
@@ -867,11 +910,11 @@ class _Entre extends State<Entre> {
                   
                      RichText(
   text: TextSpan(
-    text: 'Quantité en Stock\n',
-    style: DefaultTextStyle.of(context).style,
+    text: '+'+removeTrailingZero(a)+'\n',
+    style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 20),
     children: <TextSpan>[
-      TextSpan(text: removeTrailingZero(b)+'\n ', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
-      TextSpan(text:'(+'+removeTrailingZero(a)+')',style:TextStyle(color: Colors.green)),
+      TextSpan(text: 'Quantité en Stock:\n ',style: TextStyle(color: Colors.black,fontSize: 14,fontWeight:FontWeight.normal),),
+      TextSpan(text:removeTrailingZero(b),style:TextStyle(color: Colors.black,fontWeight:FontWeight.bold,fontSize: 15)),
     ],
   ),
  textAlign: TextAlign.center,),

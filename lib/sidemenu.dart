@@ -3,11 +3,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:axia_inventory/PreferencesGlobales.dart';
+import 'package:axia_inventory/homescreen.dart';
 import 'package:axia_inventory/inventaire0.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'constants.dart';
-import 'gestion3.dart';
+
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
@@ -39,7 +41,14 @@ import 'package:commons/commons.dart';
        final String aname;
   final String email;
   final String url;
-  ssd({Key key, this.aname, this.email,this.url}) : super(key: key);
+    final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  ssd({Key key, this.aname, this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
     }
     
     class _ssdState extends State<ssd> {
@@ -79,7 +88,13 @@ import 'package:commons/commons.dart';
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Menu(aname: a,email:b ,url: c,)),
+                          MaterialPageRoute(builder: (context) => Menu(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -99,7 +114,13 @@ import 'package:commons/commons.dart';
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Entre(aname: a,email:b ,url: c,)),
+                          MaterialPageRoute(builder: (context) => Entre(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -120,7 +141,13 @@ import 'package:commons/commons.dart';
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Sortie(aname: a,email:b ,url: c,)),
+                          MaterialPageRoute(builder: (context) => Sortie(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -142,7 +169,13 @@ import 'package:commons/commons.dart';
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Tran(aname: a,email:b ,url: c,)),
+                          MaterialPageRoute(builder: (context) => Tran(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -165,7 +198,13 @@ import 'package:commons/commons.dart';
                       setState(() {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => invacc(aname: a,email:b ,url: c,)),
+                          MaterialPageRoute(builder: (context) => invacc(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -185,7 +224,13 @@ import 'package:commons/commons.dart';
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Consultation(aname: a,email:b ,url: c,)),
+                              builder: (context) => Consultation(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -211,7 +256,13 @@ import 'package:commons/commons.dart';
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DataFromAPI(aname: a,email:b ,url: c,)),
+                              builder: (context) => HomeScreen(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                         );
                       });
                     }),
@@ -230,7 +281,24 @@ import 'package:commons/commons.dart';
                             fit: BoxFit.cover),
                       ),
                     ),
-                    onTap: () {}),
+                    onTap: () {
+  setState(() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PrefGlob(aname: a,email:b ,url: c,    entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
+                        );
+                      });
+
+
+
+                    }),
                 new ListTile(
                     title: new Text('log out'),
                     leading: ConstrainedBox(

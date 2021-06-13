@@ -11,7 +11,7 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-import 'gestion3.dart';
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -25,9 +25,16 @@ class inventaire extends StatefulWidget {
   final String url;
   final  bool fa;
   final String nominv;
+    final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
   
   
-inventaire({Key key, this.aname, this.email,this.url,this.fa,this.nominv}) : super(key: key);
+inventaire({Key key, this.aname, this.email,this.url,this.fa,this.nominv,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _inventaireState extends State<inventaire> {
@@ -35,7 +42,7 @@ class _inventaireState extends State<inventaire> {
   FocusNode _focusnode;
  
   
-   final _piinventaire = TextEditingController();
+   TextEditingController _piinventaire = TextEditingController();
    
    final _codefa = TextEditingController();
    final _commentaire = TextEditingController();
@@ -168,7 +175,11 @@ String getInitials({String string, int limitTo})  {
                  child: Container(
               width: 200,
               
-              child: TextField(enabled: false,
+              child: TextField(onChanged: (value){
+              setState(() {
+                _piinventaire.text=value;
+              });},
+                enabled: true,
                 controller: _piinventaire ,
                   obscureText: false,
                   decoration:new InputDecoration(
@@ -216,7 +227,7 @@ String getInitials({String string, int limitTo})  {
                 alignedDropdown: true,
                 child: DropdownButton(
                   hint: Text(
-                'selectioner un entrepôt',
+                'selectioner un depôt',
                 style: _validate == false?TextStyle(
                   color: Color(0xFF8B8B8B), fontSize: 12):TextStyle(
                   color: Colors.red, fontSize: 12),
@@ -411,13 +422,27 @@ String getInitials({String string, int limitTo})  {
                  Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => inventairebarrcode(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: widget.fa,nominv: "${widget.nominv}",depot: selectedName,ref: _codeinv.text,comment: _commentaire.text,decode: depco,)),
+                                  builder: (context) => inventairebarrcode(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: widget.fa,nominv: _piinventaire.text,depot: selectedName,ref: _codeinv.text,comment: _commentaire.text,decode: depco, 
+                                  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                             );}else{
              
                 Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => inventairecafa(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: widget.fa,nominv: "${widget.nominv}",depot: selectedName,ref: _codeinv.text,comment: _commentaire.text,decode: depco,familleCode: selectedfa,)),
+                                  builder: (context) => inventairecafa(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: widget.fa,nominv: _piinventaire.text,depot: selectedName,ref: _codeinv.text,comment: _commentaire.text,decode: depco,familleCode: selectedfa,
+                                   entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                             ); }                   
                                         
                   }

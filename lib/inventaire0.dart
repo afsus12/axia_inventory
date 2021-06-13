@@ -4,6 +4,7 @@ import 'package:axia_inventory/onvalidationinventaire.dart';
 import 'package:axia_inventory/sidemenu.dart';
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as Math;
 import 'package:flutter/src/rendering/box.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -17,6 +18,8 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';  //for date format
+import 'package:intl/date_symbol_data_local.dart';  
 
 import 'package:intl/intl.dart';
 
@@ -38,7 +41,15 @@ class invacc extends StatefulWidget {
   final String aname;
   final String email;
   final String url;
-  invacc({Key key, this.aname, this.email,this.url}) : super(key: key);
+    final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+
+  invacc({Key key, this.aname, this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _invaccState extends State<invacc> {
@@ -48,6 +59,8 @@ final List<Hisinv> invHislist = <Hisinv>[];
 int show=0;
 bool fa=false;
 String nominv;
+bool isVisble=false;
+  bool isloading=false;
    Future getAllName() async {
     var response = await http.get(
         Uri.parse('https://${widget.url}/api/inventaire/getstoklist/${widget.aname}'),
@@ -61,6 +74,7 @@ String nominv;
 DateTime dateTime = DateTime.parse(jsonData[index]['is_date']);
   setState(() {
     invHislist..add(Hisinv(jsonData[index]['pi_intitule'], jsonData[index]['fa_codefamille'], jsonData[index]['de_code'],dateTime, jsonData[index]['is_remarques'], jsonData[index]['is_valide'], jsonData[index]['cbcreateur'],jsonData[index]['is_code']));
+
   }); 
     }
 
@@ -100,15 +114,25 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
   
   
     super.initState();
-    getAllName();
-    setState(() {
-      filtred=invHislist;
-    }); 
+ 
     
   }
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   initializeDateFormatting("fr");
     return MaterialApp( 
-      home: Scaffold(
+      home: Scaffold(resizeToAvoidBottomInset: false,
+         floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButton:
+          Visibility(visible: isVisble,
+            child: SizedBox(width: 45,
+              child: FloatingActionButton(heroTag: null, onPressed: () {
+                setState(() {
+                  isVisble=false;
+                });
+              },
+                    child: Icon(Icons.arrow_drop_up_sharp,size: 40,), ),
+            ),
+          ),
+   
         appBar: AppBar(
           backgroundColor: Color(0xff62959c),
           title: Text('Inventaire'),
@@ -124,13 +148,25 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"    ,   entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                 });
               },
             )
           ],
-        ),drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+        ),drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",       entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
         body:Column( 
           children: [
 
@@ -222,9 +258,15 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
                    ),
                  ),
                ),
-             ):show==3?inventaire(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: fa,nominv: nominv,):SizedBox.shrink(),
+             ):show==3?inventaire(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",fa: fa,nominv: nominv,  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,):SizedBox.shrink(),
               Container(
-                height: 50,
+                height: 60,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -240,11 +282,11 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
                             Text('Historiques des inventaires',style: TextStyle(fontSize: 20,color:Colors.white)),
                       SizedBox(width: 20,), GestureDetector(onTap:(){
                        Set<SimpleItem> set = Set<SimpleItem>()
-                  ..add(SimpleItem(1, "sort by date"))
-                  ..add(SimpleItem(2, "sort by status"))
-                  ..add(SimpleItem(3, "show not valid only"))
-                  ..add(SimpleItem(4, "show not vgg only"));
-                  
+               ..add(SimpleItem(3, "afficher seulement les inventaires en attente"))
+                  ..add(SimpleItem(2, "sort par en attente"))
+                
+                  ..add(SimpleItem(1, "sort par validé"));
+                    
 radioListDialog(
   context,
   "Select one",
@@ -261,20 +303,52 @@ radioListDialog(
                         )),
         
         
-         Expanded(
+         isVisble==true ? Expanded(
            child: SizedBox(height: 200.0,
              child: ListView.builder( itemCount: filtred.length,shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                itemBuilder: (context, index) {String formattedDate = DateFormat('yyyy/MM/dd \n kk:mm').format(filtred[index].isDate);
            double c_width = MediaQuery.of(context).size.width * 0.37; 
+           String hhmm= DateFormat.Hm().format(filtred[index].isDate.toLocal());
 
+   var formater= DateFormat("EEEE\ndd/MM/yyyy", 'fr');
+  String dd=formater.format(filtred[index].isDate.toLocal());
                      return Container(
-                       child: GestureDetector( onTap: (){setState(() {
+                       child: GestureDetector( onTap: (){      print(widget.protvalidation);
+                         if(widget.protvalidation==true && filtred[index].isValide==0){
+                                    
+                                    setState(() {
                          Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => onvalidationInv(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",pintitu: filtred[index].piIntitule,comment: filtred[index].isRemarques,decode: filtred[index].deCode, collab: filtred[index].cbcreateur,iscode: filtred[index].iscode,)),
+                    MaterialPageRoute(builder: (context) => onvalidationInv(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",pintitu: filtred[index].piIntitule,comment: filtred[index].isRemarques,decode: filtred[index].deCode, collab: filtred[index].cbcreateur,iscode: filtred[index].iscode,status: filtred[index].isValide,entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                        });
+                         }else if(widget.protvalidation==false && filtred[index].isValide==0){
+
+                     return      errorDialog(context,"tu n'a pas le droit de validation");
+                         }else if(widget.protvalidation==false ||widget.protvalidation==true && filtred[index].isValide==1 ){
+
+                                         setState(() {
+                         Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => onvalidationInv(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",pintitu: filtred[index].piIntitule,comment: filtred[index].isRemarques,decode: filtred[index].deCode, collab: filtred[index].cbcreateur,iscode: filtred[index].iscode,status: filtred[index].isValide,entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
+                  );
+                       });
+                         }
+                         
+                        
                         },
                          child: Card( child: Stack(children: [
                                            Padding(
@@ -296,7 +370,7 @@ radioListDialog(
                               children: [ VerticalDivider(),
                                 Column( 
                                   children: [
-                                    Text(formattedDate ,textAlign:TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w700,fontSize: 15),),
+                                    Text(dd+'\n'+hhmm ,textAlign:TextAlign.center,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.w700,fontSize: 15),),
                                     SizedBox(height: 8,),
                                    filtred[index].isValide==1?  Text('Valider',style: TextStyle(fontSize: 18,fontWeight:FontWeight.w600,color:Colors.green,),):Text('en attente',textAlign:TextAlign.center,style: TextStyle(fontSize: 18,fontWeight:FontWeight.w600,color:Colors.yellow[700],)),
                                     filtred[index].isValide==1?   Icon(Icons.done_outline_rounded,color: Colors.green,size: 25,):Icon(Icons.pending,color:Colors.yellow[700])
@@ -384,7 +458,44 @@ radioListDialog(
            
                }),
            ),
-         )
+         ):Container(height: 250,
+           child: Center(
+           child: Column(mainAxisAlignment: MainAxisAlignment.center,
+
+             children:[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.hide_source_rounded ,size: 90,),
+              ),
+            Container(
+               child:  !isloading
+                 ?FlatButton(
+                 child: Text("Afficher l'Historique d'Inventaire"),
+                 color: Color(0xffec524b),
+                 textColor: Colors.white,
+                 minWidth: 200,
+                 height: 50,
+                 onPressed: () async {setState(() {
+                   isloading=true;
+                   invHislist.clear();
+                 });
+                   await   getAllName();
+
+                   setState(() {
+               
+                   isloading=false;
+                
+                     isVisble=true;filtred=invHislist;
+                
+                   });
+                 }
+               ):CircularProgressIndicator(),
+             ),
+
+
+             ]
+           ),
+         ),)
           ],
               
 

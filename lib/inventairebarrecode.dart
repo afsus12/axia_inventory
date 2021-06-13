@@ -28,8 +28,15 @@ class inventairebarrcode extends StatefulWidget {
   final String ref;
   final String comment;
     final String decode;
+     final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
     
-inventairebarrcode({Key key, this.aname, this.email,this.url,this.fa,this.nominv,this.depot,this.ref,this.comment,this.decode}) : super(key: key);
+inventairebarrcode({Key key, this.aname, this.email,this.url,this.fa,this.nominv,this.depot,this.ref,this.comment,this.decode,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 
 
 
@@ -42,6 +49,7 @@ class _inventairebarrcodeState extends State<inventairebarrcode> {
       final _pcomment = TextEditingController();
        String msg = "0";
        final List<Channelb> channelList=<Channelb>[];
+        FocusNode _focusnode;
   String _scanBarcode = 'Unknown';
   String selectedName;
   RegExp regex = RegExp(r"([.]*0)(?!.*\d)");
@@ -218,6 +226,16 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                
               ]),
                TableRow(children: [TableCell(
+                child: SizedBox(height: 30,child:  Text('Montant en stock:',style: TextStyle(color: Colors.grey,)))
+               
+                
+                   ),
+                   TableCell(
+                child: SizedBox(child:  Text(removeTrailingZero( double.parse(artdata[0]['asMontsto']).toString(),),),
+             ),)
+               
+              ]),
+               TableRow(children: [TableCell(
                 child: SizedBox(height: 30,child:  Text('Code Depot:',style: TextStyle(color: Colors.grey,)))
                
                 
@@ -249,8 +267,8 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
             SizedBox(height: 15,child:  Text('Quantité en stock:',style: TextStyle(color: Colors.black ,fontFamily: 'FiraSans')))
            
      
-    
-   ,SizedBox(height: 30,child:  Text(removeTrailingZero(artdata[0]['asQtesto']),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
+                                     
+   ,SizedBox(height: 30,child:  Text(removeTrailingZero( double.parse(artdata[0]['asQtesto']).toString()),style:TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w800,fontFamily: 'FiraSans')),),
 
            
    
@@ -461,7 +479,7 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
     String dep = "${widget.depot}";
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar"),
+        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar/${widget.aname}"),
         headers: {"Accept": "application/json"});
 
   var jsonBody = response.body;
@@ -477,6 +495,8 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
        var jsonData = json.decode(jsonBody);
     setState(() {
       artdata=jsonData;
+      qteController.text=removeTrailingZero( double.parse(jsonData[0]['asQtesto']).toString())      ; 
+       prixController.text=removeTrailingZero( double.parse(jsonData[0]['asCmup']).toString())      ; 
     });
                       
     print(jsonData); 
@@ -520,6 +540,11 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
           ),
         ),
       );
+    }).then((value) {
+
+      setState(() {
+        isloading=false;
+      });
     });
     
        
@@ -550,11 +575,23 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                 });
               },
-              )]), drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+              )]), drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}" , entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
               body: Container(
                 child: Column(children: [
              
@@ -635,6 +672,11 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                                        padding: const EdgeInsets.only(left:8.0,bottom: 8),
                                       child: Container(width: 200,
                                         child:   TextField(enabled: false,
+                                         autofocus: false,
+                 focusNode: _focusnode,
+                 maxLines: 5,
+                   keyboardType: TextInputType.text,
+                 minLines: 1,
                 controller: _pcomment,
                   obscureText: false,
                   decoration:new InputDecoration(
@@ -760,7 +802,13 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
     neutralAction: (){Navigator.pop(context);
        Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,)),
+    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
   );},
 
 )         ;
@@ -1204,10 +1252,10 @@ ScaffoldMessenger.of(context)
                                              'Quantité en Stock:',
                                              ),SizedBox(height: 3,),
                                              Text(
-                                             removeTrailingZero(b),
+                                             removeTrailingZero(double.parse(b.toString()).toString()),
                                              style: TextStyle(
                                                  fontWeight: FontWeight.bold,
-                                                 fontSize: 18),
+                                                 fontSize: 16),
                                              textAlign: TextAlign.center,
                                              ),
                                              SizedBox(height: 3,),
@@ -1218,9 +1266,9 @@ ScaffoldMessenger.of(context)
                                              Text(
                                              
                                               
-                                                 removeTrailingZero(channelList[index].qteAjust.toString()) ,
+                                                 removeTrailingZero(double.parse(channelList[index].qteAjust.toString()).toString() ) ,
                                               
-                                             style: TextStyle(color: Colors.blue,fontSize: 15,fontWeight: FontWeight.w500),
+                                             style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold),
                                              textAlign: TextAlign.center,
                                              )  , channelList[index].prixAjust!=0 ?Text(
                                              'Prix Ajusté:',
@@ -1228,7 +1276,7 @@ ScaffoldMessenger.of(context)
                                            channelList[index].prixAjust!=0 ? Text(
                                              
                                               
-                                                 removeTrailingZero(channelList[index].prixAjust.toString()) ,style: TextStyle(color: Colors.blue,fontSize: 15,fontWeight: FontWeight.w500), ):SizedBox.shrink(),
+                                                 removeTrailingZero(  double.parse(channelList[index].prixAjust.toString()).toString()) ,style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold), ):SizedBox.shrink(),
                                             
                                              
                                                                            ],

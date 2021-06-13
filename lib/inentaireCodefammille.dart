@@ -29,8 +29,15 @@ class inventairecafa extends StatefulWidget {
   final String comment;
   final String decode;
   final String familleCode;
+       final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
   
-inventairecafa({Key key, this.aname, this.email,this.url,this.fa,this.nominv,this.depot,this.ref,this.comment,this.decode,this.familleCode}) : super(key: key);
+inventairecafa({Key key, this.aname, this.email,this.url,this.fa,this.nominv,this.depot,this.ref,this.comment,this.decode,this.familleCode,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
  
 }
 
@@ -71,7 +78,7 @@ class _inventairecafaState extends State<inventairecafa> {
     var jsonData = json.decode(jsonBody);
    for(var i=0;i<jsonData.length;i++){ var ref=jsonData[i]['arRef'];
     var response1 = await http.get(
-        Uri.parse("https://${widget.url}/api/articleref/${widget.decode}/$ref"),
+        Uri.parse("https://${widget.url}/api/articleref/${widget.decode}/$ref/${widget.aname}"),
         headers: {"Accept": "application/json"});
  var jsonBody1 = response1.body;
 
@@ -181,11 +188,23 @@ Future<http.Response> inventairestockentete() async {
                 setState(() {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                    MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                 });
               },
-              )]), drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+              )]), drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
               body: Column(children: [
                
                
@@ -406,7 +425,13 @@ Future<http.Response> inventairestockentete() async {
     neutralAction: (){Navigator.pop(context);
        Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,)),
+    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}",  entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation, )),
   );},
 
 )         ;

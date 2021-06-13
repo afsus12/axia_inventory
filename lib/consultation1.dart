@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'gestion3.dart';
 import 'consultation1.dart';
 import 'package:intl/intl.dart';  //for date format
 import 'package:intl/date_symbol_data_local.dart';  
@@ -33,7 +32,14 @@ class Consultation extends StatefulWidget {
    final String aname;
   final String email;
   final String url;
-  Consultation({Key key, this.aname, this.email,this.url}) : super(key: key);
+    final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  Consultation({Key key, this.aname, this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
   
 }
 
@@ -44,14 +50,16 @@ class _Consultation extends State<Consultation> {
    List artdata=List();
      File imags;
     bool isloading=false;
+    bool isVisble=false;
       bool iscolored=false;
+      String Qsa;
       final List<Channelcons> channelList=<Channelcons>[];
  Future getArticlebarre(value1, value2) async {
 
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://${widget.url}/api/consultation/$dep/$bar"),
+        Uri.parse("https://${widget.url}/api/consultation/$dep/$bar/${widget.aname}"),
         headers: {"Accept": "application/json"});
 Intl.defaultLocale = "zh_HK";
   var jsonBody = response.body;
@@ -100,11 +108,26 @@ Intl.defaultLocale = "zh_HK";
           });
        
          break; 
+        case 'inventaire entree':
+      setState(() {
+         channelList..add(Channelcons(jsonData[i]['arDesign'],jsonData[i]['arRef'] ,jsonData[i]['arCodebarre'] ,
+       jsonData[i]['mbCreatedat'] , jsonData[i]['mbQteancien'], jsonData[i]['asQtesto'], jsonData[i]['mbQteentre'], null, null, null, null,jsonData[i]['mbType'] ,jsonData[i]['protmUser'] ,jsonData[i]['deIntitule'] ,imags));
+      }); 
+       break; 
+        case 'inventaire sortie': setState(() {
+            channelList..add(Channelcons(jsonData[i]['arDesign'],jsonData[i]['arRef'] ,jsonData[i]['arCodebarre'] ,
+         jsonData[i]['mbCreatedat'] , jsonData[i]['mbQteancien'], jsonData[i]['asQtesto'],null, jsonData[i]['mbQtesortie'],null, null, null,jsonData[i]['mbType'] ,jsonData[i]['protmUser'] ,jsonData[i]['deIntitule'] ,imags));
+        });
+      
+         break;
+
         } 
 
     }
    setState(() {
   isloading=false;
+
+   isVisble=true;
 });
    }else{ setState(() {
       imags=null;
@@ -112,7 +135,7 @@ Intl.defaultLocale = "zh_HK";
      for(var i=0;i < jsonData.length;i++){
       switch(jsonData[i]['mbType'] ) {
       
-      case 'entr\u00e9e':
+      case 'entr\u00e9e': 
       setState(() {
          channelList..add(Channelcons(jsonData[i]['arDesign'],jsonData[i]['arRef'] ,jsonData[i]['arCodebarre'] ,
        jsonData[i]['mbCreatedat'] , jsonData[i]['mbQteancien'], jsonData[i]['asQtesto'], jsonData[i]['mbQteentre'], null, null, null, null,jsonData[i]['mbType'] ,jsonData[i]['protmUser'] ,jsonData[i]['deIntitule'] ,imags));
@@ -133,11 +156,26 @@ Intl.defaultLocale = "zh_HK";
           });
        
          break; 
+          case 'inventaire entree': 
+      setState(() {
+         channelList..add(Channelcons(jsonData[i]['arDesign'],jsonData[i]['arRef'] ,jsonData[i]['arCodebarre'] ,
+       jsonData[i]['mbCreatedat'] , jsonData[i]['mbQteancien'], jsonData[i]['asQtesto'], jsonData[i]['mbQteentre'], null, null, null, null,jsonData[i]['mbType'] ,jsonData[i]['protmUser'] ,jsonData[i]['deIntitule'] ,imags));
+      });
+     
+         break;
+        case 'inventaire sortie': setState(() {
+            channelList..add(Channelcons(jsonData[i]['arDesign'],jsonData[i]['arRef'] ,jsonData[i]['arCodebarre'] ,
+         jsonData[i]['mbCreatedat'] , jsonData[i]['mbQteancien'], jsonData[i]['asQtesto'],null, jsonData[i]['mbQtesortie'],null, null, null,jsonData[i]['mbType'] ,jsonData[i]['protmUser'] ,jsonData[i]['deIntitule'] ,imags));
+        });
+      
+         break;
         } 
 
     }
 setState(() {
   isloading=false;
+  Qsa=channelList[channelList.length-1].asQtesto.toString();
+  isVisble=true;
 });
   }
   
@@ -234,7 +272,7 @@ switch (channelList[index].mbType){
                                                         padding: const EdgeInsets.only(top:10.0),
                                                         child: Column(
                                                           children: [ new Text('Ancienne Quantité:' ),
-                                                            new Text(removeTrailingZero(channelList[index].mbQteancien),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
+                                                            new Text( removeTrailingZero(double.parse(channelList[index].mbQteancien).toString()),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
                                                           ],
                                                         ),
                                                       ),
@@ -266,7 +304,7 @@ switch (channelList[index].mbType){
                                                    ),
                                                  ),
                                                    Text(
-                                                 removeTrailingZero(channelList[index].asQtesto),
+                                                  removeTrailingZero(double.parse(channelList[index].asQtesto).toString()),
                                                  style: TextStyle(
                                                      fontWeight: FontWeight.bold,
                                                      fontSize: 18),
@@ -278,7 +316,7 @@ switch (channelList[index].mbType){
                                                      children: [        Text(
                                                    
                                                     
-                                                       removeTrailingZero('+'+channelList[index].mbQteentre.toString()) ,
+                                                       '+'+ removeTrailingZero(double.parse(channelList[index].mbQteentre).toString()) ,
                                                     
                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green,fontSize: 15),
                                                    textAlign: TextAlign.center,
@@ -385,7 +423,7 @@ switch (channelList[index].mbType){
                                                         padding: const EdgeInsets.only(top:10.0),
                                                         child: Column(
                                                           children: [ new Text('Ancienne Quantité:' ),
-                                                            new Text(removeTrailingZero(channelList[index].mbQteancien),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
+                                                            new Text( removeTrailingZero(double.parse(channelList[index].mbQteancien).toString()),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
                                                           ],
                                                         ),
                                                       ),
@@ -417,7 +455,7 @@ switch (channelList[index].mbType){
                                                    ),
                                                  ),
                                                    Text(
-                                                 removeTrailingZero(channelList[index].asQtesto),
+                                             removeTrailingZero(double.parse(channelList[index].asQtesto).toString()) ,
                                                  style: TextStyle(
                                                      fontWeight: FontWeight.bold,
                                                      fontSize: 18),
@@ -431,7 +469,7 @@ switch (channelList[index].mbType){
                                                      children: [        Text(
                                                    
                                                     
-                                                       removeTrailingZero('-'+channelList[index].mbQtesortie.toString()) ,
+                                                     '-' +removeTrailingZero(double.parse(channelList[index].mbQtesortie).toString()) ,
                                                     
                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red,fontSize: 15),
                                                    textAlign: TextAlign.center,
@@ -539,7 +577,7 @@ switch (channelList[index].mbType){
                                                           padding: const EdgeInsets.only(top:10.0),
                                                           child: Column(
                                                             children: [ new Text('Ancienne Quantité:' ),
-                                                              new Text(removeTrailingZero(channelList[index].mbQteancien),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
+                                                              new Text( removeTrailingZero(double.parse(channelList[index].mbQteancien).toString()),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
                                                             ],
                                                           ),
                                                         ),
@@ -572,7 +610,7 @@ switch (channelList[index].mbType){
                                                    ),
                                                  ),
                                                    Text(
-                                                 removeTrailingZero(channelList[index].asQtesto),
+                                                 removeTrailingZero(double.parse(channelList[index].asQtesto).toString()),
                                                  style: TextStyle(
                                                      fontWeight: FontWeight.bold,
                                                      fontSize: 18),
@@ -587,7 +625,7 @@ switch (channelList[index].mbType){
                                                          Text(
                                                    
                                                     
-                                                       removeTrailingZero('-'+channelList[index].mbQtetrans.toString()) ,
+                                                    '-' +removeTrailingZero(double.parse(channelList[index].mbQtetrans).toString()) ,
                                                     
                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red,fontSize: 15),
                                                    textAlign: TextAlign.center,
@@ -607,7 +645,7 @@ switch (channelList[index].mbType){
                                                          Text(
                                                    
                                                     
-                                                       removeTrailingZero('+'+channelList[index].mbQtetrans.toString()) ,
+                                                       '+' +removeTrailingZero(double.parse(channelList[index].mbQtetrans).toString()) ,
                                                     
                                                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green,fontSize: 15),
                                                    textAlign: TextAlign.center,
@@ -633,6 +671,310 @@ switch (channelList[index].mbType){
       
        
          break; 
+          case 'inventaire entree':
+                               return  Container(
+                              child: Card(
+                                child: Stack(children: [
+                                 
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                   
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, top: 10),
+                                          child: Row(children: <Widget>[
+                                             Icon(
+                                              Icons.info,
+                                              color: Colors.blue,
+                                              size: 15,
+                                            ),
+                                         
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Container( width:300,
+                                              child: AutoSizeText(
+                                               channelList[index].arRef,style: TextStyle(fontWeight:FontWeight.w600),
+                                                minFontSize: 15,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:8.0),
+                                          child: Row(   
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:10.0),
+                                                child: ClipOval(
+                                                  child: channelList[index].arPhoto != null
+                                                      ? new Image.file(
+                                                          channelList[index].arPhoto,
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          'images/net.png',
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                ),
+                                              ),
+                                            SizedBox(width: 12,),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                children: [
+                                                  Container(width: c_width,
+                                                    child: new Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                     
+                                                           
+                                                            new Text(channelList[index].arDesign,
+                                                                style: TextStyle(fontSize: 13)),
+                                                        SizedBox(height: 3,),
+                                                     channelList[index].arCodebarre!=null? new  Text(channelList[index].arCodebarre,
+                                                                style: TextStyle(fontSize: 13)):SizedBox.shrink(),
+                                                      SizedBox(height: 3,),
+                                                      
+                                                    
+                                                        new    Text(channelList[index].deIntitule,
+                                                                style: TextStyle(fontSize: 13)),
+                                                        new Text('Valider par:  '+ channelList[index].protmUser, style: TextStyle(fontSize: 13))
+                                                      , Padding(
+                                                        padding: const EdgeInsets.only(top:10.0),
+                                                        child: Column(
+                                                          children: [ new Text('Ancienne Quantité:' ),
+                                                            new Text( removeTrailingZero(double.parse(channelList[index].mbQteancien).toString()),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                                                 ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                 IntrinsicHeight(
+                                   child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [VerticalDivider(),
+                                       Container( width: c_width1, padding: const EdgeInsets.only(top:10.0,right:5,left:5,bottom:3),
+                                                                             child: Column(
+                                                                               crossAxisAlignment: CrossAxisAlignment.center,
+                                                                               children:<Widget> [
+                                                                                 Text(dd+'\n'+hhmm,textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15,),),
+                                                 Padding(
+                                                   padding: const EdgeInsets.all(3.0),
+                                                   child: Text(
+                                                   'Quantité en Stock:',
+                                                   ),
+                                                 ),
+                                                   Text(
+                                                  removeTrailingZero(double.parse(channelList[index].asQtesto).toString()),
+                                                 style: TextStyle(
+                                                     fontWeight: FontWeight.bold,
+                                                     fontSize: 18),
+                                                 textAlign: TextAlign.center,
+                                                 ),   Text(channelList[index].deIntitule,style:TextStyle(color: Colors.green),),
+                                                 Padding(
+                                                   padding: const EdgeInsets.only(left:12.0),
+                                                   child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                                                     children: [        Text(
+                                                   
+                                                    
+                                                       '+'+ removeTrailingZero(double.parse(channelList[index].mbQteentre).toString()) ,
+                                                    
+                                                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green,fontSize: 15),
+                                                   textAlign: TextAlign.center,
+                                                   )  ,
+                                                       Icon(Icons.trending_up_rounded,color:Colors.green),
+                                                     ],
+                                                   ),
+                                                 ),
+                                               
+                                                 SizedBox(height: 8,),
+                                              
+                                         
+                                               
+                                                
+                                                 
+                                                                               ],
+                                                                             ),
+                                                                           ),
+                                     ],
+                                   ),
+                                 ) ]),
+                              ),
+                            );
+
+     
+         break;
+         case 'inventaire sortie': 
+                    return  Container(
+                              child: Card(
+                                child: Stack(children: [
+                                 
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                   
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, top: 10),
+                                          child: Row(children: <Widget>[     Icon(
+                                              Icons.info,
+                                              color: Colors.blue,
+                                              size: 15,
+                                            ),
+                                        
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Container( width:300,
+                                              child: AutoSizeText(
+                                               channelList[index].arRef,style: TextStyle(fontWeight:FontWeight.w600),
+                                                minFontSize: 15,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:8.0),
+                                          child: Row(   
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:10.0),
+                                                child: ClipOval(
+                                                  child: channelList[index].arPhoto != null
+                                                      ? new Image.file(
+                                                          channelList[index].arPhoto,
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          'images/net.png',
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                ),
+                                              ),
+                                            SizedBox(width: 12,),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                children: [
+                                                  Container(width: c_width,
+                                                    child: new Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                     
+                                                           
+                                                            new Text(channelList[index].arDesign,
+                                                                style: TextStyle(fontSize: 13)),
+                                                        SizedBox(height: 3,),
+                                                     channelList[index].arCodebarre!=null? new  Text(channelList[index].arCodebarre,
+                                                                style: TextStyle(fontSize: 13)):SizedBox.shrink(),
+                                                      SizedBox(height: 3,),
+                                                      
+                                                    
+                                                        new    Text(channelList[index].deIntitule,
+                                                                style: TextStyle(fontSize: 13)),
+                                                        new Text('Valider par:  '+ channelList[index].protmUser, style: TextStyle(fontSize: 13))
+                                                      , Padding(
+                                                        padding: const EdgeInsets.only(top:10.0),
+                                                        child: Column(
+                                                          children: [ new Text('Ancienne Quantité:' ),
+                                                            new Text( removeTrailingZero(double.parse(channelList[index].mbQteancien).toString()),textAlign: TextAlign.center,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold), ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                                                 ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                 IntrinsicHeight(
+                                   child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [VerticalDivider(),
+                                       Container( width: c_width1, padding: const EdgeInsets.only(top:10.0,right:5,left:5,bottom:3),
+                                                                             child: Column(
+                                                                               crossAxisAlignment: CrossAxisAlignment.center,
+                                                                               children:<Widget> [
+                                                                                 Text(dd+'\n'+hhmm,textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15,),),
+                                                 Padding(
+                                                   padding: const EdgeInsets.all(3.0),
+                                                   child: Text(
+                                                   'Quantité en Stock:',
+                                                   ),
+                                                 ),
+                                                   Text(
+                                             removeTrailingZero(double.parse(channelList[index].asQtesto).toString()) ,
+                                                 style: TextStyle(
+                                                     fontWeight: FontWeight.bold,
+                                                     fontSize: 18),
+                                                 textAlign: TextAlign.center,
+                                                 ),
+                                                 Text(channelList[index].deIntitule,style:TextStyle(color: Colors.red),),
+                                                 Padding(
+                                                   padding: const EdgeInsets.only(left:12.0),
+                                                   
+                                                   child: Row( mainAxisAlignment: MainAxisAlignment.center,
+                                                     children: [        Text(
+                                                   
+                                                    
+                                                     '-' +removeTrailingZero(double.parse(channelList[index].mbQtesortie).toString()) ,
+                                                    
+                                                   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red,fontSize: 15),
+                                                   textAlign: TextAlign.center,
+                                                   )  ,
+                                                       Icon(Icons.trending_down_rounded,color:Colors.red),
+
+                                                     ],
+                                                   ),
+                                                 ),
+                                               
+                                                 SizedBox(height: 8,),
+                                              
+                                         
+                                               
+                                                
+                                                 
+                                                                               ],
+                                                                             ),
+                                                                           ),
+                                     ],
+                                   ),
+                                 ) ]),
+                              ),
+                            );
+         break;
 
 
                            }
@@ -750,11 +1092,16 @@ switch (channelList[index].mbType){
           Padding(
             padding: const EdgeInsets.only(top: 5.0, bottom: 15),
             child: Center(
-              child: Image.asset(
+              child: isVisble==false ?Image.asset(
                 'images/scan.png',
                 cacheWidth: 300,
                 cacheHeight: 100,
-              ),
+              ):SizedBox(child: Column(
+                children: [
+                  Text('Quantité Actuelle:' ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                  Text(removeTrailingZero(double.parse(channelList[0].asQtesto).toString()),style: TextStyle(fontSize:22,fontWeight:FontWeight.bold,))
+                ],
+              )),
             ),
           ),
             Padding(
@@ -774,7 +1121,8 @@ switch (channelList[index].mbType){
                       
                     });}else{ setState(() {isloading=true;
                       
-                        
+                        channelList.clear();
+                        isVisble=false;
                             
                               
                             
@@ -791,16 +1139,18 @@ switch (channelList[index].mbType){
 
 
 
-                          new  Container(height: 50,
-                 decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30)),
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                Color(0xff2193b0),
-                Color(0xff6dd5ed),
-              ])),
-               child: Center(child: Text("Produit Ajoutées:",style: TextStyle(fontSize: 18,color: Colors.white))), ),
+                          Visibility(visible: isVisble,
+                            child: new   Container(height: 50,
+                                           decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30)),
+                                        gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                          Color(0xff2193b0),
+                                          Color(0xff6dd5ed),
+                                        ])),
+                                         child: Center(child: Text("Consultation d'Historiques",style: TextStyle(fontSize: 18,color: Colors.white))), ),
+                          ),
 
                 Expanded(
                   child: SizedBox(

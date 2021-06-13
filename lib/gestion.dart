@@ -8,7 +8,7 @@ import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';
 import 'TrasfertDuStock.dart';
-import 'gestion3.dart';
+
 import 'consultation1.dart';
 import 'api.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'menu.dart';
 import 'EntréEnStock.dart';
 import 'login.dart';
-import 'gestion3.dart';
+
 import 'EntréEnStock.dart';
 import 'Sortie du stock.dart';
 import 'inventaire1.dart';

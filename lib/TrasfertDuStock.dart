@@ -37,7 +37,14 @@ class Tran extends StatefulWidget {
   final String aname;
   final String email;
   final String url;
-  Tran({Key key, this.aname, this.email, this.url}) : super(key: key);
+   final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  Tran({Key key, this.aname, this.email, this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _Tran extends State<Tran> {
@@ -46,6 +53,7 @@ class _Tran extends State<Tran> {
   String selectedName1;
   List data = List();
   List data1 = List();
+  bool no=false;
 
   String msg = "0";
   RegExp regex = RegExp(r"([.]*0)(?!.*\d)");
@@ -190,6 +198,16 @@ class _Tran extends State<Tran> {
                             ),
                           ),
                         ]),
+                         TableRow(children: [TableCell(
+                child: SizedBox(height: 30,child:  Text('Montant en Stock:',style: TextStyle(color: Colors.grey,)))
+               
+                
+                   ),                            
+                   TableCell(
+                child: SizedBox(child:  Text(removeTrailingZero(double.parse(artdata[0]['asMontsto']).toString()),style:TextStyle(color: Colors.black)),),
+             ),
+               
+              ]),
                         TableRow(children: [
                           TableCell(
                               child: SizedBox(
@@ -233,7 +251,7 @@ class _Tran extends State<Tran> {
                           color: Colors.black, fontFamily: 'FiraSans'))),
               SizedBox(
                 height: 30,
-                child: Text(removeTrailingZero(artdata[0]['asQtesto']),
+                child: Text(removeTrailingZero(double.parse(artdata[0]['asQtesto']).toString()),
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
@@ -314,6 +332,10 @@ class _Tran extends State<Tran> {
                   ],
                 ),
               ),
+                no==true?   Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Quantité insuffisante',style: TextStyle(color:Colors.red),),
+                ):SizedBox.shrink(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -321,10 +343,13 @@ class _Tran extends State<Tran> {
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       color: Colors.blue[500]),
                   child: FlatButton(
-                      onPressed: () {
-                        setState(() {
-                          var qte = double.parse(qteController.text);
+                      onPressed: () {var qte = double.parse(qteController.text);
                           var qtes = double.parse(artdata[0]['asQtesto']);
+                           if(qte<=qtes){
+                        setState(() {
+                          
+                         
+                      
                           channelList
                             ..add(Channelt(
                                 artdata[0]['arRef'],
@@ -342,7 +367,11 @@ class _Tran extends State<Tran> {
                           depintiu1 = selectedName1;
                           depdeslist..add(selectedName1);
                         });
-                        Navigator.pop(context);
+                        Navigator.pop(context);}else{
+                         setState(() {
+                            no=true;
+                         });
+                        }
                       },
                       child: Text(
                         "Ajouter",
@@ -350,6 +379,7 @@ class _Tran extends State<Tran> {
                       )),
                 ),
               ),
+           
             ],
           ),
         ),
@@ -403,7 +433,7 @@ class _Tran extends State<Tran> {
     String dep = value1;
     String bar = value2;
     var response = await http.get(
-        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar"),
+        Uri.parse("https://${widget.url}/api/articlebar/$dep/$bar/${widget.aname}"),
         headers: {"Accept": "application/json"});
 
     var jsonBody = response.body;
@@ -420,6 +450,8 @@ class _Tran extends State<Tran> {
       var jsonData = json.decode(jsonBody);
       setState(() {
         artdata = jsonData;
+          qteController.text=removeTrailingZero(double.parse(jsonData[0]['asQtesto']).toString());
+          no=false;
       });
 
       print(jsonData);
@@ -470,6 +502,12 @@ class _Tran extends State<Tran> {
                     ),
                   ),
                 );
+              }).then((value) {
+
+          setState(() {
+            isloading=false;
+          });
+
               });
 
           break;
@@ -508,7 +546,7 @@ class _Tran extends State<Tran> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xff62959c),
         title: Text('Transfert du Stock'),
@@ -527,7 +565,13 @@ class _Tran extends State<Tran> {
                       builder: (context) => Menu(
                           aname: "${widget.aname}",
                           email: "${widget.email}",
-                          url: "${widget.url}")),
+                          url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
             },
@@ -538,7 +582,13 @@ class _Tran extends State<Tran> {
       drawer: ssd(
           aname: "${widget.aname}",
           email: "${widget.email}",
-          url: "${widget.url}"),
+          url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -727,7 +777,14 @@ class _Tran extends State<Tran> {
                             setState(() {
                               iscolored = true;
                             });
-                          } else {
+                          } else if(selectedName==selectedName1){
+                                 setState(() {
+                              iscolored = true;
+                            });
+                          }
+                          
+                          
+                          else {
                             setState(() {
                               isloading = true;
                             });
@@ -816,7 +873,13 @@ class _Tran extends State<Tran> {
                                           builder: (context) => Tran(
                                                 aname: "${widget.aname}",
                                                 email: "${widget.email}",
-                                                url: "${widget.url}",
+                                                url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
                                               )),
                                     );
                                   },
