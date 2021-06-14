@@ -473,6 +473,14 @@ class _Tran extends State<Tran> {
           element.arRef == artdata[0]['arRef'] &&
           element.deCode == artdata[0]['deCode'] &&
           element.deDepotdes == depdes);
+     
+     if(double.parse(artdata[0]['asQtesto'])==0){
+return warningDialog(context, "l'article "+artdata[0]['arRef'] +" avec cette code a barre("+artdata[0]['arCodebarre']+") n'est pas disponible a cause de rupture de stock "  ,title: "Rupture de stock",neutralText: "ok",neutralAction: (){
+  setState(() {
+    isloading=false;
+  });
+});
+}else{
       switch (contain.isNotEmpty) {
         case true:
 
@@ -512,7 +520,7 @@ class _Tran extends State<Tran> {
 
           break;
       }
-    }
+    }}
     return response;
   }
 

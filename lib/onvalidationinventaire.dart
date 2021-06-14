@@ -104,6 +104,7 @@ String selectedName;
     });
   }
   var contain = channelListb.where((element) => element.arRef == artdata[0]['arRef'] && element.deCode == artdata[0]['deCode']);
+   
      switch (contain.isNotEmpty) {
     case true:        
             
@@ -135,15 +136,18 @@ String selectedName;
           ),
         ),
       );
-    });
-    
+    }).then((value){
+      setState(() {
+        isloading=false;
+      });
+    });    
        
       break;
-  
+     }
   }
-   }
+   
    return response;
-  }
+}
   Widget setupAlertDialoadContainer(File imags, BuildContext context) {
     
   return
