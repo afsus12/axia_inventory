@@ -1,5 +1,7 @@
 import 'dart:ffi';
+import 'package:axia_inventory/homescreen.dart';
 import 'package:axia_inventory/sidemenu.dart';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 
 import 'menu.dart';
@@ -27,8 +29,15 @@ class DepotScreen extends StatefulWidget {
   final String email;
   final String url;
   final String prot2;
+       final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
 
-  DepotScreen({Key key, this.aname,this.email,this.url,this.prot2}) : super(key: key);
+  DepotScreen({Key key, this.aname,this.email,this.url,this.prot2,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _DepotScreenState extends State<DepotScreen> {
@@ -392,7 +401,7 @@ findit(jsonData);
 
                                            selectedNameadd=null;
                                          });
-                                         setState(() {
+                                         setState(() {Navigator.pop(context);
                                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -400,7 +409,13 @@ findit(jsonData);
                                           aname: "${widget.aname}",
                                           email: "${widget.email}",
                                           url: "${widget.url}"
-                                          ,prot2: "${widget.prot2}")),
+                                          ,prot2: "${widget.prot2}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
 
  
 
@@ -464,14 +479,26 @@ findit(jsonData);
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
             },
           )
         ],
       ),
-      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}" , entre:widget.entre,
+                                                      sortie:widget.sortie,
+                                                       transfer:widget.transfer,
+                                                        consult:widget.consult,
+                                                        inventaires: widget.inventaires,
+                                                        gestionutil: widget.gestionutil,
+                                                      protvalidation:widget.protvalidation,),
       body: SingleChildScrollView(
         child: Container(
           child: Container(
@@ -677,10 +704,52 @@ findit(jsonData);
                          }
                       if(_isDisabled==false){ 
                         await adminRights(0);
-                         await editRights();   
+                         await editRights();  
+                         return successDialog(context, "vos modifications ont été enregistrées avec succès",neutralAction: (){
+
+                           setState(() {
+                                      Navigator.pop(context);
+                                               Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen(
+                                        aname: "${widget.aname}",
+                                        email: "${widget.email}",
+                                        url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       
+                                    )));
+                           });
+                         }); 
                       }else{
 
                             await adminRights(1);
+                            return successDialog(context, "vos modifications ont été enregistrées avec succès",neutralAction: (){
+
+                           setState(() {
+                                      Navigator.pop(context);
+                                               Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen(
+                                        aname: "${widget.aname}",
+                                        email: "${widget.email}",
+                                        url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       
+                                    )));
+                           });
+                         }); 
                       }
                     
                         setState(() {

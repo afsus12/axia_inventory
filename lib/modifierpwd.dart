@@ -29,7 +29,15 @@ class modifierPwd extends StatefulWidget {
   final String email;
   final String url;
   final String prot2;
-  modifierPwd({Key key, this.aname,this.email,this.url,this.prot2}) : super(key: key);
+       final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
+  
+  modifierPwd({Key key, this.aname,this.email,this.url,this.prot2,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _modifierPwdState extends State<modifierPwd> {
@@ -46,6 +54,9 @@ class _modifierPwdState extends State<modifierPwd> {
       bool sortie=false;
       bool inv=false;
       bool consult=false;
+      bool iscolored=false;
+      bool isloading=false;
+     String msg="";
     List data = List();
     List<bool> boollist=List();
     List<bool> _switchValues = List.generate(7, (_) => false);
@@ -98,14 +109,26 @@ Future<http.Response> pwdEdit() async {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
             },
           )
         ],
       ),
-      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),
       body: SingleChildScrollView(
         child: Container(
           child: Container(width:450,
@@ -152,11 +175,15 @@ Future<http.Response> pwdEdit() async {
                     controller: passwdController,
                       obscureText: true,
                       decoration:new InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-        borderSide:  const BorderSide(color: Colors.grey,  width: 1,style: BorderStyle.solid,),
-           borderRadius: BorderRadius.all(Radius.circular(30)),  
-         
-          ),border: OutlineInputBorder(borderRadius: BorderRadius.circular(30) ),  
+                  enabledBorder:iscolored==false ? const OutlineInputBorder(
+      borderSide:  const BorderSide(color: Colors.grey,  width: 1,style: BorderStyle.solid,),
+     borderRadius: BorderRadius.all(Radius.circular(30)),  
+   
+    ): const OutlineInputBorder(
+      borderSide:  const BorderSide(color: Colors.red,  width: 2,style: BorderStyle.solid,),
+     borderRadius: BorderRadius.all(Radius.circular(30)),  
+   
+    ),border: OutlineInputBorder(borderRadius: BorderRadius.circular(30) ),  
                   isDense: true,
                   contentPadding: EdgeInsets.all(8),
                   
@@ -183,11 +210,15 @@ Future<http.Response> pwdEdit() async {
                     controller: protmPwdController,
                       obscureText: true,
                       decoration:new InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-        borderSide:  const BorderSide(color: Colors.grey,  width: 1,style: BorderStyle.solid,),
-           borderRadius: BorderRadius.all(Radius.circular(30)),  
-         
-          ),border: OutlineInputBorder(borderRadius: BorderRadius.circular(30) ),  
+                  enabledBorder:iscolored==false ? const OutlineInputBorder(
+      borderSide:  const BorderSide(color: Colors.grey,  width: 1,style: BorderStyle.solid,),
+     borderRadius: BorderRadius.all(Radius.circular(30)),  
+   
+    ): const OutlineInputBorder(
+      borderSide:  const BorderSide(color: Colors.red,  width: 2,style: BorderStyle.solid,),
+     borderRadius: BorderRadius.all(Radius.circular(30)),  
+   
+    ),border: OutlineInputBorder(borderRadius: BorderRadius.circular(30) ),  
                   isDense: true,
                   contentPadding: EdgeInsets.all(8),
                   
@@ -220,7 +251,7 @@ Future<http.Response> pwdEdit() async {
     
              
              
-                Padding(
+             isloading==false?   Padding(
                   padding: const EdgeInsets.only(top: 20.0,bottom: 50),
                   child: Center(
                     child: Container(
@@ -230,17 +261,36 @@ Future<http.Response> pwdEdit() async {
                         textColor: Colors.white,
                         minWidth: 100,
                         height: 50,
-                        onPressed: () async {
+                        onPressed: () async { setState(() {
+                          isloading=true;
+                        });
                           if(passwdController.text==protmPwdController.text&& passwdController.text.length>=5){
 
                           await pwdEdit();
                         successDialog(context, "mot de passe a été changer",neutralAction:() {
+                           Navigator.pop(context);
                            Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => HomeScreen(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
                         
+                          }else if(passwdController.text==null ||protmPwdController.text ==null){setState(() {
+                              iscolored=true;
+                              msg="les champs est vide";
+                          });
+                          
+                          }else{setState(() {
+                            msg="Mot de passe ne correspond pas";
+                            iscolored=true;
+                          });
+                            
                           }
                      
                           }
@@ -248,7 +298,8 @@ Future<http.Response> pwdEdit() async {
                       ),
                     ),
                   ),
-                ),
+                ):CircularProgressIndicator(),
+                iscolored==true? Text(msg,style: TextStyle(color: Colors.red),):SizedBox.shrink(),
               ],
             ),
           ),

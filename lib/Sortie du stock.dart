@@ -702,7 +702,7 @@ return warningDialog(context, "l'article "+artdata[0]['arRef'] +" avec cette cod
                )),
          ),
            Expanded(
-             child: SizedBox(height: 200.0,
+             child: SizedBox(
                child: ListView.builder(itemCount: channelList.length, scrollDirection: Axis.vertical,
                  itemBuilder: (context,index){ var a=channelList[index].qte.toString(); var b=channelList[index].qtesto.toString();
                   final item =channelList[index].toString() ;
@@ -852,10 +852,10 @@ return warningDialog(context, "l'article "+artdata[0]['arRef'] +" avec cette cod
                                           style: BorderStyle.solid,
                                         ),
                                       ),
-                                      labelText: 'Qte a Ajouter',
+                                      labelText: 'Qte a modifier',
                                       labelStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
+                                      hintText: 'Qte a modifier',
                                       hintStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
                                     ),

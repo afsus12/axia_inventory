@@ -57,6 +57,7 @@ class _PrefGlobState extends State<PrefGlob> {
  DateTime datetimefin;
    List data = List();
  DateTime  configvalid1;
+ bool isloading=false;
    TextEditingController dateController = TextEditingController();
 
 
@@ -137,14 +138,28 @@ Future getconfig() async {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       )),
                 );
               });
             },
           )
         ],
       ),
-       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       ),
        body: Column(children: [
 
            Padding(
@@ -184,17 +199,33 @@ TextField(enabled: false,controller:dateController,textAlign: TextAlign.center,)
         style: TextStyle(color: Colors.blue),
     ))
 ,
-  FlatButton(
+ isloading==false ? FlatButton(
                     child: Text('Enregistrer'),
                     color: Color(0xffec524b),
                     textColor: Colors.white,
                     minWidth: 350,
-                    height: 50,onPressed:() async {
+                    height: 50,onPressed:() async { setState(() {
+                      isloading=true;
+                    });
                    var ss = DateFormat('yyyy-MM-dd hh:mm:ss').format(datetimefin); 
                       await prefgolbales(ss,imagevalid);
+                    return successDialog(context, "Operation terminer avec succes",neutralAction: (){
+                      setState(() { Navigator.pop(context);
+                                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       )),
+                );
+                      });
+                    });
                     
-                    
-                    } ),     ],),
+                    } ):CircularProgressIndicator(),     ],),
       
     );
   }

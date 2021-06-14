@@ -72,6 +72,7 @@ bool isVisble=false;
     var n= jsonData.length;
     for(var index=0;index<n;index++){var dateFormat;
 DateTime dateTime = DateTime.parse(jsonData[index]['is_date']);
+
   setState(() {
     invHislist..add(Hisinv(jsonData[index]['pi_intitule'], jsonData[index]['fa_codefamille'], jsonData[index]['de_code'],dateTime, jsonData[index]['is_remarques'], jsonData[index]['is_valide'], jsonData[index]['cbcreateur'],jsonData[index]['is_code']));
 
@@ -284,7 +285,7 @@ var now_1m = new DateTime(now.year, now.month-1, now.day);
                        Set<SimpleItem> set = Set<SimpleItem>()
                ..add(SimpleItem(3, "afficher seulement les inventaires en attente"))
                   ..add(SimpleItem(2, "sort par en attente"))
-                
+                 ..add(SimpleItem(4, "depuis la semaine dernière"))
                   ..add(SimpleItem(1, "sort par validé"));
                     
 radioListDialog(
@@ -307,9 +308,10 @@ radioListDialog(
            child: SizedBox(height: 200.0,
              child: ListView.builder( itemCount: filtred.length,shrinkWrap: true,
                       scrollDirection: Axis.vertical,
-               itemBuilder: (context, index) {String formattedDate = DateFormat('yyyy/MM/dd \n kk:mm').format(filtred[index].isDate);
+               itemBuilder: (context, index) {
+               
            double c_width = MediaQuery.of(context).size.width * 0.37; 
-           String hhmm= DateFormat.Hm().format(filtred[index].isDate.toLocal());
+          String hhmm= DateFormat.Hm().format(filtred[index].isDate.toLocal());
 
    var formater= DateFormat("EEEE\ndd/MM/yyyy", 'fr');
   String dd=formater.format(filtred[index].isDate.toLocal());

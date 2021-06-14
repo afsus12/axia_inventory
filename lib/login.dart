@@ -26,6 +26,7 @@ String uri = '192.168.1.9:8000';
       bool inv=false;
       bool consult=false;
       bool gestionutil=false;
+      bool isloading=false;
       Future getaccess(url,prot) async {
     var response = await http.get(
         Uri.parse(
@@ -129,13 +130,16 @@ setState(() {
                           hintText: 'Entrer le mot de passe'),
                     ),
                   ),
-                  Padding(
+             isloading==false ?    Padding(
                     padding: const EdgeInsets.fromLTRB(100, 8, 100, 8),
                     child: Center(
                       child: Container(
                         child: CustomButton(
                           btnText: 'Login',
                           onBtnPressed: () async {
+                            setState(() {
+                              isloading=true;
+                            });
                             if (_formKey.currentState.validate()) {
                               var protUser = protUserController.text;
                               var protPwd = protPwdController.text;
@@ -168,6 +172,7 @@ setState(() {
                               } else {
                                 setState(() {
                                   message = 'Mauvais identifiant / mot de passe';
+                                  isloading=false;
                                 });
                               }
                             }
@@ -175,8 +180,8 @@ setState(() {
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(onPressed: (){ setState(() {
+                  ):CircularProgressIndicator(),
+               isloading==false ?   IconButton(onPressed: (){ setState(() {
                     _ipconfig.text=uri;
                   });
 
@@ -310,8 +315,8 @@ setState(() {
 
 
 
-                  }, icon: Icon(Icons.settings,size: 30,) ),
-                  Text('$message',style:TextStyle(color: Colors.red),)
+                  }, icon: Icon(Icons.settings,size: 30,) ):SizedBox.shrink(),
+               isloading==false ?  Text('$message',style:TextStyle(color: Colors.red),):SizedBox.shrink()
                 ],
               ),
             ),

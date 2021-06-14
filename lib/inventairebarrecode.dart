@@ -674,7 +674,7 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                                         child:   TextField(enabled: false,
                                          autofocus: false,
                  focusNode: _focusnode,
-                 maxLines: 5,
+                 maxLines: 3,
                    keyboardType: TextInputType.text,
                  minLines: 1,
                 controller: _pcomment,
@@ -742,559 +742,563 @@ Widget setupAlertDialoadContainer(File imags, BuildContext context) {
                     ),
                   ),
                     
-            Column(
-
-              children: [Visibility(
-                maintainSize: true, 
-  maintainAnimation: true,
-  maintainState: true, visible:go==true,
-                child: new  Container(height: 50,
-                   decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30)),
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                  Color(0xff2193b0),
-                  Color(0xff6dd5ed),
-                ])),
-               child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   Text("Produit Ajoutées:",style: TextStyle(fontSize: 18,color: Colors.white)),
-                    Container( height: 40,width: 120,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.amber[400]),
-                child: Row(
-                  children: [
-                    FlatButton(
-                          child: Text('Valider' ,style: TextStyle(color: Colors.black,)),
-                          
-                       
+            Expanded(
+              child: Column(
+            
+                children: [Visibility(
+                  maintainSize: true, 
+              maintainAnimation: true,
+              maintainState: true, visible:go==true,
+                  child: new  Container(height: 50,
+                     decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft:Radius.circular(30),topRight: Radius.circular(30)),
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                    Color(0xff2193b0),
+                    Color(0xff6dd5ed),
+                  ])),
+                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                   crossAxisAlignment: CrossAxisAlignment.center,
+                   children: [
+                     Text("Produit Ajoutées:",style: TextStyle(fontSize: 18,color: Colors.white)),
+                      Container( height: 40,width: 120,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30),color: Colors.amber[400]),
+                  child: Row(
+                    children: [
+                      FlatButton(
+                            child: Text('Valider' ,style: TextStyle(color: Colors.black,)),
+                            
                          
-                          onPressed: () async{
-                         return  await confirmationDialog(
-    context, 
-    "Le mouvement va être enregistré et validé, voulez-vous continuer", 
-    positiveText: "Valider", 
-    positiveAction: () async {
-
-                      var n=channelList.length;
-
-
-                    var j= inventairestockentete();
-                    print(await j);
-                           for( var i=0;i<n;i++){
-
-                          
-                               var f=invStockligneadd(channelList[i].arRef,channelList[i].deCode,channelList[i].qtesto.toString(),channelList[i].qteAjust.toString(),channelList[i].prixAjust.toString(),);
-
-                              print(await f);
-                            setState(() {
-                              done=i;
-                            });}
-
-
-
-                    return  successDialog( 
-    context,  
-    "Opération terminé avec succès",  
-
-    neutralText: 'Okay',
-    neutralAction: (){Navigator.pop(context);
-       Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,  entre:widget.entre,
-                                                    sortie:widget.sortie,
-                                                     transfer:widget.transfer,
-                                                      consult:widget.consult,
-                                                      inventaires: widget.inventaires,
-                                                      gestionutil: widget.gestionutil,
-                                                    protvalidation:widget.protvalidation,)),
-  );},
-
-)         ;
-
-
-
-    }
-
-);
-
-
-                   },
-
-                   
                            
-
-                         
-
- 
-                        ),
-                Icon(Icons.done)  ],
-                ),
-              )  
-               
-                 ],), ),
-              ),
-
-              SizedBox(
-          
-              child: ListView.builder(
-                  itemCount: channelList.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    var a = channelList[index].qteAjust.toString();
-                    var b = channelList[index].qtesto.toString();
-                    final item = channelList[index].toString();
-                    double c_width = MediaQuery.of(context).size.width * 0.37;
-                     double c_width1 = MediaQuery.of(context).size.width * 0.371;
-                    return Dismissible(
-                      key: UniqueKey(),
-                      onDismissed: (direction) async {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text("Article " +
-                                channelList[index].arRef +
-                                " a été supprimé")));
-                        setState(() {
-                          channelList.removeAt(index);
-                         
-                          if (channelList.length == 0) {
-                                 setState(() {
-                                   go=false;
-                                 });
-                          }
-                        });
-                      },
-                      background: Container(
-                          color: Colors.white,
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.grey,
-                            size: 40,
-                          )),
-                      child: GestureDetector(onTap: () async{
-setState(() {
-  qteController1.text=channelList[index].qteAjust.toString();
-  prixController1.text=channelList[index].prixAjust.toString();
-});
-
-                       await showDialog(context: context, builder: (BuildContext context){
-                         return  Center(
-                           child: SingleChildScrollView(
-                             child: Dialog(
-                                backgroundColor: Colors.transparent,
-                             insetPadding: EdgeInsets.all(2),
-                             child: Stack(
-                               overflow: Overflow.visible,
-                               alignment: Alignment.center,
-                               children: <Widget>[
-                                 Container(
-                                  width: 380,
-                                       
-                                   decoration: BoxDecoration(
-                                     borderRadius: BorderRadius.circular(15),
-                                     color: Colors.white
-                                   ),
-                                   padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
-                                 child: Column( mainAxisAlignment: MainAxisAlignment.center,
-                                   children: [Text("Modifer Quantité",style:TextStyle(fontSize: 24,fontWeight: FontWeight.w600)),  
-                                   Padding(
-                                     padding: const EdgeInsets.only(left:30.0,top:20),
-                                     child: Table(
-                                                defaultColumnWidth: FixedColumnWidth(150), defaultVerticalAlignment:TableCellVerticalAlignment.top ,
-                                              children: [ 
-                                           TableRow(children: [TableCell(
-                                             child: SizedBox(height: 30,child:  Text('Reference:',style: TextStyle(color: Colors.grey,)))
-                                            
-                                             
-                                                ),
-                                                TableCell(
-                                             child: SizedBox(child:  Text(channelList[index].arRef),),
-                                          ),
-                                            
-                                           ]),
-                                            TableRow(children: [TableCell(
-                                             child: SizedBox(height: 30,child:  Text('Designation:',style: TextStyle(color: Colors.grey,)))
-                                            
-                                             
-                                                ),
-                                                TableCell(
-                                             child: SizedBox(child:  AutoSizeText(
-                       channelList[index].arDesign,
-                       
-                       minFontSize: 15,
-                       maxLines: 3,
-                       
-                                            ),),),
-                                         
-                                            
-                                           ]),
-                                             TableRow(children: [TableCell(
-                                             child: SizedBox(height: 30,child:  Text('Barre Code:',style: TextStyle(color: Colors.grey,)))
-                                            
-                                             
-                                                ),
-                                                TableCell(
-                                             child: SizedBox(child:  Text(channelList[index].barcode,),),
-                                          ),
-                                            
-                                           ]),
-                                            TableRow(children: [TableCell(
-                                             child: SizedBox(height: 30,child:  Text('Quantité en Stock:',style: TextStyle(color: Colors.grey,)))
-                                            
-                                             
-                                                ),
-                                                TableCell(
-                                             child: SizedBox(child:  Text(channelList[index].qtesto.toString(),style:TextStyle(color: Colors.black)),),
-                                          ),
-                                            
-                                           ]),
-                                             TableRow(children: [TableCell(
-                                             child: SizedBox(height: 30,child:  Text('Nom Depot:',style: TextStyle(color: Colors.grey,)))
-                                            
-                                             
-                                                ),
-                                                TableCell(
-                                             child: SizedBox(child:  Text(channelList[index].deDepot,style:TextStyle(color: Colors.black)),),
-                                          ),
-                                            
-                                           ]),
-                                              
-                                             
-                                        
-                                              ],
-                                            ),
-                                   ),
-                                 Padding(
-                                   padding: const EdgeInsets.only(left:60.0),
-                                   child: Row( 
-                                    children: [
-                                    SizedBox(
-                                      width: 30,
-                                      child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffEC524B),
-                                    foregroundColor: Colors.white,
-                                    onPressed: () { 
-                                      double currentValue = double.parse(qteController1.text);
-                                
-                                      setState(() {
-                                         currentValue--;
-                                               qteController1.text =
-                                (currentValue).toString();
-                                      });
-                                    },
-                                    child: Icon(Icons.remove),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 150,
-                                      height: 40,
-                                      child: TextFormField(
-                                    controller: qteController1,
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.singleLineFormatter
-                                    ],
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: BorderSide(
-                                          width: 10,
-                                          style: BorderStyle.solid,
-                                        ),
-                                      ),
-                                      labelText: 'Qte a Ajouter',
-                                      labelStyle: TextStyle(
-                                          color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
-                                      hintStyle: TextStyle(
-                                          color: Color(0xFF8B8B8B), fontSize: 12),
-                                    ),
-                                      ),
-                                    ),
-                                   
-                                    SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffEC524B),
-                                    foregroundColor: Colors.white,
-                                    onPressed: () {double currentValue = double.parse(qteController1.text);
-                                
-                                      setState(() {
-                                         currentValue++;
-                                               qteController1.text =
-                                (currentValue).toString();
-                                      });
-                                    },
-                                    child: Icon(Icons.add),
-                                      ),
-                                    )
-                                    ],
-                                ),
-                                 ), Padding(
-                                   padding: const EdgeInsets.only(left:60.0),
-                                   child: Row( 
-                                    children: [
-                                    SizedBox(
-                                      width: 30,
-                                      child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffEC524B),
-                                    foregroundColor: Colors.white,
-                                    onPressed: () { 
-                                      double currentValue = double.parse(prixController1.text);
-                                
-                                      setState(() {
-                                         currentValue--;
-                                               prixController1.text =
-                                (currentValue).toString();
-                                      });
-                                    },
-                                    child: Icon(Icons.remove),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 150,
-                                      height: 40,
-                                      child: TextFormField(
-                                    controller: prixController1,
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.singleLineFormatter
-                                    ],
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.all(10),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: BorderSide(
-                                          width: 10,
-                                          style: BorderStyle.solid,
-                                        ),
-                                      ),
-                                      labelText: 'Qte a Ajouter',
-                                      labelStyle: TextStyle(
-                                          color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
-                                      hintStyle: TextStyle(
-                                          color: Color(0xFF8B8B8B), fontSize: 12),
-                                    ),
-                                      ),
-                                    ),
-                                   
-                                    SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffEC524B),
-                                    foregroundColor: Colors.white,
-                                    onPressed: () {double currentValue = double.parse(prixController1.text);
-                                
-                                      setState(() {
-                                         currentValue++;
-                                               prixController1.text =
-                                (currentValue).toString();
-                                      });
-                                    },
-                                    child: Icon(Icons.add),
-                                      ),
-                                    )
-                                    ],
-                                ),
-                                 ), Container(decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Colors.blue[500]), 
-                                 child: FlatButton(onPressed: (){ var a= new Channelb( channelList[index].arRef, channelList[index].arDesign, channelList[index].deCode, channelList[index].arImage, channelList[index].deDepot, channelList[index].qtesto, double.parse(qteController1.text), channelList[index].barcode, double.parse(prixController1.text), channelList[index].cump);
-          
-                                  setState(() { 
-                                 channelList.removeAt(index);
-                                
-                                 channelList.insert(index, a);
-                                
-                                 qteController.text='0'; 
-                                            
-                                 });
-                                
-                                 Navigator.pop(context);
-                                 }
-                                 ,
-                                 child: Text("Enregistrer",style: TextStyle(fontSize: 18,color: Colors.white),)),
-                                 ),],),
-                                   ),
-                                 
-                                 
-                               
-                                
-                                 Positioned(
-                                   top: -70,
-                                   child: CircleAvatar(
-                                   backgroundColor: Colors.transparent,
-                                   radius: Constants.avatarRadius,
-                                   child: ClipRRect( borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
-                                 child: channelList[index].arImage !=null ? new Image.file(channelList[index].arImage,
-                                 width: 100,
-                                 height: 100,
-                                 fit: BoxFit.cover,
-                               ):Image.asset('images/net.png',width: 100,
-                                 height: 100,
-                                 fit: BoxFit.cover,)),
-                               ), )
-                               ],
-                             )
-                                                  ),
-                           ),
-                         ); },); 
-                   
-                       
-                         
-                                                       
-ScaffoldMessenger.of(context)
-                                         .showSnackBar(SnackBar(content: Text("Article "+channelList[index].arRef+" a été modifié"))); 
-
-                      },
-                        child: Container(
-                          child: Card(
-                            child: Stack(children: [
+                            onPressed: () async{
+                           return  await confirmationDialog(
+                context, 
+                "Le mouvement va être enregistré et validé, voulez-vous continuer", 
+                positiveText: "Valider", 
+                positiveAction: () async {
+            
+                        var n=channelList.length;
+            
+            
+                      var j= inventairestockentete();
+                      print(await j);
+                             for( var i=0;i<n;i++){
+            
+                            
+                                 var f=invStockligneadd(channelList[i].arRef,channelList[i].deCode,channelList[i].qtesto.toString(),channelList[i].qteAjust.toString(),channelList[i].prixAjust.toString(),);
+            
+                                print(await f);
+                              setState(() {
+                                done=i;
+                              });}
+            
+            
+            
+                      return  successDialog( 
+                context,  
+                "Opération terminé avec succès",  
+            
+                neutralText: 'Okay',
+                neutralAction: (){Navigator.pop(context);
+                   Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,  entre:widget.entre,
+                                                      sortie:widget.sortie,
+                                                       transfer:widget.transfer,
+                                                        consult:widget.consult,
+                                                        inventaires: widget.inventaires,
+                                                        gestionutil: widget.gestionutil,
+                                                      protvalidation:widget.protvalidation,)),
+              );},
+            
+            )         ;
+            
+            
+            
+                }
+            
+            );
+            
+            
+                     },
+            
+                     
                              
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Column(
-                               
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10.0, top: 10),
-                                      child: Row(children: <Widget>[
-                                        Icon(
-                                          Icons.fiber_manual_record,
-                                          color: Colors.blue,
-                                          size: 13,
-                                        ),
-                                        SizedBox(
-                                          width: 3,
-                                        ),
-                                        Container( width:300,
-                                          child: AutoSizeText(
-                                           channelList[index].arRef,style: TextStyle(fontWeight:FontWeight.w600),
-                                            minFontSize: 15,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ]),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top:8.0),
-                                      child: Row(   
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(left:10.0),
-                                            child: ClipOval(
-                                              child: channelList[index].arImage != null
-                                                  ? new Image.file(
-                                                      channelList[index].arImage,
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Image.asset(
-                                                      'images/net.png',
-                                                      width: 60,
-                                                      height: 60,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                            ),
-                                          ),
-                                        SizedBox(width: 12,),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Container(width: c_width,
-                                                child: new Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                 
-                                                       
-                                                        new Text(channelList[index].arDesign,
-                                                            style: TextStyle(fontSize: 13)),
-                                                    SizedBox(height: 3,),
-                                                 channelList[index].barcode!=null? new  Text(channelList[index].barcode,
-                                                            style: TextStyle(fontSize: 13)):SizedBox.shrink(),
-                                                  SizedBox(height: 3,),
-                                                  
+            
+                           
+            
+             
+                          ),
+                  Icon(Icons.done)  ],
+                  ),
+                )  
+                 
+                   ],), ),
+                ),
+            
+                Expanded(
+                  child: SizedBox(
+                          
+                  child: ListView.builder(
+                      itemCount: channelList.length,
+                      scrollDirection: Axis.vertical,
+                
+                      itemBuilder: (context, index) {
+                        var a = channelList[index].qteAjust.toString();
+                        var b = channelList[index].qtesto.toString();
+                        final item = channelList[index].toString();
+                        double c_width = MediaQuery.of(context).size.width * 0.37;
+                         double c_width1 = MediaQuery.of(context).size.width * 0.371;
+                        return Dismissible(
+                          key: UniqueKey(),
+                          onDismissed: (direction) async {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Article " +
+                                    channelList[index].arRef +
+                                    " a été supprimé")));
+                            setState(() {
+                              channelList.removeAt(index);
+                             
+                              if (channelList.length == 0) {
+                                     setState(() {
+                                       go=false;
+                                     });
+                              }
+                            });
+                          },
+                          background: Container(
+                              color: Colors.white,
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.grey,
+                                size: 40,
+                              )),
+                          child: GestureDetector(onTap: () async{
+                setState(() {
+                  qteController1.text=channelList[index].qteAjust.toString();
+                  prixController1.text=channelList[index].prixAjust.toString();
+                });
+                
+                           await showDialog(context: context, builder: (BuildContext context){
+                             return  Center(
+                               child: SingleChildScrollView(
+                                 child: Dialog(
+                                    backgroundColor: Colors.transparent,
+                                 insetPadding: EdgeInsets.all(2),
+                                 child: Stack(
+                                   overflow: Overflow.visible,
+                                   alignment: Alignment.center,
+                                   children: <Widget>[
+                                     Container(
+                                      width: 380,
+                                           
+                                       decoration: BoxDecoration(
+                                         borderRadius: BorderRadius.circular(15),
+                                         color: Colors.white
+                                       ),
+                                       padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
+                                     child: Column( mainAxisAlignment: MainAxisAlignment.center,
+                                       children: [Text("Modifer Quantité",style:TextStyle(fontSize: 24,fontWeight: FontWeight.w600)),  
+                                       Padding(
+                                         padding: const EdgeInsets.only(left:30.0,top:20),
+                                         child: Table(
+                                                    defaultColumnWidth: FixedColumnWidth(150), defaultVerticalAlignment:TableCellVerticalAlignment.top ,
+                                                  children: [ 
+                                               TableRow(children: [TableCell(
+                                                 child: SizedBox(height: 30,child:  Text('Reference:',style: TextStyle(color: Colors.grey,)))
                                                 
-                                                    new    Text(channelList[index].deDepot,
-                                                            style: TextStyle(fontSize: 13)),
+                                                 
+                                                    ),
+                                                    TableCell(
+                                                 child: SizedBox(child:  Text(channelList[index].arRef),),
+                                              ),
+                                                
+                                               ]),
+                                                TableRow(children: [TableCell(
+                                                 child: SizedBox(height: 30,child:  Text('Designation:',style: TextStyle(color: Colors.grey,)))
+                                                
+                                                 
+                                                    ),
+                                                    TableCell(
+                                                 child: SizedBox(child:  AutoSizeText(
+                           channelList[index].arDesign,
+                           
+                           minFontSize: 15,
+                           maxLines: 3,
+                           
+                                                ),),),
+                                             
+                                                
+                                               ]),
+                                                 TableRow(children: [TableCell(
+                                                 child: SizedBox(height: 30,child:  Text('Barre Code:',style: TextStyle(color: Colors.grey,)))
+                                                
+                                                 
+                                                    ),
+                                                    TableCell(
+                                                 child: SizedBox(child:  Text(channelList[index].barcode,),),
+                                              ),
+                                                
+                                               ]),
+                                                TableRow(children: [TableCell(
+                                                 child: SizedBox(height: 30,child:  Text('Quantité en Stock:',style: TextStyle(color: Colors.grey,)))
+                                                
+                                                 
+                                                    ),
+                                                    TableCell(
+                                                 child: SizedBox(child:  Text(channelList[index].qtesto.toString(),style:TextStyle(color: Colors.black)),),
+                                              ),
+                                                
+                                               ]),
+                                                 TableRow(children: [TableCell(
+                                                 child: SizedBox(height: 30,child:  Text('Nom Depot:',style: TextStyle(color: Colors.grey,)))
+                                                
+                                                 
+                                                    ),
+                                                    TableCell(
+                                                 child: SizedBox(child:  Text(channelList[index].deDepot,style:TextStyle(color: Colors.black)),),
+                                              ),
+                                                
+                                               ]),
                                                   
+                                                 
+                                            
                                                   ],
                                                 ),
-                                              ),
-                                            ],
+                                       ),
+                                     Padding(
+                                       padding: const EdgeInsets.only(left:60.0),
+                                       child: Row( 
+                                        children: [
+                                        SizedBox(
+                                          width: 30,
+                                          child: FloatingActionButton(
+                                        backgroundColor: const Color(0xffEC524B),
+                                        foregroundColor: Colors.white,
+                                        onPressed: () { 
+                                          double currentValue = double.parse(qteController1.text);
+                                    
+                                          setState(() {
+                                             currentValue--;
+                                                   qteController1.text =
+                                    (currentValue).toString();
+                                          });
+                                        },
+                                        child: Icon(Icons.remove),
                                           ),
                                         ),
-                                                             ],
-                                      ),
+                                        Container(
+                                          width: 150,
+                                          height: 40,
+                                          child: TextFormField(
+                                        controller: qteController1,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.singleLineFormatter
+                                        ],
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(10),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30),
+                                            borderSide: BorderSide(
+                                              width: 10,
+                                              style: BorderStyle.solid,
+                                            ),
+                                          ),
+                                          labelText: 'Qte a Modifier',
+                                          labelStyle: TextStyle(
+                                              color: Color(0xFF8B8B8B), fontSize: 12),
+                                          hintText: 'Qte a Modifier',
+                                          hintStyle: TextStyle(
+                                              color: Color(0xFF8B8B8B), fontSize: 12),
+                                        ),
+                                          ),
+                                        ),
+                                       
+                                        SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: FloatingActionButton(
+                                        backgroundColor: const Color(0xffEC524B),
+                                        foregroundColor: Colors.white,
+                                        onPressed: () {double currentValue = double.parse(qteController1.text);
+                                    
+                                          setState(() {
+                                             currentValue++;
+                                                   qteController1.text =
+                                    (currentValue).toString();
+                                          });
+                                        },
+                                        child: Icon(Icons.add),
+                                          ),
+                                        )
+                                        ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                             IntrinsicHeight(
-                               child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.end,
-                                 children: [VerticalDivider(),
-                                   Container( width: c_width1, padding: const EdgeInsets.only(top:10.0,right:5,left:5,bottom:3),
-                                                                         child: Column(
-                                                                           crossAxisAlignment: CrossAxisAlignment.center,
-                                                                           children:<Widget> [
-                                             Text(
-                                             'Quantité en Stock:',
-                                             ),SizedBox(height: 3,),
-                                             Text(
-                                             removeTrailingZero(double.parse(b.toString()).toString()),
-                                             style: TextStyle(
-                                                 fontWeight: FontWeight.bold,
-                                                 fontSize: 16),
-                                             textAlign: TextAlign.center,
-                                             ),
-                                             SizedBox(height: 3,),
-                                              Transform.rotate(angle:Math.pi / 180 * 90,child: Icon(Icons.double_arrow)),
-                                            Text(
-                                             'Quantité Ajusté:',
-                                             ),
-                                             Text(
-                                             
-                                              
-                                                 removeTrailingZero(double.parse(channelList[index].qteAjust.toString()).toString() ) ,
-                                              
-                                             style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold),
-                                             textAlign: TextAlign.center,
-                                             )  , channelList[index].prixAjust!=0 ?Text(
-                                             'Prix Ajusté:',
-                                             ):SizedBox.shrink(),
-                                           channelList[index].prixAjust!=0 ? Text(
-                                             
-                                              
-                                                 removeTrailingZero(  double.parse(channelList[index].prixAjust.toString()).toString()) ,style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold), ):SizedBox.shrink(),
-                                            
-                                             
-                                                                           ],
-                                                                         ),
-                                                                       ),
-                                 ],
+                                     ), Padding(
+                                       padding: const EdgeInsets.only(left:60.0),
+                                       child: Row( 
+                                        children: [
+                                        SizedBox(
+                                          width: 30,
+                                          child: FloatingActionButton(
+                                        backgroundColor: const Color(0xffEC524B),
+                                        foregroundColor: Colors.white,
+                                        onPressed: () { 
+                                          double currentValue = double.parse(prixController1.text);
+                                    
+                                          setState(() {
+                                             currentValue--;
+                                                   prixController1.text =
+                                    (currentValue).toString();
+                                          });
+                                        },
+                                        child: Icon(Icons.remove),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 150,
+                                          height: 40,
+                                          child: TextFormField(
+                                        controller: prixController1,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.singleLineFormatter
+                                        ],
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(10),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30),
+                                            borderSide: BorderSide(
+                                              width: 10,
+                                              style: BorderStyle.solid,
+                                            ),
+                                          ),
+                                          labelText: 'Prix a modifier',
+                                          labelStyle: TextStyle(
+                                              color: Color(0xFF8B8B8B), fontSize: 12),
+                                          hintText: 'Prix a modifier',
+                                          hintStyle: TextStyle(
+                                              color: Color(0xFF8B8B8B), fontSize: 12),
+                                        ),
+                                          ),
+                                        ),
+                                       
+                                        SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: FloatingActionButton(
+                                        backgroundColor: const Color(0xffEC524B),
+                                        foregroundColor: Colors.white,
+                                        onPressed: () {double currentValue = double.parse(prixController1.text);
+                                    
+                                          setState(() {
+                                             currentValue++;
+                                                   prixController1.text =
+                                    (currentValue).toString();
+                                          });
+                                        },
+                                        child: Icon(Icons.add),
+                                          ),
+                                        )
+                                        ],
+                                    ),
+                                     ), Container(decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), color: Colors.blue[500]), 
+                                     child: FlatButton(onPressed: (){ var a= new Channelb( channelList[index].arRef, channelList[index].arDesign, channelList[index].deCode, channelList[index].arImage, channelList[index].deDepot, channelList[index].qtesto, double.parse(qteController1.text), channelList[index].barcode, double.parse(prixController1.text), channelList[index].cump);
+                          
+                                      setState(() { 
+                                     channelList.removeAt(index);
+                                    
+                                     channelList.insert(index, a);
+                                    
+                                     qteController.text='0'; 
+                                                
+                                     });
+                                    
+                                     Navigator.pop(context);
+                                     }
+                                     ,
+                                     child: Text("Enregistrer",style: TextStyle(fontSize: 18,color: Colors.white),)),
+                                     ),],),
+                                       ),
+                                     
+                                     
+                                   
+                                    
+                                     Positioned(
+                                       top: -70,
+                                       child: CircleAvatar(
+                                       backgroundColor: Colors.transparent,
+                                       radius: Constants.avatarRadius,
+                                       child: ClipRRect( borderRadius: BorderRadius.all(Radius.circular(Constants.avatarRadius)),
+                                     child: channelList[index].arImage !=null ? new Image.file(channelList[index].arImage,
+                                     width: 100,
+                                     height: 100,
+                                     fit: BoxFit.cover,
+                                   ):Image.asset('images/net.png',width: 100,
+                                     height: 100,
+                                     fit: BoxFit.cover,)),
+                                   ), )
+                                   ],
+                                 )
+                                                      ),
                                ),
-                             ) ]),
+                             ); },); 
+                       
+                           
+                             
+                                                           
+                ScaffoldMessenger.of(context)
+                                             .showSnackBar(SnackBar(content: Text("Article "+channelList[index].arRef+" a été modifié"))); 
+                
+                          },
+                            child: Container(
+                              child: Card(
+                                child: Stack(children: [
+                                 
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                   
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10.0, top: 10),
+                                          child: Row(children: <Widget>[
+                                            Icon(
+                                              Icons.fiber_manual_record,
+                                              color: Colors.blue,
+                                              size: 13,
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Container( width:300,
+                                              child: AutoSizeText(
+                                               channelList[index].arRef,style: TextStyle(fontWeight:FontWeight.w600),
+                                                minFontSize: 15,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(top:8.0),
+                                          child: Row(   
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(left:10.0),
+                                                child: ClipOval(
+                                                  child: channelList[index].arImage != null
+                                                      ? new Image.file(
+                                                          channelList[index].arImage,
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          'images/net.png',
+                                                          width: 60,
+                                                          height: 60,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                ),
+                                              ),
+                                            SizedBox(width: 12,),
+                                            IntrinsicHeight(
+                                              child: Row(
+                                                children: [
+                                                  Container(width: c_width,
+                                                    child: new Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                     
+                                                           
+                                                            new Text(channelList[index].arDesign,
+                                                                style: TextStyle(fontSize: 13)),
+                                                        SizedBox(height: 3,),
+                                                     channelList[index].barcode!=null? new  Text(channelList[index].barcode,
+                                                                style: TextStyle(fontSize: 13)):SizedBox.shrink(),
+                                                      SizedBox(height: 3,),
+                                                      
+                                                    
+                                                        new    Text(channelList[index].deDepot,
+                                                                style: TextStyle(fontSize: 13)),
+                                                      
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                                                 ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                 IntrinsicHeight(
+                                   child: Row(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.end,
+                                     children: [VerticalDivider(),
+                                       Container( width: c_width1, padding: const EdgeInsets.only(top:10.0,right:5,left:5,bottom:3),
+                                                                             child: Column(
+                                                                               crossAxisAlignment: CrossAxisAlignment.center,
+                                                                               children:<Widget> [
+                                                 Text(
+                                                 'Quantité en Stock:',
+                                                 ),SizedBox(height: 3,),
+                                                 Text(
+                                                 removeTrailingZero(double.parse(b.toString()).toString()),
+                                                 style: TextStyle(
+                                                     fontWeight: FontWeight.bold,
+                                                     fontSize: 16),
+                                                 textAlign: TextAlign.center,
+                                                 ),
+                                                 SizedBox(height: 3,),
+                                                  Transform.rotate(angle:Math.pi / 180 * 90,child: Icon(Icons.double_arrow)),
+                                                Text(
+                                                 'Quantité Ajusté:',
+                                                 ),
+                                                 Text(
+                                                 
+                                                  
+                                                     removeTrailingZero(double.parse(channelList[index].qteAjust.toString()).toString() ) ,
+                                                  
+                                                 style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold),
+                                                 textAlign: TextAlign.center,
+                                                 )  , channelList[index].prixAjust!=0 ?Text(
+                                                 'Prix Ajusté:',
+                                                 ):SizedBox.shrink(),
+                                               channelList[index].prixAjust!=0 ? Text(
+                                                 
+                                                  
+                                                     removeTrailingZero(  double.parse(channelList[index].prixAjust.toString()).toString()) ,style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight: FontWeight.bold), ):SizedBox.shrink(),
+                                                
+                                                 
+                                                                               ],
+                                                                             ),
+                                                                           ),
+                                     ],
+                                   ),
+                                 ) ]),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-
-
-
-              ],
+                        );
+                      }),
+                            ),
+                ),
+            
+            
+            
+                ],
+              ),
             )      
 
 

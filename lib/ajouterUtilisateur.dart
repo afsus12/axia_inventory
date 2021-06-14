@@ -28,8 +28,15 @@ class ajouterUtilisateur extends StatefulWidget {
   final String aname;
   final String email;
   final String url;
+    final bool entre;
+  final bool sortie;
+  final bool transfer;
+  final bool consult;
+  final bool gestionutil;
+  final bool inventaires;
+  final bool protvalidation;
 
-  ajouterUtilisateur({Key key, this.aname,this.email,this.url}) : super(key: key);
+  ajouterUtilisateur({Key key, this.aname,this.email,this.url,this.entre,this.sortie,this.transfer,this.consult,this.gestionutil,this.inventaires,this.protvalidation}) : super(key: key);
 }
 
 class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
@@ -354,14 +361,28 @@ Future<http.Response> rolesadd() async {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       )),
                 );
               });
             },
           )
         ],
       ),
-      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),
+      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       ),
       body: SingleChildScrollView(
         child: Container(
           child: Container(width:450,
@@ -954,7 +975,15 @@ Future<http.Response> rolesadd() async {
                                   builder: (context) =>  HomeScreen(
                                       aname: "${widget.aname}",
                                       email: "${widget.email}",
-                                      url: "${widget.url}")),
+                                      url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       )),
+                                      
                             );
                           } );
                           }else{
@@ -985,13 +1014,22 @@ setState(() {
 });
 
 
-return successDialog(context, "utilisateur ajouté avec succès",neutralAction:(){ Navigator.push(
+return successDialog(context, "utilisateur ajouté avec succès",neutralAction:(){
+   Navigator.pop(context);
+   Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => HomeScreen(
                                       aname: "${widget.aname}",
                                       email: "${widget.email}",
-                                      url: "${widget.url}")),
+                                      url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
+                                       )),
                             );
                           } );
                         }  else{

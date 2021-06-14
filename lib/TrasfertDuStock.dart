@@ -896,7 +896,7 @@ class _Tran extends State<Tran> {
           ),
           Expanded(
             child: SizedBox(
-              height: 200.0,
+     
               child: ListView.builder(
                   itemCount: channelList.length,
                   scrollDirection: Axis.vertical,
@@ -1059,10 +1059,10 @@ class _Tran extends State<Tran> {
                                           style: BorderStyle.solid,
                                         ),
                                       ),
-                                      labelText: 'Qte a Ajouter',
+                                      labelText: 'Qte a modifier',
                                       labelStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
+                                      hintText: 'Qte a modifier',
                                       hintStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
                                     ),

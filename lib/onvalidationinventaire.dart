@@ -56,7 +56,7 @@ List data= new List();
            double prixa;
              bool isloading=false;
                bool go=false;
-
+bool _iscolored=false;
  File imags;
  double qtes;
  double qte;
@@ -215,6 +215,18 @@ String selectedName;
                    TableCell(
                 child: SizedBox(child:  Text(artdata[0]['arCodebarre'],),),
              ),
+             
+               
+              ]),
+                 TableRow(children: [TableCell(
+                child: SizedBox(height: 30,child:  Text('Montant en Stock:',style: TextStyle(color: Colors.grey,)))
+               
+                
+                   ),
+                   TableCell(
+                child: SizedBox(child:  Text(   removeTrailingZero( double.parse(artdata[0]['asMontsto'].toString()).toString()  ) ),),
+             ),
+             
                
               ]),
                TableRow(children: [TableCell(
@@ -237,16 +249,7 @@ String selectedName;
              ),
                
               ]),
-                 TableRow(children: [TableCell(
-                child: SizedBox(height: 30,child:  Text('Montant en Stock:',style: TextStyle(color: Colors.grey,)))
-               
                 
-                   ),
-                   TableCell(
-                child: SizedBox(child:  Text(artdata[0]['asMontsto'],style:TextStyle(color: Colors.black)),),
-             ),
-               
-              ]),
                  
                 
            
@@ -629,14 +632,26 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}", entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
             },
           )
         ],
       ),
-      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),body:Column(children: [ Expanded(
+      drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}", entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),body:Column(children: [ Expanded(
             child: Column(
               children: [Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -719,7 +734,7 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
                 decoration: ShapeDecoration(
                  shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
-                side: _validate==false? BorderSide(
+                side: _iscolored==false? BorderSide(
                 width: 0.6, style: BorderStyle.solid):BorderSide(
                 width: 2, style: BorderStyle.solid,color: Colors.red),
                  ),
@@ -730,11 +745,11 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
                 child: DropdownButton<String>(
                   hint: Text(
                 'selection de souche',
-                style: _validate == false?TextStyle(
+                style: _iscolored == false?TextStyle(
                   color: Color(0xFF8B8B8B), fontSize: 12):TextStyle(
                   color: Colors.red, fontSize: 12),
                   ),
-                  icon: _validate==false ? Icon(Icons.arrow_drop_down):Icon(Icons.arrow_drop_down,color: Colors.red),
+                  icon: _iscolored==false ? Icon(Icons.arrow_drop_down):Icon(Icons.arrow_drop_down,color: Colors.red),
                   iconSize: 20,
                    value: selectedName,
                       
@@ -844,7 +859,7 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
                      
                        
                         onPressed: ()async{ 
-                
+                                     if (selectedName!=null){
                          return  await confirmationDialog(
     context, 
     "Le mouvement va être enregistré et validé, voulez-vous continuer", 
@@ -871,7 +886,13 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
     neutralAction: (){Navigator.pop(context);
        Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}" ,)),
+    MaterialPageRoute(builder: (context) => invacc(aname: "${widget.aname}",email:"${widget.email}",url:"${widget.url}", entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
   );},
 
 )         ;
@@ -881,7 +902,11 @@ Future<http.Response> inventairestockmodifier(valueqte,valueprix,ref) async {
         },
 
 );
-
+}else{
+  setState(() {
+    _iscolored=true;
+  });
+}
 },
 
                  
@@ -1069,10 +1094,10 @@ setState(() {
                                           style: BorderStyle.solid,
                                         ),
                                       ),
-                                      labelText: 'Qte a Ajouter',
+                                      labelText: 'Qte a Ajuster',
                                       labelStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
+                                      hintText: 'Qte a Ajuster',
                                       hintStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
                                     ),
@@ -1139,10 +1164,10 @@ setState(() {
                                           style: BorderStyle.solid,
                                         ),
                                       ),
-                                      labelText: 'Qte a Ajouter',
+                                      labelText: 'Prix a Ajuster',
                                       labelStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
-                                      hintText: 'Qte a ajouté',
+                                      hintText: 'Prix a Ajuster',
                                       hintStyle: TextStyle(
                                           color: Color(0xFF8B8B8B), fontSize: 12),
                                     ),
@@ -1324,7 +1349,7 @@ ScaffoldMessenger.of(context)
                                                    removeTrailingZero(b),
                                                    style: TextStyle(
                                                        fontWeight: FontWeight.bold,
-                                                       fontSize: 18),
+                                                       fontSize: 16),
                                                    textAlign: TextAlign.center,
                                                    ),
                                                    SizedBox(height: 3,),
@@ -1337,7 +1362,7 @@ ScaffoldMessenger.of(context)
                                                     
                                                        removeTrailingZero(channelListb[index].qteAjust.toString()) ,
                                                     
-                                                   style: TextStyle(color: Colors.red,fontSize: 13),
+                                                   style: TextStyle(color: Colors.blue,fontSize: 18),
                                                    textAlign: TextAlign.center,
                                                    )  ,
                                                      Text(
@@ -1348,7 +1373,7 @@ ScaffoldMessenger.of(context)
                                                     
                                                        removeTrailingZero(channelListb[index].prixAjust.toString()) ,
                                                     
-                                                   style: TextStyle(color: Colors.red,fontSize: 13),
+                                                   style: TextStyle(color: Colors.blue,fontSize: 18),
                                                    textAlign: TextAlign.center,
                                                    )  ,
                                                   
@@ -1463,7 +1488,7 @@ ScaffoldMessenger.of(context)
                                                    removeTrailingZero(b),
                                                    style: TextStyle(
                                                        fontWeight: FontWeight.bold,
-                                                       fontSize: 18),
+                                                       fontSize: 16),
                                                    textAlign: TextAlign.center,
                                                    ),
                                                    SizedBox(height: 3,),
@@ -1476,7 +1501,7 @@ ScaffoldMessenger.of(context)
                                                     
                                                        removeTrailingZero(channelListb[index].qteAjust.toString()) ,
                                                     
-                                                   style: TextStyle(color: Colors.red,fontSize: 13),
+                                                   style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight:FontWeight.bold),
                                                    textAlign: TextAlign.center,
                                                    )  ,
                                                      Text(
@@ -1487,7 +1512,7 @@ ScaffoldMessenger.of(context)
                                                     
                                                        removeTrailingZero(channelListb[index].prixAjust.toString()) ,
                                                     
-                                                   style: TextStyle(color: Colors.red,fontSize: 13),
+                                                   style: TextStyle(color: Colors.blue,fontSize: 18,fontWeight:FontWeight.bold),
                                                    textAlign: TextAlign.center,
                                                    )  ,
                                                   

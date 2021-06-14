@@ -82,6 +82,13 @@ Future delete(user) async {
                                         aname: "${widget.aname}",
                                         email: "${widget.email}",
                                         url: "${widget.url}",
+                                        entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
                                     )));
               });
             },
@@ -102,14 +109,26 @@ Future delete(user) async {
               setState(() {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}")),
+                  MaterialPageRoute(builder: (context) => Menu(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                 );
               });
             },
           )
         ],
       ),
-       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}"),resizeToAvoidBottomInset: false,
+       drawer: ssd(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,),resizeToAvoidBottomInset: false,
        body: Column(children: [ Container(decoration: BoxDecoration(color: Color(0xff62959c), borderRadius: BorderRadius.only(
                      bottomLeft: Radius.circular(80),
                      bottomRight: Radius.circular(80))),height: 80,
@@ -203,7 +222,13 @@ Future delete(user) async {
                          setState(() {
                              Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DepotScreen(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",prot2: filtredlist[index]["protmUser"],)),
+                    MaterialPageRoute(builder: (context) => DepotScreen(aname: "${widget.aname}",email: "${widget.email}",url: "${widget.url}",prot2: filtredlist[index]["protmUser"],entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,)),
                   );
                          });
                          },
@@ -233,7 +258,13 @@ Future delete(user) async {
                                         aname: "${widget.aname}",
                                         email: "${widget.email}",
                                         url: "${widget.url}",
-                                        prot2: filtredlist[index]["protmUser"], 
+                                        prot2: filtredlist[index]["protmUser"],entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation, 
                                     )));
               });
                          },
@@ -257,20 +288,28 @@ Future delete(user) async {
                          height: 50,
                          onPressed: () {
                                 confirmationDialog(context, "le compte "+filtredlist[index]['protmUser']+" sera supprimé définitivement,vous etes sur de le supprimer ?",neutralText: "Annuler",positiveText: "Valider", 
-    positiveAction: ()async {   await delete(filtredlist[index]["protmUser"]); 
-    setState(() {
+    positiveAction: ()async {  return successDialog(context, "utilisateur a  éte supprimé avec succes",neutralAction: () async{
+       await delete(filtredlist[index]["protmUser"]); 
+    setState(() {Navigator.pop(context);
               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => HomeScreen(
                                         aname: "${widget.aname}",
                                         email: "${widget.email}",
-                                        url: "${widget.url}",
+                                        url: "${widget.url}",entre:widget.entre,
+                                                    sortie:widget.sortie,
+                                                     transfer:widget.transfer,
+                                                      consult:widget.consult,
+                                                      inventaires: widget.inventaires,
+                                                      gestionutil: widget.gestionutil,
+                                                    protvalidation:widget.protvalidation,
                                        
                                     )));
           
     });
       
+    });
     
     } 
                          
