@@ -19,8 +19,9 @@ class _loginState extends State<login> {
 TextEditingController _ipconfig = TextEditingController();
 
 
-String uri = '192.168.1.9:8000';
+
      bool transfere=false;
+     String uri = '192.168.1.9:8000';
       bool entree=false;
       bool sortie=false;
       bool inv=false;

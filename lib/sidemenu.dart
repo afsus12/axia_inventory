@@ -111,7 +111,7 @@ import 'package:commons/commons.dart';
                             child: Image.asset('images/in1.png',
                                 fit: BoxFit.fill))),
                     onTap: () {
-                      setState(() {
+                      setState(() {if(widget.entre==true){
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Entre(aname: a,email:b ,url: c,    entre:widget.entre,
@@ -122,7 +122,7 @@ import 'package:commons/commons.dart';
                                                       gestionutil: widget.gestionutil,
                                                     protvalidation:widget.protvalidation,)),
                         );
-                      });
+                      }});
                     }),
                 new ListTile(
                     title: new Text('Sortie du Stock'),
@@ -137,7 +137,7 @@ import 'package:commons/commons.dart';
                             margin: EdgeInsets.only(left: 1),
                             child: Image.asset('images/out2.png',
                                 fit: BoxFit.fill))),
-                    onTap: () {
+                    onTap: () {if(widget.sortie==true){
                       setState(() {
                         Navigator.push(
                           context,
@@ -150,7 +150,7 @@ import 'package:commons/commons.dart';
                                                     protvalidation:widget.protvalidation,)),
                         );
                       });
-                    }),
+                    }}),
                 new ListTile(
                     title: new Text('Transfert du Stock'),
                     leading: ConstrainedBox(
@@ -165,7 +165,7 @@ import 'package:commons/commons.dart';
                           child: Image.asset('images/exchange2.png',
                               fit: BoxFit.fill),
                         )),
-                    onTap: () {
+                    onTap: () {if(widget.transfer==true){
                       setState(() {
                         Navigator.push(
                           context,
@@ -177,7 +177,7 @@ import 'package:commons/commons.dart';
                                                       gestionutil: widget.gestionutil,
                                                     protvalidation:widget.protvalidation,)),
                         );
-                      });
+                      });}
                     }),
                 new ListTile(
                     title: new Text('Inventaire'),
@@ -219,7 +219,7 @@ import 'package:commons/commons.dart';
                       ),
                       child: Image.asset('images/his2.png', fit: BoxFit.cover),
                     ),
-                    onTap: () {
+                    onTap: () {if(widget.consult==true){
                       setState(() {
                         Navigator.push(
                           context,
@@ -233,7 +233,7 @@ import 'package:commons/commons.dart';
                                                     protvalidation:widget.protvalidation,)),
                         );
                       });
-                    }),
+                     } }),
                 Divider(
                   color: Colors.grey,
                 ),
@@ -251,7 +251,7 @@ import 'package:commons/commons.dart';
                         child: Image.asset('images/usr.png', fit: BoxFit.cover),
                       ),
                     ),
-                    onTap: () {
+                    onTap: () {if(widget.gestionutil==true){
                       setState(() {
                         Navigator.push(
                           context,
@@ -265,7 +265,7 @@ import 'package:commons/commons.dart';
                                                     protvalidation:widget.protvalidation,)),
                         );
                       });
-                    }),
+                    }}),
                 new ListTile(
                     title: new Text('Parametre'),
                     leading: ConstrainedBox(

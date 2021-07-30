@@ -74,7 +74,7 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
     List data = List();
         List data2 = List();
     List<bool> boollist=List();
-    List<bool> _switchValues = List.generate(7, (_) => false);
+    List<bool> _switchValues = List.generate(100, (_) => false);
     List erreurmsg=List();
     
   int admin;
@@ -110,7 +110,7 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                              ok=false;
                            });
                            
-                         } else if(protmUserController.text.length<=5){
+                         } else if(protmUserController.text.length<5){
                          
                          setState(() {
                            ok=false;
@@ -129,7 +129,7 @@ class _ajouterUtilisateurState extends State<ajouterUtilisateur> {
                             });
                            
                           
-                         }else if(protmPwdController.text.length <=5 ){
+                         }else if(protmPwdController.text.length <5 ){
 
                           
                              setState(() {

@@ -66,7 +66,7 @@ class _DepotScreenState extends State<DepotScreen> {
     bool isloading=false;
     bool   validinv=false;
     List<bool> boollist=List();
-    List<bool> _switchValues = List.generate(7, (_) => false);
+    List<bool> _switchValues = List.generate(100, (_) => false);
   int admin;
   List pre=List();
    Future getAllName() async {
